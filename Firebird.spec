@@ -21,6 +21,7 @@ Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 #  by codes.h regeneration from messages.gbak(?))
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-link.patch
+Patch2:		%{name}-sparc.patch
 #Patch0:		%{name}-fix.patch
 #Patch1:		%{name}-gcc33.patch
 #Patch4:		%{name}-env-overflows.patch
@@ -30,7 +31,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
 # see firebird-*/jrd/{common.h,gds.h,ibase.h} if you want to add support for more
-ExclusiveArch:	%{ix86}
+ExclusiveArch:	%{ix86} sparc sparcv9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
@@ -95,6 +96,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %setup -q -n firebird-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
