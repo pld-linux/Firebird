@@ -16,25 +16,25 @@ Source3:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
 # Source3-md5:	f4176d5dec952ee774bb8ee74c1f715d
 Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # Source4-md5:	66eef71c188215d10988788282c014a7
-# dirty "fixes" for missing error contants and conflict with isql from unixODBC
-# (gds__bad_{limit,skip}_param are defined in supplied codes.h, but removed
-#  by codes.h regeneration from messages.gbak(?))
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-sparc.patch
-#Patch0:		%{name}-fix.patch
-#Patch1:		%{name}-gcc33.patch
+Patch3:		%{name}-va.patch
+Patch4:		%{name}-types.patch
+Patch5:		%{name}-morearchs.patch
 #Patch4:		%{name}-env-overflows.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
-# see firebird-*/jrd/{common.h,gds.h,ibase.h} if you want to add support for more
+# see morearchs patch if you want to add support for more 32-bit archs
 ExclusiveArch:	%{ix86} sparc sparcv9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
+%define		specflags	-fno-strict-aliasing
+%define		debugcflags	-O1 -g -Wall -fno-strict-aliasing
 
 %description
 Firebird is a powerful, high-performance relational database designed
@@ -97,6 +97,10 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+# incomplete, 64-bit port is broken
+#%patch4 -p1
+%patch5 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
@@ -117,7 +121,7 @@ mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 
 %{__make} \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC" \
-	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch" \
+	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch" \
 	LIB_LINK_RPATH_LINE= \
 	LIB_CLIENT_LINK_OPTIONS="-lpthread"
 
