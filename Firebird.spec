@@ -144,6 +144,9 @@ ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	lib -p /sbin/ldconfig
+%postun	lib -p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
 %doc doc/{sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
