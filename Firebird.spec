@@ -3,7 +3,7 @@ Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.0.2.908
-Release:	1
+Release:	2
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/%{name}-%{version}.src.tar.gz
@@ -21,9 +21,12 @@ Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 #  by codes.h regeneration from messages.gbak(?))
 Patch0:		%{name}-fix.patch
 Patch1:		%{name}-gcc33.patch
+Patch2:		%{name}-link.patch
+Patch3:		%{name}-chmod.patch
+Patch4:		%{name}-env-overflows.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	unzip
-Requires:	%{name}-lib = %{version}
+Requires:	%{name}-lib = %{version}-%{release}
 # see firebird-*/jrd/{common.h,gds.h,ibase.h} if you want to add support for more
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -54,7 +57,7 @@ Biblioteka wspó³dzielona Firebird (libgds).
 Summary:	Header files for Firebird library
 Summary(pl):	Pliki nag³ówkowe biblioteki Firebird
 Group:		Development/Libraries
-Requires:	%{name}-lib = %{version}
+Requires:	%{name}-lib = %{version}-%{release}
 
 %description devel
 Header files for Firebird library.
@@ -66,7 +69,7 @@ Pliki nag³ówkowe biblioteki Firebird.
 Summary:	Static Firebird library
 Summary(pl):	Statyczna biblioteka Firebird
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static Firebird library (libgds).
@@ -89,6 +92,9 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %setup -q -n firebird-%{version} -a1
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
