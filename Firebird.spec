@@ -3,12 +3,12 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	1.5.1.4500
-Release:	3
+Version:	1.5.2.4731
+Release:	1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
-# Source0-md5:	d4594415a3615dd06192abdad57ae04d
+# Source0-md5:	fea53ed5213cff4bd96513fb1a6c0ca2
 Source1:	http://www.ibphoenix.com/downloads/60All.zip
 # Source1-md5:	f86a132012361cd4ae88563105741a4c
 Source2:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
