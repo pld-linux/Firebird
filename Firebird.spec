@@ -5,6 +5,7 @@
 %bcond_with	ss	# Super Server
 Summary:	Firebird SQL Database Server and Client tools
 Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
+Summary(de):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.2.4731
@@ -53,6 +54,19 @@ to be embedded into applications on multiple platforms.
 Firebird jest potê¿nym, wysoko wydajnym systemem relacyjnych baz
 danych zaprojektowanym do osadzania w aplikacjach na wielu
 platformach.
+
+%description -l de
+Firebird ist der Open-Source-Spin-Off des weiterhin kommerziell von
+Borland vertriebenen relationalen Datenbankmanagementsystemes
+InterBase. Die Abspaltung erfolgte im Jahre 2000 als kurz vor Freigabe
+der Version 6 des kommerziellen Vorgängers Interbase bei Borland
+ernsthafte Überlegungen im Gange waren, die Weiterentwicklung
+einzustellen.
+
+Aus Interbase 6.0 wurde Firebird 1.0, wobei dies als eine
+Bugfix-Version mit nur wenigen Erweiterungen angesehen werden kann.
+Eine Erweiterung von Firebird 1.0 ist der 64-Bit File I/O, so dass
+auch Datenbankdateien über 2GB erzeugt werden können.
 
 %package lib
 Summary:	Firebird shared library
@@ -246,7 +260,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/firebird
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/firebird
 %else
-%attr(640,root,root) %config(noreplace) %verify(not mtime md5 size) /etc/sysconfig/rc-inetd/firebird
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/firebird
 %endif
 
 %files lib
