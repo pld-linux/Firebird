@@ -227,3 +227,14 @@
  				{
  					  ERR_punt();
  				}
+--- firebird-1.5.0.4290/src/gpre/int.cpp.orig	2003-07-02 20:58:41.000000000 +0200
++++ firebird-1.5.0.4290/src/gpre/int.cpp	2004-05-29 15:41:48.000000000 +0200
+@@ -638,7 +638,7 @@
+ static void gen_type( ACT action, int column)
+ {
+ 
+-	printa(column, "%ld", (SLONG) action->act_object);
++	printa(column, "%" SLONGFORMAT, (SLONG) action->act_object);
+ }
+ 
+ 
