@@ -7,9 +7,12 @@ Release:	1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/%{name}-%{version}.src.tar.gz
+# Source0-md5: 8ca9aac6cfe2670659d00bb2decb3456
 Source1:	http://dl.sourceforge.net/firebird/bootkit-%{version}.tar.gz
+# Source1-md5: 3ce1d058d568242843fa0f92d5ae7018
 Source2:	http://www.ibphoenix.com/downloads/60All.zip
 Source3:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
+# Source3-md5: f4176d5dec952ee774bb8ee74c1f715d
 Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # dirty "fixes" for missing error contants and conflict with isql from unixODBC
 # (gds__bad_{limit,skip}_param are defined in supplied codes.h, but removed
