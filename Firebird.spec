@@ -1,4 +1,8 @@
-# TODO: kill unaligned accesses (create_db,gpre_current,gbak_static,isql_static) on alpha
+# TODO:
+# - kill unaligned accesses (create_db,gpre_current,gbak_static,isql_static) on alpha
+# - create classic server/super server subpackaged and drop bcond
+#   (see firebird2 on debian how to do it)
+%bcond_with	ss	# Super Server
 Summary:	Firebird SQL Database Server and Client tools
 Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
@@ -15,6 +19,9 @@ Source2:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
 # Source2-md5:	f4176d5dec952ee774bb8ee74c1f715d
 Source3:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # Source3-md5:	66eef71c188215d10988788282c014a7
+Source4:	firebird.init
+Source5:	firebird.sysconfig
+Source6:	firebird.inetd
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-env-overflows.patch
@@ -119,9 +126,9 @@ cd ../../..
 %{__autoconf}
 
 %configure \
+	%{?with_ss:--enable-superserver} \
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
-# --enable-superserver
 
 # OPTFLAGS for editline
 export OPTFLAGS="%{rpmcflags}"
@@ -148,8 +155,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C src -f ../gen/Makefile.install buildImageDir
 
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig/rc-inetd}
 install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+
 install gen/firebird/lib/libfb*.a $RPM_BUILD_ROOT%{_libdir}
 cd gen/buildroot/%{ibdir}
 
@@ -165,6 +174,9 @@ ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 
+install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
+install %{SOURCE5}      $RPM_BUILD_ROOT/etc/sysconfig/firebird
+install %{SOURCE6}	$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -188,6 +200,7 @@ else
                         -c "Firebird Server" firebird 1>&2
 fi
 
+%if %{with ss}
 %post
 /sbin/chkconfig --add firebird
 if [ -f /var/lock/subsys/firebird ]; then
@@ -203,6 +216,7 @@ if [ "$1" = "0" ]; then
         fi
         /sbin/chkconfig --del firebird
 fi
+%endif
 
 %postun
 if [ "$1" = "0" ]; then
@@ -228,8 +242,12 @@ fi
 %{ibdir}/security.fdb
 %{ibdir}/aliases.conf
 %{ibdir}/firebird.conf
+%if %{with ss}
 %attr(754,root,root) /etc/rc.d/init.d/firebird
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/firebird
+%else
+%attr(640,root,root) %config(noreplace) %verify(not mtime md5 size) /etc/sysconfig/rc-inetd/firebird
+%endif
 
 %files lib
 %defattr(644,root,root,755)
