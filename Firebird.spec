@@ -21,6 +21,9 @@ Patch2:		%{name}-env-overflows.patch
 Patch3:		%{name}-va.patch
 Patch4:		%{name}-morearchs.patch
 URL:		http://firebird.sourceforge.net/
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	unzip
