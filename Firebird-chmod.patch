@@ -1,15 +1,17 @@
---- firebird-1.0.2.908/builds/original/prefix.linux.orig	2002-03-01 14:16:31.000000000 +0100
-+++ firebird-1.0.2.908/builds/original/prefix.linux	2003-10-29 19:58:41.558232152 +0100
-@@ -65,7 +65,7 @@
- BACKEND_BRIDGE_MISC=	head5.o allp.o
- BIN_PATH=		/usr/isc/bin
- BRIDGE_MISC=		head5.o allp.o
--CHMOD_VAL=		666
-+CHMOD_VAL=		644
+--- firebird-1.5.0.4290/builds/posix/Makefile.in.refDatabases.orig	2003-04-10 09:50:03.000000000 +0200
++++ firebird-1.5.0.4290/builds/posix/Makefile.in.refDatabases	2004-05-24 23:46:47.933836000 +0200
+@@ -107,7 +107,7 @@
+ $(FIREBIRD)/security.fdb:	$(SRC_ROOT)/misc/security.gbak
+ 	$(BIN)/gbak_static  -R $< $@
+ 	$(TOUCH) $@
+-	$(CHMOD) 666 $@
++	$(CHMOD) 644 $@
  
- #NOTE: I removed CURSES_LIB=  -lbsd because it breaks the build on SuSE systems
- #      and isn't necessary anymore. 
-@@ -163,9 +163,9 @@
+ metadata.fdb:	$(SRC_ROOT)/misc/metadata.gbak
+ 	$(BIN)/gbak_static -MODE read_only -R $< $@
+--- firebird-1.5.0.4290/builds/posix/make.defaults.orig	2003-11-11 02:01:51.000000000 +0100
++++ firebird-1.5.0.4290/builds/posix/make.defaults	2004-05-24 23:47:17.602325704 +0200
+@@ -92,9 +92,9 @@
  SH=			sh -c
  RM=			rm -f
  CHMOD=			chmod
