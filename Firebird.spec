@@ -19,12 +19,14 @@ Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # dirty "fixes" for missing error contants and conflict with isql from unixODBC
 # (gds__bad_{limit,skip}_param are defined in supplied codes.h, but removed
 #  by codes.h regeneration from messages.gbak(?))
+Patch0:		%{name}-chmod.patch
+Patch1:		%{name}-link.patch
 #Patch0:		%{name}-fix.patch
 #Patch1:		%{name}-gcc33.patch
-#Patch2:		%{name}-link.patch
-#Patch3:		%{name}-chmod.patch
 #Patch4:		%{name}-env-overflows.patch
 URL:		http://firebird.sourceforge.net/
+BuildRequires:	libstdc++-devel
+BuildRequires:	ncurses-devel
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
 # see firebird-*/jrd/{common.h,gds.h,ibase.h} if you want to add support for more
@@ -58,6 +60,7 @@ Summary:	Header files for Firebird library
 Summary(pl):	Pliki nag³ówkowe biblioteki Firebird
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
+Requires:	libstdc++-devel
 
 %description devel
 Header files for Firebird library.
@@ -90,12 +93,8 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 
 %prep
 %setup -q -n firebird-%{version}
-# -a1
-#%patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
+%patch0 -p1
+%patch1 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
@@ -109,10 +108,6 @@ mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 %{__aclocal}
 %{__autoconf}
 
-#INTERBASE=/usr/lib/interbase; export INTERBASE
-#echo 'y' | ./Configure.sh PROD
-#. ./Configure_SetupEnv.sh
-
 %configure \
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
@@ -120,64 +115,72 @@ mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 
 %{__make} \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC" \
-	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch"
-
-#%{__make} firebird \
-#	CC="%{__cc}" \
-#	PROD_CFLAGS="%{rpmcflags} -fpic -DFLINTSTONE"
-
-# classic/super - what's the difference?
-#%%{__make} super_firebird
-
-#-Isource/interbase/include"
+	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch" \
+	LIB_LINK_RPATH_LINE= \
+	LIB_CLIENT_LINK_OPTIONS="-lpthread"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-#INTERBASE=/usr/lib/interbase; export INTERBASE
-#. ./Configure_SetupEnv.sh
 
 %{__make} -C src -f ../gen/Makefile.install buildImageDir
-# -f firebird/install/linux/Makefile
 
-#install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
-#	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-#cd buildroot/opt/interbase
-#rm -f bin/isc4.gbak
-#cp -af UDF bin help intl interbase.msg isc4.gdb isc_config \
-#	$RPM_BUILD_ROOT%{ibdir}
-#install include/* $RPM_BUILD_ROOT%{_includedir}
-#install lib/* $RPM_BUILD_ROOT%{_libdir}
-#install examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+install gen/firebird/lib/libfb*.a $RPM_BUILD_ROOT%{_libdir}
+cd gen/buildroot/%{ibdir}
+
+cp -af UDF bin help intl aliases.conf firebird.conf firebird.msg security.fdb \
+	$RPM_BUILD_ROOT%{ibdir}
+install include/* $RPM_BUILD_ROOT%{_includedir}
+cp -df lib/* $RPM_BUILD_ROOT%{_libdir}
+install examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+
+# or libfbembed?
+ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
+ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so
+
+ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc builds_win32/install/{*License,Readme}.txt
+%doc doc/{sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
 %attr(755,root,root) %{_libdir}/libib_util.so
 %dir %{ibdir}
 %attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin
 %{ibdir}/help
 %{ibdir}/intl
-%{ibdir}/interbase.msg
-# following two files should be in /var and /etc resp.?
-%{ibdir}/isc4.gdb
-%{ibdir}/isc_config
+%{ibdir}/firebird.msg
+# following files should be in /var (*.fdb) and /etc (*.conf)?
+%{ibdir}/security.fdb
+%{ibdir}/aliases.conf
+%{ibdir}/firebird.conf
 
 %files lib
 %defattr(644,root,root,755)
-# .so link needed here - library doesn't have SONAME
-%attr(755,root,root) %{_libdir}/libgds.so*
+%attr(755,root,root) %{_libdir}/libfbclient.so.*.*.*
+%attr(755,root,root) %{_libdir}/libfbembed.so.*.*.*
+# InterBase/old Firebird compatibility symlinks
+%attr(755,root,root) %{_libdir}/libgds.so.0
+# needed here - original libgds.so.0 didn't have soname, so some old
+# (possibly not open-source) apps may be linked with libgds.so
+%attr(755,root,root) %{_libdir}/libgds.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/*
+%attr(755,root,root) %{_libdir}/libfbclient.so
+%attr(755,root,root) %{_libdir}/libfbembed.so
+%{_includedir}/*.h
 %{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
+%{_libdir}/libfbcommon.a
+%{_libdir}/libfbstatic.a
+# compat link
 %{_libdir}/libgds.a
 
 %files doc
