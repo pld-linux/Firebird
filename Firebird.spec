@@ -123,7 +123,7 @@ mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 	%{?debug:--enable-debug}
 # --enable-superserver
 
-%{__make} \
+%{__make} -j1 \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC" \
 	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch" \
 	LIB_LINK_RPATH_LINE= \
