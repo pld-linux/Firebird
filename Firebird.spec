@@ -18,11 +18,11 @@ Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # Source4-md5:	66eef71c188215d10988788282c014a7
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-link.patch
-Patch2:		%{name}-sparc.patch
-Patch3:		%{name}-va.patch
-Patch4:		%{name}-types.patch
-Patch5:		%{name}-morearchs.patch
-#Patch4:		%{name}-env-overflows.patch
+Patch2:		%{name}-env-overflows.patch
+Patch3:		%{name}-sparc.patch
+Patch4:		%{name}-va.patch
+Patch5:		%{name}-types.patch
+Patch6:		%{name}-morearchs.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
@@ -98,9 +98,10 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 # incomplete, 64-bit port is broken
-#%patch4 -p1
-%patch5 -p1
+#%patch5 -p1
+%patch6 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
