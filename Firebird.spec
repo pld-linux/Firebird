@@ -20,6 +20,7 @@ Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # (gds__bad_{limit,skip}_param are defined in supplied codes.h, but removed
 #  by codes.h regeneration from messages.gbak(?))
 Patch0:		%{name}-fix.patch
+Patch1:		%{name}-gcc33.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}
@@ -87,6 +88,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %prep
 %setup -q -n firebird-%{version} -a1
 %patch0 -p1
+%patch1 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
