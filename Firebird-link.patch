@@ -1,11 +1,11 @@
---- firebird-1.0.2.908/builds/original/sfx.jrd.orig	2002-06-21 20:56:54.000000000 +0200
-+++ firebird-1.0.2.908/builds/original/sfx.jrd	2003-10-29 19:54:23.282496032 +0100
-@@ -437,7 +437,7 @@
- 		$(CSI_P_MISC) $(DSQL_P_MISC) $(LOCK_P_MISC) \
- 		$(REMOTE_P_MISC) $(SECURITY_P_MISC) $(BRIDGE_P_MISC) $(INTL_P_MISC) \
- 		$(REGISTER_P_MISC) $(WAL_P_MISC) $(FUNCTIONS) $(GDSF_LIB) \
--		$(LD_LIBS) -o gds.so
-+		$(LD_LIBS) -o gds.so -ldl -lcrypt -soname libgds.so.1
- 	$(CHMOD_6) gds.so
- 	$(MV) gds.so $(GDSSHR)
- 	$(TOUCH) gds.so
+--- firebird-1.5.0.4290/builds/posix/Makefile.in.extlib.orig	2004-02-15 09:51:02.000000000 +0100
++++ firebird-1.5.0.4290/builds/posix/Makefile.in.extlib	2004-05-24 23:58:14.519459120 +0200
+@@ -110,7 +110,7 @@
+ 
+ lib_ib_util: $(LIBIBUTIL_SO)
+ 
+-$(LIBIBUTIL_SO):	LINK_PROD=$(LIBIBUTIL_SO)
++$(LIBIBUTIL_SO):	LINK_PROD=$(IbUtilLibraryName)
+ $(LIBIBUTIL_SO):	$(UTIL_Objects)
+ 	$(LIB_LINK) $(LIB_LINK_OPTIONS) $(LIB_LINK_SONAME_LINE) $(LIB_LINK_RPATH_LINE) -o $@ $^
+ #	-$(LN) $(@F) $(LIBFBINTL_SOBASENAME) 
