@@ -1,0 +1,14 @@
+--- firebird-1.5.0.4290/src/jrd/gds.cpp.orig	2004-02-06 05:56:28.000000000 +0100
++++ firebird-1.5.0.4290/src/jrd/gds.cpp	2004-05-29 15:22:12.000000000 +0200
+@@ -2717,7 +2717,10 @@
+ 	va_list args;
+ 
+ 	VA_START(args, string);
+-	blr_format(control, string, args);
++	/* blr_format(control, string, ...); */
++	vsprintf(control->ctl_ptr, string, args);
++	while (*control->ctl_ptr)
++		control->ctl_ptr++;
+ 	offset = 0;
+ 	PRINT_LINE;
+ 	Firebird::status_exception::raise(-1);
