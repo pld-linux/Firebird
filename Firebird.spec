@@ -1,3 +1,4 @@
+# TODO: kill unaligned accesses (create_db,gpre_current,gbak_static,isql_static) on alpha
 Summary:	Firebird SQL Database Server and Client tools
 Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
@@ -27,7 +28,7 @@ Requires:	%{name}-lib = %{version}-%{release}
 # official ports are x86, sparc and amd64
 # ppc added in morearchs patch
 # see morearchs patch if you want to add support for more archs
-ExclusiveArch:	%{ix86} amd64 sparc sparcv9 ppc
+ExclusiveArch:	%{ix86} alpha amd64 sparc sparcv9 ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
