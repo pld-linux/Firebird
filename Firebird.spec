@@ -100,7 +100,7 @@ echo 'y' | ./Configure.sh PROD
 	PROD_CFLAGS="%{rpmcflags} -fpic -DFLINTSTONE"
 
 # classic/super - what's the difference?
-#%{__make} super_firebird
+#%%{__make} super_firebird
 
 #-Isource/interbase/include"
 
