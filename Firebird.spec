@@ -28,8 +28,11 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
+# official ports are x86 and sparc(32)
+# ppc added in morearchs patch
 # see morearchs patch if you want to add support for more 32-bit archs
-ExclusiveArch:	%{ix86} sparc sparcv9
+# (64-bit port is currently broken, types patch is not sufficient)
+ExclusiveArch:	%{ix86} sparc sparcv9 ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
