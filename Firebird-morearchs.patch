@@ -57,3 +57,15 @@
  #error "Define SWAP_DOUBLE for your platform correctly !"
  #endif
  #endif
+diff -ur firebird-1.5.1.4500.orig/src/jrd/ibase.h firebird-1.5.1.4500/src/jrd/ibase.h
+--- firebird-1.5.1.4500.orig/src/jrd/ibase.h	2004-03-29 05:50:10.000000000 +0200
++++ firebird-1.5.1.4500/src/jrd/ibase.h	2004-10-03 03:32:57.962674256 +0200
+@@ -57,7 +57,7 @@
+ // It is difficult to detect 64-bit long from the redistributable header
+ // we do not care of 16-bit platforms anymore thus we may use plain "int"
+ // which is 32-bit on all platforms we support
+-#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
++#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha) || defined(__sparcv9)
+ typedef	int		ISC_LONG;
+ typedef	unsigned int	ISC_ULONG;
+ #else
