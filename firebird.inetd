@@ -1,0 +1,11 @@
+SERVICE_NAME=firebird
+SERVICE_TYPE=unlisted
+SOCK_TYPE=stream
+PROTOCOL=tcp
+PORT=3050
+FLAGS=nowait
+USER=firebird
+GROUP=firebird
+SERVER=tcpd
+DAEMON=/usr/lib/interbase/bin/fb_inet_server
+DAEMONARGS=""
