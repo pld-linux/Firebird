@@ -136,6 +136,9 @@ DARCH=""
 	LIB_LINK_RPATH_LINE= \
 	LIB_CLIENT_LINK_OPTIONS="-lpthread"
 
+# fb_lock_mgr is started during build - try to stop it (if /proc is mounted...)
+/sbin/fuser -k gen/firebird/bin/fb_lock_mgr 2>/dev/null || :
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
