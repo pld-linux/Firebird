@@ -2,28 +2,28 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	1.0.2.908
-Release:	2
+Version:	1.5.0.4290
+Release:	0.1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
-Source0:	http://dl.sourceforge.net/firebird/%{name}-%{version}.src.tar.gz
-# Source0-md5: 8ca9aac6cfe2670659d00bb2decb3456
-Source1:	http://dl.sourceforge.net/firebird/bootkit-%{version}.tar.gz
-# Source1-md5: 3ce1d058d568242843fa0f92d5ae7018
+Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
+# Source0-md5:	c088ccf4d149ecc1fa03ee27e9043701
+#Source1:	http://dl.sourceforge.net/firebird/bootkit-%{version}.tar.gz
+## Source1-md5: 3ce1d058d568242843fa0f92d5ae7018
 Source2:	http://www.ibphoenix.com/downloads/60All.zip
 # Source2-md5:	f86a132012361cd4ae88563105741a4c
 Source3:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
-# Source3-md5: f4176d5dec952ee774bb8ee74c1f715d
+# Source3-md5:	f4176d5dec952ee774bb8ee74c1f715d
 Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
 # Source4-md5:	66eef71c188215d10988788282c014a7
 # dirty "fixes" for missing error contants and conflict with isql from unixODBC
 # (gds__bad_{limit,skip}_param are defined in supplied codes.h, but removed
 #  by codes.h regeneration from messages.gbak(?))
-Patch0:		%{name}-fix.patch
-Patch1:		%{name}-gcc33.patch
-Patch2:		%{name}-link.patch
-Patch3:		%{name}-chmod.patch
-Patch4:		%{name}-env-overflows.patch
+#Patch0:		%{name}-fix.patch
+#Patch1:		%{name}-gcc33.patch
+#Patch2:		%{name}-link.patch
+#Patch3:		%{name}-chmod.patch
+#Patch4:		%{name}-env-overflows.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
@@ -89,12 +89,13 @@ Extensive InterBase and Firebird documentation.
 Obszerna dokumentacja do baz InterBase i Firebird.
 
 %prep
-%setup -q -n firebird-%{version} -a1
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+%setup -q -n firebird-%{version}
+# -a1
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p1
+#%patch3 -p1
+#%patch4 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE2} -d docs/IB6.0
@@ -104,13 +105,26 @@ unzip -q %{SOURCE4} -d docs/IB3.0
 mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 
 %build
-INTERBASE=/usr/lib/interbase; export INTERBASE
-echo 'y' | ./Configure.sh PROD
-. ./Configure_SetupEnv.sh
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
 
-%{__make} firebird \
-	CC="%{__cc}" \
-	PROD_CFLAGS="%{rpmcflags} -fpic -DFLINTSTONE"
+#INTERBASE=/usr/lib/interbase; export INTERBASE
+#echo 'y' | ./Configure.sh PROD
+#. ./Configure_SetupEnv.sh
+
+%configure \
+	--prefix=%{ibdir} \
+	%{?debug:--enable-debug}
+# --enable-superserver
+
+%{__make} \
+	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC" \
+	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch"
+
+#%{__make} firebird \
+#	CC="%{__cc}" \
+#	PROD_CFLAGS="%{rpmcflags} -fpic -DFLINTSTONE"
 
 # classic/super - what's the difference?
 #%%{__make} super_firebird
@@ -119,20 +133,21 @@ echo 'y' | ./Configure.sh PROD
 
 %install
 rm -rf $RPM_BUILD_ROOT
-INTERBASE=/usr/lib/interbase; export INTERBASE
-. ./Configure_SetupEnv.sh
+#INTERBASE=/usr/lib/interbase; export INTERBASE
+#. ./Configure_SetupEnv.sh
 
-%{__make} buildclassicimage -f firebird/install/linux/Makefile
+%{__make} -C src -f ../gen/Makefile.install buildImageDir
+# -f firebird/install/linux/Makefile
 
-install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
-	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-cd buildroot/opt/interbase
-rm -f bin/isc4.gbak
-cp -af UDF bin help intl interbase.msg isc4.gdb isc_config \
-	$RPM_BUILD_ROOT%{ibdir}
-install include/* $RPM_BUILD_ROOT%{_includedir}
-install lib/* $RPM_BUILD_ROOT%{_libdir}
-install examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+#install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
+#	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+#cd buildroot/opt/interbase
+#rm -f bin/isc4.gbak
+#cp -af UDF bin help intl interbase.msg isc4.gdb isc_config \
+#	$RPM_BUILD_ROOT%{ibdir}
+#install include/* $RPM_BUILD_ROOT%{_includedir}
+#install lib/* $RPM_BUILD_ROOT%{_libdir}
+#install examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
