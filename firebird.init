@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# firebird		RDBMS
+#
+# chkconfig:	2345 80 30
+# description:	firebird is a database server
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+
+# Source oident configureation.
+if [ -f /etc/sysconfig/firebird ]; then
+	. /etc/sysconfig/firebird
+fi
+
+DAEMON=/usr/lib/interbase/bin/fbmgr
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down firebird
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	# Start daemons.
+	if [ ! -f /var/lock/subsys/firebird ]; then
+		msg_starting firebird
+		daemon --user firebird $DAEMON -start -forever
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/firebird
+	else
+		msg_already_running firebird
+	fi
+	;;
+  stop)
+	# Stop daemons.
+	if [ -f /var/lock/subsys/firebird ]; then
+		msg_stopping firebird
+		daemon --user firebird $DAEMON -shut
+		rm -f /var/lock/subsys/firebird >/dev/null 2>&1
+	else
+		msg_not_running firebird
+	fi	
+	;;
+  restart|force-reload)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  status)
+	status fb_inet_server
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL
