@@ -18,6 +18,8 @@ Patch0:		%{name}-fix.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}
+# see firebird-*/jrd/{common.h,gds.h,ibase.h} if you want to add support for more
+ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
