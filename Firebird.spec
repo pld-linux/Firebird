@@ -4,7 +4,7 @@ Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.1.4500
-Release:	2
+Release:	3
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
@@ -29,9 +29,9 @@ BuildRequires:	ncurses-devel
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
 # official ports are x86, sparc and amd64
-# ppc added in morearchs patch
+# alpha and ppc added in morearchs patch
 # see morearchs patch if you want to add support for more archs
-ExclusiveArch:	%{ix86} alpha amd64 sparc sparcv9 ppc
+ExclusiveArch:	%{ix86} amd64 sparc sparcv9 alpha ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
