@@ -1,0 +1,14 @@
+--- firebird-1.0.0.796/Configure.sh.orig	Wed Nov 21 19:11:05 2001
++++ firebird-1.0.0.796/Configure.sh	Thu Dec  5 20:00:21 2002
+@@ -137,11 +137,7 @@
+     mkdir -p $SuperDirName
+ 
+     cd $SuperDirName
+-    if [ $BuildHostType = "SOLARIS" -o $BuildHostType = "SCO_EV" ]; then
+       ln -s ../../$ClassicDirName/[a-z0-9]*[!oa] .  
+-    else   
+-      ln -s ../../$ClassicDirName/[a-z0-9]*[^oa] .  
+-    fi
+     cd ../..
+ 
+ }
