@@ -1,6 +1,6 @@
---- firebird-1.5.0.4290/src/jrd/common.h.orig	2004-05-28 23:36:22.000000000 +0200
-+++ firebird-1.5.0.4290/src/jrd/common.h	2004-05-28 23:44:49.000000000 +0200
-@@ -131,6 +131,18 @@
+--- firebird-1.5.1.4500/src/jrd/common.h.orig	2004-05-28 23:36:22.000000000 +0200
++++ firebird-1.5.1.4500/src/jrd/common.h	2004-05-28 23:44:49.000000000 +0200
+@@ -131,6 +131,14 @@
  #define IMPLEMENTATION  isc_info_db_impl_linux_sparc /* 65  */
  #endif /* sparc */
  
@@ -12,29 +12,24 @@
 +#define IMPLEMENTATION	isc_info_db_impl_linux_alpha
 +#endif
 +
-+#ifdef __x86_64__
-+#define IMPLEMENTATION	isc_info_db_impl_linux_amd64
-+#endif
-+
  #define MEMMOVE(from,to,length)		memmove ((void *)to, (void *)from, (size_t) length)
  #define MOVE_FAST(from,to,length)       memcpy (to, from, (int) (length))
  #define MOVE_FASTER(from,to,length)     memcpy (to, from, (int) (length))
---- firebird-1.5.0.4290/src/jrd/ibase.h.orig	2003-12-28 00:06:25.000000000 +0100
-+++ firebird-1.5.0.4290/src/jrd/ibase.h	2004-05-28 23:48:49.000000000 +0200
-@@ -1573,6 +1573,10 @@
- 
+--- firebird-1.5.1.4500/src/jrd/ibase.h.orig	2004-03-29 05:50:10.000000000 +0200
++++ firebird-1.5.1.4500/src/jrd/ibase.h	2004-08-08 00:59:58.069029392 +0200
+@@ -1577,6 +1577,9 @@
  	isc_info_db_impl_linux_sparc = 65,
+ 	isc_info_db_impl_linux_amd64 = 66,
  
-+	isc_info_db_impl_linux_ppc = 66,
-+	isc_info_db_impl_linux_alpha = 67,
-+	isc_info_db_impl_linux_amd64 = 68,
++	isc_info_db_impl_linux_ppc = 67,
++	isc_info_db_impl_linux_alpha = 68,
 +
  	isc_info_db_impl_last_value   /* Leave this LAST! */
      };
  
---- firebird-1.5.0.4290/src/jrd/pag.cpp.orig	2004-05-28 22:16:09.000000000 +0200
-+++ firebird-1.5.0.4290/src/jrd/pag.cpp	2004-05-28 23:58:59.000000000 +0200
-@@ -180,6 +180,15 @@
+--- firebird-1.5.1.4500/src/jrd/pag.cpp.orig	2004-05-28 22:16:09.000000000 +0200
++++ firebird-1.5.1.4500/src/jrd/pag.cpp	2004-05-28 23:58:59.000000000 +0200
+@@ -180,6 +180,12 @@
  #ifdef __sparc__
  #define CLASS           20
  #endif
@@ -44,20 +39,17 @@
 +#ifdef __alpha__
 +#define CLASS		31
 +#endif
-+#ifdef __x86_64__
-+#define CLASS		32
-+#endif
  #endif
  
  #ifdef FREEBSD
---- firebird-1.5.0.4290/src/remote/xdr.cpp.orig	2004-05-29 00:05:08.000000000 +0200
-+++ firebird-1.5.0.4290/src/remote/xdr.cpp	2004-05-29 00:06:09.000000000 +0200
+--- firebird-1.5.1.4500/src/remote/xdr.cpp.orig	2004-08-08 00:57:44.918271384 +0200
++++ firebird-1.5.1.4500/src/remote/xdr.cpp	2004-08-08 00:59:21.762548816 +0200
 @@ -39,10 +39,10 @@
  // The simpliest way to check it is to issue
  // "select abs(2.0/3.0) from rdb$database" from correct client
  // It will return big strange value in case of invalid define
--#if defined(i386) || defined(I386) || defined(_M_IX86)
-+#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(__alpha__) || defined(__x86_64__)
+-#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64)
++#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(__alpha__)
  #define		SWAP_DOUBLE
  #else
 -#if !defined(sparc) && !defined(__sparc__) && !defined(PowerPC)

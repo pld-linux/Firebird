@@ -1,21 +1,3 @@
---- firebird-1.5.0.4290/configure.in.orig	2003-12-23 23:23:54.000000000 +0000
-+++ firebird-1.5.0.4290/configure.in	2004-05-28 16:18:05.000000000 +0000
-@@ -51,15 +51,6 @@
-     SHRLIB_EXT=so
-     ;;
- 
--  sparc*-*-linux-*)
--    MAKEFILE_PREFIX=linux_sparc32
--    PLATFORM=LINUX
--    AC_DEFINE(LINUX)
--    LOCK_MANAGER_FLG=Y
--    EDITLINE_FLG=Y
--    SHRLIB_EXT=so
--    ;;
--
-   *-*-linux*)
-     MAKEFILE_PREFIX=linux
-     PLATFORM=LINUX
 --- firebird-1.5.0.4290/src/jrd/common.h.orig	2003-10-27 18:30:37.000000000 +0000
 +++ firebird-1.5.0.4290/src/jrd/common.h	2004-05-28 16:29:42.000000000 +0000
 @@ -120,7 +120,7 @@
