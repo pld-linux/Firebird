@@ -168,6 +168,48 @@ ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+if [ -n "`/usr/bin/getgid firebird`" ]; then
+        if [ "`/usr/bin/getgid firebird`" != "145" ]; then
+                echo "Error: group firebird doesn't have gid=145. Correct this before installing firebird." 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 145 firebird
+fi
+if [ -n "`/bin/id -u firebird 2>/dev/null`" ]; then
+        if [ "`/bin/id -u firebird`" != "89" ]; then
+                echo "Error: user firebird doesn't have uid=145. Correct this before installing firebird." 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/useradd -u 145 \
+                        -d %{ibdir} -s /bin/sh -g firebird \
+                        -c "Firebird Server" firebird 1>&2
+fi
+
+%post
+/sbin/chkconfig --add firebird
+if [ -f /var/lock/subsys/firebird ]; then
+        /etc/rc.d/init.d/firebird restart >&2
+else
+        echo "Run \"/etc/rc.d/init.d/firebird start\" to start firebird." >&2
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+        if [ -f /var/lock/subsys/firebird ]; then
+                /etc/rc.d/init.d/firebird stop
+        fi
+        /sbin/chkconfig --del firebird
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+        %userremove firebird
+        %groupremove firebird
+fi
+
 %post	lib -p /sbin/ldconfig
 %postun	lib -p /sbin/ldconfig
 
@@ -186,6 +228,8 @@ rm -rf $RPM_BUILD_ROOT
 %{ibdir}/security.fdb
 %{ibdir}/aliases.conf
 %{ibdir}/firebird.conf
+%attr(754,root,root) /etc/rc.d/init.d/firebird
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/firebird
 
 %files lib
 %defattr(644,root,root,755)
