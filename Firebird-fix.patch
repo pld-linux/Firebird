@@ -1,25 +1,3 @@
---- firebird-1.0.0.796/qli/help.e.orig	Thu Aug  3 22:53:52 2000
-+++ firebird-1.0.0.796/qli/help.e	Thu Dec  5 00:21:52 2002
-@@ -160,7 +160,7 @@
-     if (!(l = p - X.TOPIC))
- 	continue;
-     if (++topics == 1 && banner)
--	ib_printf ("%s\n", banner, string, parent);
-+	ib_printf ("%s\n", banner);
-     p = line + ((ptr - line + COLUMN_WIDTH - 1) / COLUMN_WIDTH) * COLUMN_WIDTH;
-     if (p + l > line + RIGHT_MARGIN)
- 	{
---- firebird-1.0.0.796/porting/qli/help.c.orig	Thu Dec  5 00:00:10 2002
-+++ firebird-1.0.0.796/porting/qli/help.c	Thu Dec  5 00:22:15 2002
-@@ -289,7 +289,7 @@
- 		  isc_25.isc_26))
- 	continue;
-     if (++topics == 1 && banner)
--	ib_printf ("%s\n", banner, string, parent);
-+	ib_printf ("%s\n", banner);
-     p = line + ((ptr - line + COLUMN_WIDTH - 1) / COLUMN_WIDTH) * COLUMN_WIDTH;
-     if (p + l > line + RIGHT_MARGIN)
- 	{
 --- firebird-1.0.0.796/jrd/rse.c.orig	Fri Mar  1 12:54:03 2002
 +++ firebird-1.0.0.796/jrd/rse.c	Thu Dec  5 00:48:00 2002
 @@ -735,7 +735,7 @@
@@ -40,37 +18,6 @@
              ((IRSB_SKIP)impure)->irsb_count++;
  
  	    rsb = rsb->rsb_next;
---- firebird-1.0.0.796/dsql/ddl.c.orig	Sat Dec  8 13:57:34 2001
-+++ firebird-1.0.0.796/dsql/ddl.c	Thu Dec  5 00:52:03 2002
-@@ -2885,7 +2885,7 @@
-     if (!arguments || position > arguments->nod_count || position < 1)
- 	ERRD_post (gds__sqlerr, gds_arg_number, (SLONG) -607, 
- 	    gds_arg_gds, gds__dsql_command_err, 
--	    gds_arg_gds, isc_dsql_udf_return_pos_err, /*gds__extern_func_err, */
-+	    gds_arg_gds, isc_dsql_function_err /*isc_dsql_udf_return_pos_err*/, /*gds__extern_func_err, */
- 		gds_arg_number, (SLONG) (arguments ? arguments->nod_count : 0),
- 		/* CVC: We should devise new msg "position should be between 1 and #params";
- 		here it is: dsql_udf_return_pos_err */
---- firebird-1.0.0.796/dsql/pass1.c.orig	Fri Feb  8 13:03:01 2002
-+++ firebird-1.0.0.796/dsql/pass1.c	Thu Dec  5 00:57:13 2002
-@@ -1193,7 +1193,7 @@
-     if (node)
- 	ALLD_release ((FRB) node);
-     ERRD_post (gds__sqlerr, gds_arg_number, (SLONG) -204,
--	gds_arg_gds, isc_dsql_ambiguous_field_name,
-+	gds_arg_gds, isc_dsql_field_ref /*isc_dsql_ambiguous_field_name*/,
- 	gds_arg_string, buffer,
- 	gds_arg_string, ++p,
- 	gds_arg_gds, gds__random,
-@@ -1204,7 +1204,7 @@
- 
- 
- ERRD_post_warning (isc_sqlwarn, gds_arg_number, (SLONG) 204,
--	gds_arg_warning, isc_dsql_ambiguous_field_name,
-+	gds_arg_warning, isc_dsql_field_ref /*isc_dsql_ambiguous_field_name*/,
- 	gds_arg_string, buffer,
- 	gds_arg_string, ++p,
- 	gds_arg_gds, gds__random,
 --- firebird-1.0.0.796/Configure_SetupEnv.sh.orig	Tue Aug  7 20:19:19 2001
 +++ firebird-1.0.0.796/Configure_SetupEnv.sh	Thu Dec  5 08:14:29 2002
 @@ -53,6 +53,6 @@
