@@ -11,9 +11,11 @@ Source0:	http://dl.sourceforge.net/firebird/%{name}-%{version}.src.tar.gz
 Source1:	http://dl.sourceforge.net/firebird/bootkit-%{version}.tar.gz
 # Source1-md5: 3ce1d058d568242843fa0f92d5ae7018
 Source2:	http://www.ibphoenix.com/downloads/60All.zip
+# Source2-md5:	f86a132012361cd4ae88563105741a4c
 Source3:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
 # Source3-md5: f4176d5dec952ee774bb8ee74c1f715d
 Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
+# Source4-md5:	66eef71c188215d10988788282c014a7
 # dirty "fixes" for missing error contants and conflict with isql from unixODBC
 # (gds__bad_{limit,skip}_param are defined in supplied codes.h, but removed
 #  by codes.h regeneration from messages.gbak(?))
