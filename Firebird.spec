@@ -2,37 +2,34 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	1.5.0.4290
-Release:	1
+Version:	1.5.1.4500
+Release:	0.1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
-# Source0-md5:	c088ccf4d149ecc1fa03ee27e9043701
-#Source1:	http://dl.sourceforge.net/firebird/bootkit-%{version}.tar.gz
-## Source1-md5: 3ce1d058d568242843fa0f92d5ae7018
-Source2:	http://www.ibphoenix.com/downloads/60All.zip
-# Source2-md5:	f86a132012361cd4ae88563105741a4c
-Source3:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
-# Source3-md5:	f4176d5dec952ee774bb8ee74c1f715d
-Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
-# Source4-md5:	66eef71c188215d10988788282c014a7
+# Source0-md5:	d4594415a3615dd06192abdad57ae04d
+Source1:	http://www.ibphoenix.com/downloads/60All.zip
+# Source1-md5:	f86a132012361cd4ae88563105741a4c
+Source2:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
+# Source2-md5:	f4176d5dec952ee774bb8ee74c1f715d
+Source3:	http://www.ibphoenix.com/downloads/isc_docs.zip
+# Source3-md5:	66eef71c188215d10988788282c014a7
 Patch0:		%{name}-chmod.patch
-Patch1:		%{name}-link.patch
+Patch1:		%{name}-editline.patch
 Patch2:		%{name}-env-overflows.patch
 Patch3:		%{name}-sparc.patch
 Patch4:		%{name}-va.patch
-Patch5:		%{name}-types.patch
-Patch6:		%{name}-morearchs.patch
+Patch5:		%{name}-morearchs.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
-# official ports are x86 and sparc(32)
+# official ports are x86, sparc and amd64
 # ppc added in morearchs patch
 # see morearchs patch if you want to add support for more 32-bit archs
 # (64-bit port is currently broken, types patch is not sufficient)
-ExclusiveArch:	%{ix86} sparc sparcv9 ppc
+ExclusiveArch:	%{ix86} amd64 sparc sparcv9 ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
@@ -102,18 +99,20 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-# incomplete, 64-bit port is broken
-#%patch5 -p1
-%patch6 -p1
+%patch5 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
-unzip -q %{SOURCE2} -d docs/IB6.0
-tar xzf %{SOURCE3} -C docs/IB4.0
-unzip -q %{SOURCE4} -d docs/IB3.0
+unzip -q %{SOURCE1} -d docs/IB6.0
+tar xzf %{SOURCE2} -C docs/IB4.0
+unzip -q %{SOURCE3} -d docs/IB3.0
 # standardize extension, also avoids gzipping by compress-doc
 mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 
 %build
+cd src/extern/editline
+cp -f /usr/share/automake/config.* .
+%{__autoconf}
+cd ../../..
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
@@ -123,6 +122,8 @@ mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 	%{?debug:--enable-debug}
 # --enable-superserver
 
+# OPTFLAGS for editline
+export OPTFLAGS="%{rpmcflags}"
 %{__make} -j1 \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC" \
 	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch" \
@@ -165,7 +166,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin
 %{ibdir}/help
-%{ibdir}/intl
+%dir %{ibdir}/intl
+%attr(755,root,root) %{ibdir}/intl/fbintl
 %{ibdir}/firebird.msg
 # following files should be in /var (*.fdb) and /etc (*.conf)?
 %{ibdir}/security.fdb
