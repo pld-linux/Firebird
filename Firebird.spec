@@ -6,8 +6,8 @@ Version:	1.0.2.908
 Release:	1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
-Source0:	ftp://ftp.sourceforge.net/pub/sourceforge/firebird/%{name}-%{version}.src.tar.gz
-Source1:	ftp://ftp.sourceforge.net/pub/sourceforge/firebird/bootkit-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/firebird/%{name}-%{version}.src.tar.gz
+Source1:	http://dl.sourceforge.net/firebird/bootkit-%{version}.tar.gz
 Source2:	http://www.ibphoenix.com/downloads/60All.zip
 Source3:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
 Source4:	http://www.ibphoenix.com/downloads/isc_docs.zip
