@@ -1,0 +1,94 @@
+--- firebird-1.5.1.4500/src/extern/editline/configure.in.orig	2004-05-23 20:24:25.000000000 +0200
++++ firebird-1.5.1.4500/src/extern/editline/configure.in	2004-08-08 02:29:06.390960872 +0200
+@@ -8,7 +8,11 @@
+ CFLAGS=$CFLAGS
+ AC_PROG_CC
+ if test "x$CFLAGS" = "x" ; then
+-  no_CFLAGS="yes"
++  if test "x$OPTFLAGS" != "x"; then
++    CFLAGS="$OPTFLAGS"
++  else  
++    no_CFLAGS="yes"
++  fi
+ fi
+ if test "x$no_CFLAGS" = "xyes" -a "x$GCC" = "xyes" ; then
+ 	CFLAGS="-Wall -pipe -g3"
+@@ -18,6 +22,7 @@
+ S_CFLAGS="-fPIC -DPIC"
+ AC_SUBST(S_CFLAGS)
+ AC_PROG_CPP
++AC_PROG_EGREP
+ dnl Must do this now, otherwise it is only done for NetBSD (see 'case' below)
+ 
+ dnl Platform-specific settings.  The ABI can probably be determined
+@@ -63,22 +68,25 @@
+ AC_PROG_RANLIB
+ AC_PATH_PROG(AR, ar, , $PATH)
+ 
+-dnl Search for termcap access routines in termcap, tinfo, curses, and ncurses.
+-AC_CHECK_LIB(termcap, tgetent, , \
+-  AC_CHECK_LIB(tinfo, tgetent, , \
+-    AC_CHECK_LIB(curses, tgetent, , \
+-      AC_CHECK_LIB(ncurses, tgetent, , \
+-        AC_MSG_ERROR(termcap support not found)))))
+-
+-dnl Use termcap.h if it exists; otherwise we need both term.h and [n]curses.h.
+-AC_CHECK_HEADERS(termcap.h, , \
+-  AC_CHECK_HEADERS(term.h, , \
+-    AC_MSG_RESULT(Need term.h since termcap.h is missing))
+-  AC_CHECK_HEADERS(curses.h, , \
+-    AC_CHECK_HEADERS(ncurses.h, , \
+-      AC_MSG_RESULT(Need curses.h or ncurses.h))))
++if test -d /usr/include/ncurses; then
++	CPPFLAGS="$CPPFLAGS -I/usr/include/ncurses"
++fi
++dnl Search for termcap access routines in tinfo, curses, and ncurses, termcap.
++AC_CHECK_LIB(tinfo, tgetent, ,[
++  AC_CHECK_LIB(curses, tgetent, ,[
++    AC_CHECK_LIB(ncurses, tgetent, ,[
++      AC_CHECK_LIB(termcap, tgetent, ,[
++        AC_MSG_ERROR(termcap support not found)])])])])
++
++dnl Use term.h (and [n]curses.h) if it exists; otherwise use termcap.h
++AC_CHECK_HEADERS(term.h,[
++  AC_CHECK_HEADERS(curses.h, ,[
++    AC_CHECK_HEADERS(ncurses.h, ,[
++      AC_MSG_RESULT(Need curses.h or ncurses.h)])])],[
++  AC_CHECK_HEADERS(termcap.h, ,[
++    AC_MSG_RESULT(Need termcap.h since term.h is missing)])])
+ 
+-AC_CHECK_HEADERS(sys/cdefs.h vis.h alloca.h)
++AC_CHECK_HEADERS(sys/cdefs.h alloca.h)
+ 
+ AC_CHECK_FUNCS(issetugid)
+ AC_CHECK_FUNCS(strlcat, , CCSRCS="$CCSRCS np/strlcat.c")
+@@ -87,6 +95,10 @@
+ AC_CHECK_FUNCS(strvis, , CCSRCS="$CCSRCS np/vis.c")
+ AC_CHECK_FUNCS(strunvis, , CCSRCS="$CCSRCS np/unvis.c")
+ 
++if test "$ac_cv_func_strvis" = "yes" && test "$ac_cv_func_strunvis" = "yes" ; then
++	AC_CHECK_HEADERS(vis.h)
++fi
++
+ AC_EGREP_CPP(yes,
+ [#include <sys/cdefs.h>
+ #ifdef __RCSID
+@@ -135,7 +147,7 @@
+ if test "x$enable_debug" = "xyes" ; then
+   CPPFLAGS="$CPPFLAGS -DDEBUG_TTY -DDEBUG_KEY -DDEBUG_READ -DDEBUG"
+   CPPFLAGS="$CPPFLAGS -DDEBUG_REFRESH -DDEBUG_PASTE"
+-else
++elif test "x$no_CFLAGS" = "xyes"; then
+   CFLAGS="$CFLAGS -O"
+ fi
+ 
+--- firebird-1.5.1.4500/src/extern/editline/term.c.orig	2004-05-23 20:24:25.000000000 +0200
++++ firebird-1.5.1.4500/src/extern/editline/term.c	2004-08-08 02:49:13.258489120 +0200
+@@ -63,6 +63,7 @@
+ /* Solaris's term.h does horrid things. */
+ #if (defined(HAVE_TERM_H) && !defined(SUNOS))
+ #include <term.h>
++#undef key_clear
+ #endif
+ #include <sys/types.h>
+ #include <sys/ioctl.h>
