@@ -17,9 +17,8 @@ Source3:	http://www.ibphoenix.com/downloads/isc_docs.zip
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-env-overflows.patch
-Patch3:		%{name}-sparc.patch
-Patch4:		%{name}-va.patch
-Patch5:		%{name}-morearchs.patch
+Patch3:		%{name}-va.patch
+Patch4:		%{name}-morearchs.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
@@ -27,8 +26,7 @@ BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
 # official ports are x86, sparc and amd64
 # ppc added in morearchs patch
-# see morearchs patch if you want to add support for more 32-bit archs
-# (64-bit port is currently broken, types patch is not sufficient)
+# see morearchs patch if you want to add support for more archs
 ExclusiveArch:	%{ix86} amd64 sparc sparcv9 ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -99,7 +97,6 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE1} -d docs/IB6.0
@@ -124,9 +121,18 @@ cd ../../..
 
 # OPTFLAGS for editline
 export OPTFLAGS="%{rpmcflags}"
+%ifarch amd64
+DARCH="-DAMD64"
+%else
+%ifarch sparc sparcv9
+DARCH="-Dsparc"
+%else
+DARCH=""
+%endif
+%endif
 %{__make} -j1 \
-	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC" \
-	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch" \
+	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
+	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch $DARCH" \
 	LIB_LINK_RPATH_LINE= \
 	LIB_CLIENT_LINK_OPTIONS="-lpthread"
 
