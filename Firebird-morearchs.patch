@@ -17,6 +17,15 @@
  #define MOVE_FASTER(from,to,length)     memcpy (to, from, (int) (length))
 --- firebird-1.5.1.4500/src/jrd/ibase.h.orig	2004-03-29 05:50:10.000000000 +0200
 +++ firebird-1.5.1.4500/src/jrd/ibase.h	2004-08-08 00:59:58.069029392 +0200
+@@ -57,7 +57,7 @@
+ // It is difficult to detect 64-bit long from the redistributable header
+ // we do not care of 16-bit platforms anymore thus we may use plain "int"
+ // which is 32-bit on all platforms we support
+-#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
++#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha__) || defined(__sparcv9)
+ typedef	int		ISC_LONG;
+ typedef	unsigned int	ISC_ULONG;
+ #else
 @@ -1577,6 +1577,9 @@
  	isc_info_db_impl_linux_sparc = 65,
  	isc_info_db_impl_linux_amd64 = 66,
@@ -57,15 +66,39 @@
  #error "Define SWAP_DOUBLE for your platform correctly !"
  #endif
  #endif
-diff -ur firebird-1.5.1.4500.orig/src/jrd/ibase.h firebird-1.5.1.4500/src/jrd/ibase.h
---- firebird-1.5.1.4500.orig/src/jrd/ibase.h	2004-03-29 05:50:10.000000000 +0200
-+++ firebird-1.5.1.4500/src/jrd/ibase.h	2004-10-03 03:32:57.962674256 +0200
-@@ -57,7 +57,7 @@
- // It is difficult to detect 64-bit long from the redistributable header
- // we do not care of 16-bit platforms anymore thus we may use plain "int"
- // which is 32-bit on all platforms we support
--#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
-+#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha) || defined(__sparcv9)
- typedef	int		ISC_LONG;
- typedef	unsigned int	ISC_ULONG;
+--- firebird-1.5.1.4500/src/jrd/utl.cpp.orig	2004-03-29 05:50:11.000000000 +0200
++++ firebird-1.5.1.4500/src/jrd/utl.cpp	2004-08-08 14:13:50.000000000 +0200
+@@ -255,7 +255,10 @@
+     "Firebird/Darwin/PowerPC",	/* 63 */
+     "Firebird/SINIX-Z",	/* 64 */
+     "Firebird/linux Sparc",	/* 65 */
+-    "Firebird/linux AMD64"	/* 66 */
++    "Firebird/linux AMD64",	/* 66 */
++
++    "Firebird/linux PPC",	/* 67 */
++    "Firebird/linux alpha"	/* 68 */
+ };
+ 
+ 
+--- firebird-1.5.1.4500/src/jrd/btr.cpp.orig	2004-08-08 14:17:42.000000000 +0200
++++ firebird-1.5.1.4500/src/jrd/btr.cpp	2004-08-08 14:16:30.000000000 +0200
+@@ -191,7 +191,7 @@
+ //
+ inline SLONG BTR_get_quad(const UCHAR* p)
+ {
+-#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64)
++#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(__alpha__)
+ 	// For IA32 (little-endian) this optimization is a _very_ large speed-up!
+ 	return *reinterpret_cast<const SLONG*>(p);
  #else
+--- firebird-1.5.1.4500/src/include/fb_types.h.orig	2004-03-29 05:49:42.000000000 +0200
++++ firebird-1.5.1.4500/src/include/fb_types.h	2004-10-08 11:25:29.000000000 +0200
+@@ -74,7 +74,7 @@
+ // Temporarly restrict new definition until ULONG clash with Windows
+ // type is solved. Win64 port is not possible before that point.
+ // Cannot use SIZEOF_LONG define here because we are in a public header
+-#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
++#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha__)
+ 	/* EKU: Firebird requires (S)LONG to be 32 bit */
+ #   define LONG_DEFINED
+     typedef int SLONG;
