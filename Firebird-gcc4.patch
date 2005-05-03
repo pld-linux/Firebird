@@ -1,0 +1,448 @@
+--- firebird-1.5.2.4731/src/common/classes/alloc.h~	2004-09-17 20:34:27.000000000 +0000
++++ firebird-1.5.2.4731/src/common/classes/alloc.h	2005-05-02 23:30:18.351312952 +0000
+@@ -253,11 +253,11 @@
+ #define FB_NEW(pool) new(pool,__FILE__,__LINE__)
+ #define FB_NEW_RPT(pool,count) new(pool,count,__FILE__,__LINE__)
+ #else
+-static inline void* operator new(size_t s, Firebird::MemoryPool& pool) {
++inline void* operator new(size_t s, Firebird::MemoryPool& pool) {
+ 	return pool.allocate(s);
+ //	return pool.calloc(s);
+ }
+-static inline void* operator new[](size_t s, Firebird::MemoryPool& pool) {
++inline void* operator new[](size_t s, Firebird::MemoryPool& pool) {
+ 	return pool.allocate(s);
+ //	return pool.calloc(s);
+ }
+--- firebird-1.5.2.4731/src/common/config/config.h.orig	2005-05-02 23:33:31.284982576 +0000
++++ firebird-1.5.2.4731/src/common/config/config.h	2005-05-02 23:36:57.674606584 +0000
+@@ -118,12 +118,12 @@
+ 	/*
+ 		Block size for the sorting manager
+ 	*/
+-	static int getSortMemBlockSize();
++	static size_t getSortMemBlockSize();
+ 
+ 	/*
+ 		Memory usage limit for the sorting manager
+ 	*/
+-	static int getSortMemUpperLimit();
++	static size_t getSortMemUpperLimit();
+ 
+ 	/*
+ 		Whether remote (NFS) files can be opened
+@@ -133,12 +133,12 @@
+ 	/*
+ 		Startup option for the guardian
+ 	*/
+-	static int getGuardianOption();
++	static size_t getGuardianOption();
+ 
+ 	/*
+ 		CPU affinity mask
+ 	*/
+-	static int getCpuAffinityMask();
++	static size_t getCpuAffinityMask();
+ 
+ 	/*
+ 		Old parameter ordering for backward compatibility with FB1/IB6.X
+@@ -148,7 +148,7 @@
+ 	/*
+ 		XDR buffer size
+ 	*/
+-	static int getTcpRemoteBufferSize();
++	static size_t getTcpRemoteBufferSize();
+ 
+ 	/*
+ 		Disable Nagle algorithm
+@@ -158,37 +158,37 @@
+ 	/*
+ 		IPC client mapping
+ 	*/
+-	static int getIpcMapSize();
++	static size_t getIpcMapSize();
+ 
+ 	/*
+ 		Default database cache size
+ 	*/
+-	static int getDefaultDbCachePages();
++	static size_t getDefaultDbCachePages();
+ 
+ 	/*
+ 		Connection timeout
+ 	*/
+-	static int getConnectionTimeout();
++	static size_t getConnectionTimeout();
+ 
+ 	/*
+ 		Dummy packet interval
+ 	*/
+-	static int getDummyPacketInterval();
++	static size_t getDummyPacketInterval();
+ 
+ 	/*
+ 		Lock manager memory size
+ 	*/
+-	static int getLockMemSize();
++	static size_t getLockMemSize();
+ 
+ 	/*
+ 		Lock manager semaphore count
+ 	*/
+-	static int getLockSemCount();
++	static size_t getLockSemCount();
+ 
+ 	/*
+ 		Lock manager signal number
+ 	*/
+-	static int getLockSignal();
++	static size_t getLockSignal();
+ 
+ 	/*
+ 		Lock manager grant order
+@@ -198,27 +198,27 @@
+ 	/*
+ 		Lock manager hash slots
+ 	*/
+-	static int getLockHashSlots();
++	static size_t getLockHashSlots();
+ 
+ 	/*
+ 		Lock manager acquire spins
+ 	*/
+-	static int getLockAcquireSpins();
++	static size_t getLockAcquireSpins();
+ 
+ 	/*
+ 		Event manager memory size
+ 	*/
+-	static int getEventMemSize();
++	static size_t getEventMemSize();
+ 
+ 	/*
+ 		Deadlock timeout
+ 	*/
+-	static int getDeadlockTimeout();
++	static size_t getDeadlockTimeout();
+ 
+ 	/*
+ 		Solaris stall value
+ 	*/
+-	static int getSolarisStallValue();
++	static size_t getSolarisStallValue();
+ 
+ 	/*
+ 		Trace memory pools
+@@ -228,17 +228,17 @@
+ 	/*
+ 		Priority switch delay
+ 	*/
+-	static int getPrioritySwitchDelay();
++	static size_t getPrioritySwitchDelay();
+ 
+ 	/*
+ 		Dead threads collection
+ 	*/
+-	static int getDeadThreadsCollection();
++	static size_t getDeadThreadsCollection();
+ 
+ 	/*
+ 		Priority boost
+ 	*/
+-	static int getPriorityBoost();
++	static size_t getPriorityBoost();
+ 
+ 	/*
+ 		Service name for remote protocols
+@@ -248,7 +248,7 @@
+ 	/*
+ 		Service port for INET
+ 	*/
+-	static int getRemoteServicePort();
++	static size_t getRemoteServicePort();
+ 
+ 	/*
+ 		Pipe name for WNET
+@@ -263,17 +263,17 @@
+ 	/*
+ 		Unflushed writes number
+ 	*/
+-	static int getMaxUnflushedWrites();
++	static size_t getMaxUnflushedWrites();
+ 
+ 	/*
+ 		Unflushed write time
+ 	*/
+-	static int getMaxUnflushedWriteTime();
++	static size_t getMaxUnflushedWriteTime();
+ 
+ 	/*
+ 		Process priority level
+ 	*/
+-	static int getProcessPriorityLevel();
++	static size_t getProcessPriorityLevel();
+ 
+ 	/*
+ 		Create window for IPC stuff
+@@ -288,7 +288,7 @@
+ 	/*
+ 		Port for event processing
+ 	*/
+-	static int getRemoteAuxPort();
++	static size_t getRemoteAuxPort();
+ 
+ 	/*
+ 		Server binding NIC address
+--- firebird-1.5.2.4731/src/common/config/config.cpp.orig	2005-05-02 23:33:35.531337032 +0000
++++ firebird-1.5.2.4731/src/common/config/config.cpp	2005-05-02 23:36:03.720808808 +0000
+@@ -257,14 +257,14 @@
+ 	return result ? result : sysConfig.root_dir;
+ }
+ 
+-int Config::getSortMemBlockSize()
++size_t Config::getSortMemBlockSize()
+ {
+-	return (int) sysConfig.values[KEY_SORT_MEM_BLOCK_SIZE];
++	return (size_t) sysConfig.values[KEY_SORT_MEM_BLOCK_SIZE];
+ }
+ 
+-int Config::getSortMemUpperLimit()
++size_t Config::getSortMemUpperLimit()
+ {
+-	return (int) sysConfig.values[KEY_SORT_MEM_UPPER_LIMIT];
++	return (size_t) sysConfig.values[KEY_SORT_MEM_UPPER_LIMIT];
+ }
+ 
+ bool Config::getRemoteFileOpenAbility()
+@@ -272,14 +272,14 @@
+ 	return (bool) sysConfig.values[KEY_REMOTE_FILE_OPEN_ABILITY];
+ }
+ 
+-int Config::getGuardianOption()
++size_t Config::getGuardianOption()
+ {
+-	return (int) sysConfig.values[KEY_GUARDIAN_OPTION];
++	return (size_t) sysConfig.values[KEY_GUARDIAN_OPTION];
+ }
+ 
+-int Config::getCpuAffinityMask()
++size_t Config::getCpuAffinityMask()
+ {
+-	return (int) sysConfig.values[KEY_CPU_AFFINITY_MASK];
++	return (size_t) sysConfig.values[KEY_CPU_AFFINITY_MASK];
+ }
+ 
+ bool Config::getOldParameterOrdering()
+@@ -287,9 +287,9 @@
+ 	return (bool) sysConfig.values[KEY_OLD_PARAMETER_ORDERING];
+ }
+ 
+-int Config::getTcpRemoteBufferSize()
++size_t Config::getTcpRemoteBufferSize()
+ {
+-	return (int) sysConfig.values[KEY_TCP_REMOTE_BUFFER_SIZE];
++	return (size_t) sysConfig.values[KEY_TCP_REMOTE_BUFFER_SIZE];
+ }
+ 
+ bool Config::getTcpNoNagle()
+@@ -297,39 +297,39 @@
+ 	return (bool) sysConfig.values[KEY_TCP_NO_NAGLE];
+ }
+ 
+-int Config::getIpcMapSize()
++size_t Config::getIpcMapSize()
+ {
+-	return (int) sysConfig.values[KEY_IPC_MAP_SIZE];
++	return (size_t) sysConfig.values[KEY_IPC_MAP_SIZE];
+ }
+ 
+-int Config::getDefaultDbCachePages()
++size_t Config::getDefaultDbCachePages()
+ {
+-	return (int) sysConfig.values[KEY_DEFAULT_DB_CACHE_PAGES];
++	return (size_t) sysConfig.values[KEY_DEFAULT_DB_CACHE_PAGES];
+ }
+ 
+-int Config::getConnectionTimeout()
++size_t Config::getConnectionTimeout()
+ {
+-	return (int) sysConfig.values[KEY_CONNECTION_TIMEOUT];
++	return (size_t) sysConfig.values[KEY_CONNECTION_TIMEOUT];
+ }
+ 
+-int Config::getDummyPacketInterval()
++size_t Config::getDummyPacketInterval()
+ {
+-	return (int) sysConfig.values[KEY_DUMMY_PACKET_INTERVAL];
++	return (size_t) sysConfig.values[KEY_DUMMY_PACKET_INTERVAL];
+ }
+ 
+-int Config::getLockMemSize()
++size_t Config::getLockMemSize()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_MEM_SIZE];
++	return (size_t) sysConfig.values[KEY_LOCK_MEM_SIZE];
+ }
+ 
+-int Config::getLockSemCount()
++size_t Config::getLockSemCount()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_SEM_COUNT];
++	return (size_t) sysConfig.values[KEY_LOCK_SEM_COUNT];
+ }
+ 
+-int Config::getLockSignal()
++size_t Config::getLockSignal()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_SIGNAL];
++	return (size_t) sysConfig.values[KEY_LOCK_SIGNAL];
+ }
+ 
+ bool Config::getLockGrantOrder()
+@@ -337,29 +337,29 @@
+ 	return (bool) sysConfig.values[KEY_LOCK_GRANT_ORDER];
+ }
+ 
+-int Config::getLockHashSlots()
++size_t Config::getLockHashSlots()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_HASH_SLOTS];
++	return (size_t) sysConfig.values[KEY_LOCK_HASH_SLOTS];
+ }
+ 
+-int Config::getLockAcquireSpins()
++size_t Config::getLockAcquireSpins()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_ACQUIRE_SPINS];
++	return (size_t) sysConfig.values[KEY_LOCK_ACQUIRE_SPINS];
+ }
+ 
+-int Config::getEventMemSize()
++size_t Config::getEventMemSize()
+ {
+-	return (int) sysConfig.values[KEY_EVENT_MEM_SIZE];
++	return (size_t) sysConfig.values[KEY_EVENT_MEM_SIZE];
+ }
+ 
+-int Config::getDeadlockTimeout()
++size_t Config::getDeadlockTimeout()
+ {
+-	return (int) sysConfig.values[KEY_DEADLOCK_TIMEOUT];
++	return (size_t) sysConfig.values[KEY_DEADLOCK_TIMEOUT];
+ }
+ 
+-int Config::getSolarisStallValue()
++size_t Config::getSolarisStallValue()
+ {
+-	return (int) sysConfig.values[KEY_SOLARIS_STALL_VALUE];
++	return (size_t) sysConfig.values[KEY_SOLARIS_STALL_VALUE];
+ }
+ 
+ bool Config::getTraceMemoryPools()
+@@ -367,25 +367,25 @@
+ 	return (bool) sysConfig.values[KEY_TRACE_MEMORY_POOLS];
+ }
+ 
+-int Config::getPrioritySwitchDelay()
++size_t Config::getPrioritySwitchDelay()
+ {
+-	int rc = (int) sysConfig.values[KEY_PRIORITY_SWITCH_DELAY];
++	size_t rc = (size_t) sysConfig.values[KEY_PRIORITY_SWITCH_DELAY];
+ 	if (rc < 1)
+ 		rc = 1;
+ 	return rc;
+ }
+ 
+-int Config::getDeadThreadsCollection()
++size_t Config::getDeadThreadsCollection()
+ {
+-	int rc = (int) sysConfig.values[KEY_DEAD_THREADS_COLLECTION];
++	size_t rc = (size_t) sysConfig.values[KEY_DEAD_THREADS_COLLECTION];
+ 	if (rc < 1)
+ 		rc = 1;
+ 	return rc;
+ }
+ 
+-int Config::getPriorityBoost()
++size_t Config::getPriorityBoost()
+ {
+-	int rc = (int) sysConfig.values[KEY_PRIORITY_BOOST];
++	size_t rc = (size_t) sysConfig.values[KEY_PRIORITY_BOOST];
+ 	if (rc < 1)
+ 		rc = 1;
+ 	if (rc > 1000)
+@@ -398,9 +398,9 @@
+ 	return (const char*) sysConfig.values[KEY_REMOTE_SERVICE_NAME];
+ }
+ 
+-int Config::getRemoteServicePort()
++size_t Config::getRemoteServicePort()
+ {
+-	return (int) sysConfig.values[KEY_REMOTE_SERVICE_PORT];
++	return (size_t) sysConfig.values[KEY_REMOTE_SERVICE_PORT];
+ }
+ 
+ const char *Config::getRemotePipeName()
+@@ -413,19 +413,19 @@
+ 	return (const char*) sysConfig.values[KEY_IPC_NAME];
+ }
+ 
+-int Config::getMaxUnflushedWrites()
++size_t Config::getMaxUnflushedWrites()
+ {
+-	return (int) sysConfig.values[KEY_MAX_UNFLUSHED_WRITES];
++	return (size_t) sysConfig.values[KEY_MAX_UNFLUSHED_WRITES];
+ }
+ 
+-int Config::getMaxUnflushedWriteTime()
++size_t Config::getMaxUnflushedWriteTime()
+ {
+-	return (int) sysConfig.values[KEY_MAX_UNFLUSHED_WRITE_TIME];
++	return (size_t) sysConfig.values[KEY_MAX_UNFLUSHED_WRITE_TIME];
+ }
+ 
+-int Config::getProcessPriorityLevel()
++size_t Config::getProcessPriorityLevel()
+ {
+-	return (int) sysConfig.values[KEY_PROCESS_PRIORITY_LEVEL];
++	return (size_t) sysConfig.values[KEY_PROCESS_PRIORITY_LEVEL];
+ }
+ 
+ bool Config::getCreateInternalWindow()
+@@ -438,10 +438,10 @@
+ 	return (bool) sysConfig.values[KEY_COMPLETE_BOOLEAN_EVALUATION];
+ }
+ 
+-int Config::getRemoteAuxPort()
++size_t Config::getRemoteAuxPort()
+ {
+ #ifdef SUPERSERVER
+-	return (int) sysConfig.values[KEY_REMOTE_AUX_PORT];
++	return (size_t) sysConfig.values[KEY_REMOTE_AUX_PORT];
+ #else
+ 	return 0;
+ #endif
+--- firebird-1.5.2.4731/src/jrd/common.h.orig	2005-05-02 23:26:45.000000000 +0000
++++ firebird-1.5.2.4731/src/jrd/common.h	2005-05-02 23:50:08.873326096 +0000
+@@ -864,8 +864,8 @@
+ 
+ #define JRD_BUGCHK 15			/* facility code for bugcheck messages */
+ #ifndef OFFSET
+-#define OFFSET(struct,fld)      ((int) &((struct) 0)->fld)
+-#define OFFSETA(struct,fld)     ((int) ((struct) 0)->fld)
++#define OFFSET(struct,fld)      ((size_t) &((struct) 0)->fld)
++#define OFFSETA(struct,fld)     ((size_t) ((struct) 0)->fld)
+ #endif
+ 
+ #ifndef ODS_ALIGNMENT
+--- firebird-1.5.2.4731/src/jrd/gds.cpp.orig	2005-05-02 23:39:56.000000000 +0000
++++ firebird-1.5.2.4731/src/jrd/gds.cpp	2005-05-02 23:51:13.128557816 +0000
+@@ -2356,7 +2356,7 @@
+ 		return result;
+ 
+ 	if (stdio_flag)
+-		if (!(result = ib_fdopen((int) result, "w+")))
++		if (!(result = ib_fdopen((size_t) result, "w+")))
+ 			return (void *)-1;
+ 
+ 	if (expanded_string)
