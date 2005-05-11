@@ -34,13 +34,13 @@ BuildRequires:	automake
 BuildRequires:	libtool
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
-# official ports are x86, sparc and amd64
+# official ports are x86, sparc and x86_64
 # alpha and ppc added in morearchs patch
 # see morearchs patch if you want to add support for more archs
-ExclusiveArch:	%{ix86} amd64 sparc sparcv9 alpha ppc
+ExclusiveArch:	%{ix86} %{x8664} sparc sparcv9 alpha ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
@@ -147,7 +147,7 @@ cd ../../..
 
 # OPTFLAGS for editline
 export OPTFLAGS="%{rpmcflags}"
-%ifarch amd64
+%ifarch %{x8664}
 DARCH="-DAMD64"
 %else
 %ifarch sparc sparcv9
