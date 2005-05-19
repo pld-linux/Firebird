@@ -184,7 +184,7 @@ cp -df lib/* $RPM_BUILD_ROOT%{_libdir}
 install examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 # or libfbembed?
-ln -sf libfbclient.so.1.5.0 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
+ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
 ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
