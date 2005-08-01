@@ -31,6 +31,7 @@ Patch4:		%{name}-morearchs.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	bison
 BuildRequires:	libtool
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
