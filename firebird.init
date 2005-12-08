@@ -51,7 +51,7 @@ case "$1" in
 		rm -f /var/lock/subsys/firebird >/dev/null 2>&1
 	else
 		msg_not_running firebird
-	fi	
+	fi
 	;;
   restart|force-reload)
 	$0 stop
