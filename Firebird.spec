@@ -28,6 +28,7 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-env-overflows.patch
 Patch3:		%{name}-va.patch
 Patch4:		%{name}-morearchs.patch
+Patch5:		%{name}-gcc4.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -124,6 +125,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE1} -d docs/IB6.0
