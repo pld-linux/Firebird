@@ -1,6 +1,6 @@
 # TODO:
 # - kill unaligned accesses (create_db,gpre_current,gbak_static,isql_static) on alpha
-# - create classic server/super server subpackaged and drop bcond
+# - create classic server/super server subpackages and drop bcond
 #   (see firebird2 on debian how to do it)
 %bcond_with	ss	# Super Server
 Summary:	Firebird SQL Database Server and Client tools
@@ -8,12 +8,12 @@ Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Summary(de):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	1.5.2.4731
+Version:	1.5.3.4870
 Release:	1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
-# Source0-md5:	fea53ed5213cff4bd96513fb1a6c0ca2
+# Source0-md5:	559d005ab6622274f9448687f930393c
 Source1:	http://www.ibphoenix.com/downloads/60All.zip
 # Source1-md5:	f86a132012361cd4ae88563105741a4c
 Source2:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
@@ -25,10 +25,9 @@ Source5:	firebird.sysconfig
 Source6:	firebird.inetd
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
-Patch2:		%{name}-env-overflows.patch
-Patch3:		%{name}-va.patch
-Patch4:		%{name}-morearchs.patch
-Patch5:		%{name}-gcc4.patch
+Patch2:		%{name}-va.patch
+Patch3:		%{name}-morearchs.patch
+Patch4:		%{name}-gcc4.patch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -125,7 +124,6 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE1} -d docs/IB6.0
