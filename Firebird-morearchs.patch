@@ -22,7 +22,7 @@
  // we do not care of 16-bit platforms anymore thus we may use plain "int"
  // which is 32-bit on all platforms we support
 -#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
-+#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha__) || defined(__sparcv9)
++#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha__)
  typedef	int		ISC_LONG;
  typedef	unsigned int	ISC_ULONG;
  #else
