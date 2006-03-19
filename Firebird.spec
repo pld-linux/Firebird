@@ -4,8 +4,8 @@
 #   (see firebird2 on debian how to do it)
 %bcond_with	ss	# Super Server
 Summary:	Firebird SQL Database Server and Client tools
-Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Summary(de):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
+Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.3.4870
@@ -32,10 +32,10 @@ URL:		http://firebird.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
-BuildRequires:	libtool
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool
 BuildRequires:	ncurses-devel
-BuildRequires:	rpmbuild(macros) >= 1.213
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
 # official ports are x86, sparc and x86_64
@@ -203,17 +203,11 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with ss}
 %post
 /sbin/chkconfig --add firebird
-if [ -f /var/lock/subsys/firebird ]; then
-	/etc/rc.d/init.d/firebird restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/firebird start\" to start firebird." >&2
-fi
+%service firebird restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/firebird ]; then
-		/etc/rc.d/init.d/firebird stop
-	fi
+	%service firebird stop
 	/sbin/chkconfig --del firebird
 fi
 %endif
