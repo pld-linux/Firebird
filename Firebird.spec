@@ -9,7 +9,7 @@ Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.3.4870
-Release:	1
+Release:	2
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
@@ -158,6 +158,8 @@ DARCH=""
 %endif
 %endif
 %{__make} -j1 \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
 	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch $DARCH" \
 	LIB_LINK_RPATH_LINE= \
