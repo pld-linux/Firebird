@@ -1,0 +1,28 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## security-remote-preauth-crash.dpatch by  <divanov@creditreform.bg>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad firebird2-1.5.3.4870~/src/jrd/unix.cpp firebird2-1.5.3.4870/src/jrd/unix.cpp
+--- firebird2-1.5.3.4870~/src/jrd/unix.cpp	2004-03-29 06:50:11.000000000 +0300
++++ firebird2-1.5.3.4870/src/jrd/unix.cpp	2006-03-20 11:46:53.000000000 +0200
+@@ -643,6 +643,8 @@
+ 	if (string) {
+ 		ptr = string;
+ 		if (length) {
++                        if (length >= sizeof(temp)) length = sizeof(temp) - 1;
++
+ 			MOVE_FAST(string, temp, length);
+ 			temp[length] = 0;
+ 			ptr = temp;
+@@ -651,6 +653,8 @@
+ 	else {
+ 		ptr = file_name;
+ 		if (file_length) {
++                        if (file_length >= sizeof(temp)) file_length = sizeof(temp) - 1;
++
+ 			MOVE_FAST(file_name, temp, file_length);
+ 			temp[file_length] = 0;
+ 			ptr = temp;

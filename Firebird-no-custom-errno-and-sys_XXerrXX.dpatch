@@ -1,0 +1,201 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 003_no-custom-errno-and-sys_XXerrXX.dpatch by  <divanov@creditreform.bg>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Remove declarations of errno, syserrlist, sysnerr
+
+@DPATCH@
+
+--- firebird2-1.5.2.orig/src/jrd/gds.cpp
++++ firebird2-1.5.2/src/jrd/gds.cpp
+@@ -182,12 +182,6 @@
+ 
+ extern "C" {
+ 
+-#if !(defined VMS || defined WIN_NT || defined LINUX || defined FREEBSD || defined NETBSD || defined DARWIN )
+-extern int errno;
+-extern SCHAR *sys_errlist[];
+-extern int sys_nerr;
+-#endif
+-
+ #ifndef PRINTF
+ #define PRINTF 			ib_printf
+ #endif
+@@ -334,8 +328,6 @@
+ #define ib_printf	(*_libgds_printf)
+ #define ib_fopen	(*_libgds_fopen)
+ #define ib_fclose	(*_libgds_fclose)
+-#define sys_nerr	(*_libgds_sys_nerr)
+-#define sys_errlist	(*_libgds_sys_errlist)
+ #define malloc		(*_libgds_malloc)
+ #define gettimeofday(*_libgds_gettimeofday)
+ #define ctime		(*_libgds_ctime)
+@@ -368,8 +360,6 @@
+ extern int ib_printf();
+ extern IB_FILE *ib_fopen();
+ extern int ib_fclose();
+-extern int sys_nerr;
+-extern SCHAR *sys_errlist[];
+ extern void *malloc();
+ extern int gettimeofday();
+ extern SCHAR *ctime();
+@@ -956,14 +946,7 @@
+ 		break;
+ 
+ 	case gds_arg_unix:
+-		if (code > 0 && code < sys_nerr && (p = (TEXT*)sys_errlist[code]))
+-			strcpy(s, p);
+-		else if (code == 60)
+-			strcpy(s, "connection timed out");
+-		else if (code == 61)
+-			strcpy(s, "connection refused");
+-		else
+-			sprintf(s, "unknown unix error %ld", code);	/* TXNN */
++		sprintf(s, "%s", strerror (code));
+ 		break;
+ 
+ 	case gds_arg_dos:
+--- firebird2-1.5.2.orig/src/jrd/shrinit.cpp
++++ firebird2-1.5.2/src/jrd/shrinit.cpp
+@@ -70,8 +70,6 @@
+ void (*_libgds_rewind) () = 0;
+ int (*_libgds_fseek) () = 0;
+ int (*_libgds__flsbuf) () = 0;
+-SCHAR(**_libgds_sys_errlist) = 0;
+-int *_libgds_sys_nerr = 0;
+ void *(*_libgds_malloc) () = 0;
+ int (*_libgds_gettimeofday) () = 0;
+ SCHAR *(*_libgds_ctime) () = 0;
+--- firebird2-1.5.2.orig/src/extern/editline/sys.h
++++ firebird2-1.5.2/src/extern/editline/sys.h
+@@ -124,11 +124,8 @@
+ extern int	fflush(FILE *);
+ extern int	tolower(int);
+ extern int	toupper(int);
+-extern int	errno, sys_nerr;
+-extern char	*sys_errlist[];
+ extern void	perror(const char *);
+ #  include <string.h>
+-#  define strerror(e)	sys_errlist[e]
+ # endif
+ # ifdef SABER
+ extern ptr_t    memcpy(ptr_t, const ptr_t, size_t);
+--- firebird2-1.5.2.orig/src/utilities/rebuild.cpp
++++ firebird2-1.5.2/src/utilities/rebuild.cpp
+@@ -56,8 +56,6 @@
+ 
+ IB_FILE *dbg_file;
+ 
+-extern SCHAR *sys_errlist[];
+-
+ static void checksum(RBDB, ULONG, ULONG, UCHAR);
+ static USHORT compute_checksum(RBDB, PAG);
+ static void db_error(int);
+@@ -536,7 +534,7 @@
+  *
+  **************************************/
+ 
+-	ib_printf(sys_errlist[status]);
++	ib_printf(strerror (status));
+ 	exit(FINI_ERROR);
+ }
+ 
+--- firebird2-1.5.2.orig/src/utilities/analyse.cpp
++++ firebird2-1.5.2/src/utilities/analyse.cpp
+@@ -47,8 +47,6 @@
+ #include "jrd.h"
+ #include "ods.h"
+ 
+-extern SCHAR *sys_errlist[];
+-
+ static void analyse(int, SCHAR *, PAG, int);
+ static SLONG get_long(void);
+ static void db_error(int);
+@@ -290,7 +288,7 @@
+  *
+  **************************************/
+ 
+-	ib_printf(sys_errlist[status]);
++	ib_printf(strerror (status));
+ 	abort();
+ }
+ 
+--- firebird2-1.5.2.orig/src/utilities/dba_full.epp
++++ firebird2-1.5.2/src/utilities/dba_full.epp
+@@ -63,8 +63,6 @@
+ 
+ #if (defined WIN_NT)
+ #include <stdlib.h>
+-#else
+-extern SCHAR *sys_errlist[];
+ #endif
+ 
+ typedef struct dba_rel {
+@@ -1122,7 +1120,7 @@
+ 	tddba = GET_THREAD_DATA;
+ 
+ #ifndef VMS
+-	FPRINTF(tddba->sw_outfile, "%s\n", sys_errlist[status]);
++	FPRINTF(tddba->sw_outfile, "%s\n", strerror (status));
+ #else
+ 	if ((p = strerror(status)) || (p = strerror(EVMSERR, status)))
+ 		FPRINTF(tddba->sw_outfile, "%s\n", p);
+--- firebird2-1.5.2.orig/src/utilities/sbc_print.cpp
++++ firebird2-1.5.2/src/utilities/sbc_print.cpp
+@@ -69,10 +69,6 @@
+ 
+ #define DEFAULT_SIZE	8192
+ 
+-#if !(defined WIN_NT)
+-extern SCHAR *sys_errlist[];
+-#endif
+-
+ static void cache_init(void);
+ static void db_get_sbc(SCHAR *, SCHAR *, SLONG *, SSHORT *);
+ 
+@@ -490,7 +486,7 @@
+ 	SCHAR *p;
+ 
+ #ifndef VMS
+-	ib_printf(sys_errlist[status]);
++	ib_printf(strerror (status));
+ #else
+ 	if ((p = strerror(status)) || (p = strerror(EVMSERR, status)))
+ 		ib_printf("%s\n", p);
+--- firebird2-1.5.2.orig/src/utilities/dba.epp
++++ firebird2-1.5.2/src/utilities/dba.epp
+@@ -1520,7 +1520,7 @@
+ 	tddba->page_number = -1;
+ 
+ #ifndef VMS
+-	FPRINTF(tddba->sw_outfile, "%s\n", sys_errlist[status]);
++	FPRINTF(tddba->sw_outfile, "%s\n", strerror (status));
+ #else
+ 	if ((p = strerror(status)) || (p = strerror(EVMSERR, status)))
+ 		FPRINTF(tddba->sw_outfile, "%s\n", p);
+--- firebird2-1.5.2.orig/src/lock/lock.cpp
++++ firebird2-1.5.2/src/lock/lock.cpp
+@@ -338,14 +338,12 @@
+ 
+ 
+ #ifdef SHLIB_DEFS
+-#define sys_errlist	(*_libgds_sys_errlist)
+ #define waitpid		(*_libgds_waitpid)
+ #define execl		(*_libgds_execl)
+ #define _exit		(*_libgds__exit)
+ #define statistics	(*_libgds_stat)
+ #define chmod		(*_libgds_chmod)
+ 
+-extern SCHAR *sys_errlist[];
+ extern int waitpid();
+ extern int execl();
+ extern void _exit();
+@@ -2067,7 +2065,7 @@
+ 
+ #if !(defined WIN_NT)
+ 	if (errno > 0)
+-		ib_fprintf(ib_stderr, "--%s\n", sys_errlist[errno]);
++		ib_fprintf(ib_stderr, "--%s\n", strerror (errno));
+ #endif
+ 
+ #ifdef DEV_BUILD

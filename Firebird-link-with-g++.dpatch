@@ -1,0 +1,32 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 008_link-with-g++.dpatch by  <divanov@creditreform.bg>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: use g++ to link objects
+
+@DPATCH@
+
+--- firebird2-1.5.2.orig/builds/posix/make.rules
++++ firebird2-1.5.2/builds/posix/make.rules
+@@ -91,16 +91,16 @@
+ ifdef UseLibToolForLink
+ 
+ 
+-    LIB_LINK= libtool $(CC(
+-    STATICLIB_LINK = libtool $(CC) -all-static
++    LIB_LINK= libtool $(CXX)
++    STATICLIB_LINK = libtool $(CXX) -all-static
+ #    LIB_LINK_OPTIONS = -version-info 0:0:0 -release 1.5.0.0 -rpath /usr/lib
+     LIB_LINK_OPTIONS += -version-info 0:0:0 -release 1.5.0.0 $(LIB_LINK_RPATH)$(FirebirdInstallPrefix)/lib
+ 
+-    EXE_LINK = libtool $(CC)
+-    STATICEXE_LINK = libtool $(CC) -all-static
++    EXE_LINK = libtool $(CXX)
++    STATICEXE_LINK = libtool $(CXX) -all-static
+ else
+ 
+-    LIB_LINK= $(CC)
++    LIB_LINK= $(CXX)
+     STATICLIB_LINK= ar cruvs
+ #    LIB_LINK_OPTIONS = -soname libgds.$(SHRLIB_EXT) -rpath /usr/lib
+ #    LIB_LINK_OPTIONS = -soname libgds.$(SHRLIB_EXT).2 -rpath /usr/lib

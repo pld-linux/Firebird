@@ -1,0 +1,59 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 006_fix-os-detection.dpatch by  <divanov@creditreform.bg>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix OS detection in configure and configure.in
+
+@DPATCH@
+
+--- firebird2-1.5.2.orig/src/extern/editline/configure
++++ firebird2-1.5.2/src/extern/editline/configure
+@@ -894,7 +894,7 @@
+   *-*-freebsd*)
+ 	ABI="elf"
+ 	;;
+-  *-*-linux*)
++  *-*-linux* | *-*-gnu* | *-*-k*bsd*-gnu)
+ 	ABI="elf"
+ 	;;
+   *-*-netbsd*)
+--- firebird2-1.5.2.orig/src/extern/editline/configure.in
++++ firebird2-1.5.2/src/extern/editline/configure.in
+@@ -32,7 +32,7 @@
+   *-*-freebsd*)
+ 	ABI="elf"
+ 	;;
+-  *-*-linux*)
++  *-*-linux* | *-*-gnu* | *-*-k*bsd*-gnu)
+ 	ABI="elf"
+ 	;;
+   *-*-netbsd*)
+--- firebird2-1.5.2.orig/configure.in
++++ firebird2-1.5.2/configure.in
+@@ -58,7 +58,7 @@
+     SHRLIB_EXT=so
+     ;;
+ 
+-  x86_64*-*-linux*)
++  x86_64*-*-linux* | x86_64*-*-gnu* | x86_64*-*-k*bsd*-gnu)
+     MAKEFILE_PREFIX=linux_amd64
+     INSTALL_PREFIX=linux
+     PLATFORM=LINUX
+@@ -70,7 +70,7 @@
+     CPU_TYPE=amd64
+     ;;
+ 
+-  sparc*-*-linux*)
++  sparc*-*-linux* | sparc*-*-gnu* | sparc*-*-k*bsd*-gnu)
+     MAKEFILE_PREFIX=linux_sparc32
+     INSTALL_PREFIX=linux
+     PLATFORM=LINUX
+@@ -80,7 +80,7 @@
+     SHRLIB_EXT=so
+     ;;
+ 
+-  *-*-linux*)
++  *-*-linux* | *-*-gnu* | *-*-k*bsd*-gnu)
+     MAKEFILE_PREFIX=linux
+     PLATFORM=LINUX
+     AC_DEFINE(LINUX)

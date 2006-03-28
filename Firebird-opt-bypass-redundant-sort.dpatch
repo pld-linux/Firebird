@@ -1,0 +1,103 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 009_opt-bypass-redundant-sort.dpatch by  <divanov@creditreform.bg>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: RP: optimize sort with OUTER JOIN if all the fields in the sort list 
+## DP: are from one stream, check the stream is the most outer stream, if true 
+## DP: update rse and ignore the sort
+
+@DPATCH@
+
+--- firebird2-1.5.2.orig/src/jrd/opt.cpp
++++ firebird2-1.5.2/src/jrd/opt.cpp
+@@ -1518,7 +1518,89 @@
+ 			set_position(sort, project, NULL);
+ 			sort = rse->rse_sorted = NULL;
+ 		}
+-	}
++	}
++
++	// RP: optimize sort with OUTER JOIN
++	// if all the fields in the sort list are from one stream, check the stream is
++	// the most outer stream, if true update rse and ignore the sort
++	if (sort) {
++		UCHAR sort_stream = 0;
++		bool usableSort = true;
++		sort_ptr = sort->nod_arg;
++		sort_end = sort_ptr + sort->nod_count;
++		for (; sort_ptr < sort_end; sort_ptr++) {
++			if ((*sort_ptr)->nod_type == nod_field) { 
++				// Get stream for this field at this position.
++				const UCHAR current_stream = (UCHAR)(IPTR)(*sort_ptr)->nod_arg[e_fld_stream];
++				// If this is the first position node, save this stream.
++				if (sort_ptr == sort->nod_arg) {
++			    	sort_stream = current_stream;
++				}
++				else if (current_stream != sort_stream) {
++					// If the current stream is different then the previous stream
++					// then we can't use this sort for an indexed order retrieval.					
++					usableSort = false;
++					break;
++				}
++			}
++			else {
++				// This position doesn't use a simple field, thus we can't use
++				// any index for the sort.
++				usableSort = false;
++				break;
++			}
++		}
++
++		if (usableSort) {
++			RSE new_rse = NULL;
++			JRD_NOD node = (JRD_NOD) rse;
++			while (node) {
++				if (node->nod_type == nod_rse) {
++					new_rse = (RSE) node;
++					if (new_rse->rse_jointype == blr_inner) {
++						if (new_rse->rse_count == 1) {
++							node = new_rse->rse_relation[0];
++						}
++						else {
++							bool sortStreamFound = false;
++							for (int i = 0; i < new_rse->rse_count; i++) {
++								JRD_NOD subNode = (JRD_NOD) new_rse->rse_relation[i];
++								if (subNode->nod_type == nod_relation && 
++									((USHORT)(IPTR)subNode->nod_arg[e_rel_stream]) == sort_stream && 
++									new_rse != rse) 
++								{
++									sortStreamFound = true;
++									break;
++								}
++
++							}
++							if (sortStreamFound) {
++								new_rse->rse_sorted = sort;
++								sort = rse->rse_sorted = NULL;
++							}
++							node = NULL;
++						}
++					}
++					else if (new_rse->rse_jointype == blr_left) {
++						node = new_rse->rse_relation[0];
++					}
++					else {
++						node = NULL;
++					}
++				}
++				else {
++					if (node->nod_type == nod_relation && 
++						((USHORT)(IPTR)node->nod_arg[e_rel_stream]) == sort_stream && 
++						new_rse && new_rse != rse) 
++					{
++						new_rse->rse_sorted = sort;
++						sort = rse->rse_sorted = NULL;
++					}
++					node = NULL;
++				}
++			}
++		}
++	}
+ }
+ 
+ 
