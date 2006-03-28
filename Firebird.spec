@@ -28,6 +28,13 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
 Patch4:		%{name}-gcc4.patch
+Patch5:		%{name}-fix-os-detection.dpatch
+Patch6:		%{name}-fix-pthreads-detect.dpatch
+Patch7:		%{name}-link-with-g++.dpatch
+Patch8:		%{name}-no-custom-errno-and-sys_XXerrXX.dpatch
+Patch9:		%{name}-opt-bypass-redundant-sort.dpatch
+Patch10:	%{name}-security-remote-preauth-crash.dpatch
+Patch11:	%{name}-separate-file-and-sem-perms.dpatch
 URL:		http://firebird.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -124,7 +131,13 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE1} -d docs/IB6.0
 tar xzf %{SOURCE2} -C docs/IB4.0
