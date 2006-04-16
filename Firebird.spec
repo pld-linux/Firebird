@@ -45,6 +45,10 @@ BuildRequires:	ncurses-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
+%if %{with ss}
+Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
+%endif
 # official ports are x86, sparc and x86_64
 # alpha and ppc added in morearchs patch
 # see morearchs patch if you want to add support for more archs
