@@ -174,7 +174,18 @@ DARCH="-Dsparc"
 DARCH=""
 %endif
 %endif
+
 %{__make} -j1 \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
+	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch $DARCH" \
+	LIB_LINK_RPATH_LINE= \
+	LIB_CLIENT_LINK_OPTIONS="-lpthread"
+
+# my name is hack. dirty hack.
+# why isn't that build in previous make call?
+%{__make} -C src -f ../gen/Makefile.libfbembed libfbembed \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
@@ -195,6 +206,7 @@ install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 install gen/firebird/lib/libfb*.a $RPM_BUILD_ROOT%{_libdir}
+install gen/firebird/lib/libfbembed.so* $RPM_BUILD_ROOT%{_libdir}
 cd gen/buildroot/%{ibdir}
 
 cp -af UDF bin help intl aliases.conf firebird.conf firebird.msg security.fdb \
@@ -212,6 +224,7 @@ ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
 install %{SOURCE5}      $RPM_BUILD_ROOT/etc/sysconfig/firebird
 install %{SOURCE6}	$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
