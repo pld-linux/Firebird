@@ -17,7 +17,7 @@ if [ -f /etc/sysconfig/firebird ]; then
 	. /etc/sysconfig/firebird
 fi
 
-DAEMON=/usr/lib/interbase/bin/fbmgr
+DAEMON=/usr/lib/interbase/bin/fbmgr.bin
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
