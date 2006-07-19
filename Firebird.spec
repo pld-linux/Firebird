@@ -35,7 +35,7 @@ Patch8:		%{name}-no-custom-errno-and-sys_XXerrXX.dpatch
 Patch9:		%{name}-opt-bypass-redundant-sort.dpatch
 Patch10:	%{name}-security-remote-preauth-crash.dpatch
 Patch11:	%{name}-separate-file-and-sem-perms.dpatch
-URL:		http://firebird.sourceforge.net/
+URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
