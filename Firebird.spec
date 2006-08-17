@@ -257,17 +257,17 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
 %attr(755,root,root) %{_libdir}/libib_util.so
-%dir %{ibdir}
+%dir %attr(770,root,firebird) %{ibdir}
 %attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin
 %{ibdir}/help
-%dir %{ibdir}/intl
+%dir %attr(770,root,firebird) %{ibdir}/intl
 %attr(755,root,root) %{ibdir}/intl/fbintl
 %{ibdir}/firebird.msg
 # following files should be in /var (*.fdb) and /etc (*.conf)?
-%{ibdir}/security.fdb
-%{ibdir}/aliases.conf
-%{ibdir}/firebird.conf
+%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/security.fdb
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/aliases.conf
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/firebird.conf
 %if %{with ss}
 %attr(754,root,root) /etc/rc.d/init.d/firebird
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/firebird
