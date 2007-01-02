@@ -9,7 +9,7 @@ Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.3.4870
-Release:	4
+Release:	5
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
@@ -35,6 +35,7 @@ Patch8:		%{name}-no-custom-errno-and-sys_XXerrXX.dpatch
 Patch9:		%{name}-opt-bypass-redundant-sort.dpatch
 Patch10:	%{name}-security-remote-preauth-crash.dpatch
 Patch11:	%{name}-separate-file-and-sem-perms.dpatch
+Patch12:	%{name}-ppc.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -142,6 +143,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 install -d docs/{IB3.0,IB4.0,IB6.0}
 unzip -q %{SOURCE1} -d docs/IB6.0
 tar xzf %{SOURCE2} -C docs/IB4.0
@@ -165,14 +167,15 @@ cd ../../..
 
 # OPTFLAGS for editline
 export OPTFLAGS="%{rpmcflags}"
+DARCH=""
 %ifarch %{x8664}
 DARCH="-DAMD64"
-%else
+%endif
 %ifarch sparc sparcv9
 DARCH="-Dsparc"
-%else
-DARCH=""
 %endif
+%ifarch ppc
+DARCH="-DPPC"
 %endif
 
 %{__make} -j1 \
