@@ -151,6 +151,9 @@ unzip -q %{SOURCE3} -d docs/IB3.0
 # standardize extension, also avoids gzipping by compress-doc
 mv -f docs/IB6.0/LANGREF.{PDF,pdf}
 
+# force rebuild
+rm -f src/dsql/parse.cpp
+
 %build
 cd src/extern/editline
 cp -f /usr/share/automake/config.* .
