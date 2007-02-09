@@ -9,7 +9,7 @@ Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.3.4870
-Release:	7
+Release:	8
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
@@ -284,7 +284,10 @@ fi
 %files lib
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfbclient.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfbclient.so.[0-9]+
 %attr(755,root,root) %{_libdir}/libfbembed.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.[0-9]+
+
 # InterBase/old Firebird compatibility symlinks
 %attr(755,root,root) %{_libdir}/libgds.so.0
 # needed here - original libgds.so.0 didn't have soname, so some old
