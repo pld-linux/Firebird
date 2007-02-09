@@ -284,9 +284,9 @@ fi
 %files lib
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfbclient.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfbclient.so.[0-9]+
+%attr(755,root,root) %ghost %{_libdir}/libfbclient.so.[0-9]
 %attr(755,root,root) %{_libdir}/libfbembed.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.[0-9]+
+%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.[0-9]
 
 # InterBase/old Firebird compatibility symlinks
 %attr(755,root,root) %{_libdir}/libgds.so.0
