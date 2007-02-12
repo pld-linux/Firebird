@@ -4,8 +4,8 @@
 #   (see firebird2 on debian how to do it)
 %bcond_with	ss	# Super Server
 Summary:	Firebird SQL Database Server and Client tools
-Summary(de):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
-Summary(pl):	Firebird - serwer baz danych SQL oraz narzêdzia klienckie
+Summary(de.UTF-8):   Firebird - relationalen Open-Source- Datenbankmanagementsystems
+Summary(pl.UTF-8):   Firebird - serwer baz danych SQL oraz narzÄ™dzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.3.4870
@@ -64,38 +64,38 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Firebird is a powerful, high-performance relational database designed
 to be embedded into applications on multiple platforms.
 
-%description -l pl
-Firebird jest potê¿nym, wysoko wydajnym systemem relacyjnych baz
+%description -l pl.UTF-8
+Firebird jest potÄ™Å¼nym, wysoko wydajnym systemem relacyjnych baz
 danych zaprojektowanym do osadzania w aplikacjach na wielu
 platformach.
 
-%description -l de
+%description -l de.UTF-8
 Firebird ist der Open-Source-Spin-Off des weiterhin kommerziell von
 Borland vertriebenen relationalen Datenbankmanagementsystemes
 InterBase. Die Abspaltung erfolgte im Jahre 2000 als kurz vor Freigabe
-der Version 6 des kommerziellen Vorgängers Interbase bei Borland
-ernsthafte Überlegungen im Gange waren, die Weiterentwicklung
+der Version 6 des kommerziellen VorgÃ¤ngers Interbase bei Borland
+ernsthafte Ãœberlegungen im Gange waren, die Weiterentwicklung
 einzustellen.
 
 Aus Interbase 6.0 wurde Firebird 1.0, wobei dies als eine
 Bugfix-Version mit nur wenigen Erweiterungen angesehen werden kann.
 Eine Erweiterung von Firebird 1.0 ist der 64-Bit File I/O, so dass
-auch Datenbankdateien über 2GB erzeugt werden können.
+auch Datenbankdateien Ã¼ber 2GB erzeugt werden kÃ¶nnen.
 
 %package lib
 Summary:	Firebird shared library
-Summary(pl):	Biblioteka wspó³dzielona Firebird
+Summary(pl.UTF-8):   Biblioteka wspÃ³Å‚dzielona Firebird
 Group:		Libraries
 
 %description lib
 Firebird shared library (libgds).
 
-%description lib -l pl
-Biblioteka wspó³dzielona Firebird (libgds).
+%description lib -l pl.UTF-8
+Biblioteka wspÃ³Å‚dzielona Firebird (libgds).
 
 %package devel
 Summary:	Header files for Firebird library
-Summary(pl):	Pliki nag³ówkowe biblioteki Firebird
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe biblioteki Firebird
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	libstdc++-devel
@@ -103,30 +103,30 @@ Requires:	libstdc++-devel
 %description devel
 Header files for Firebird library.
 
-%description devel -l pl
-Pliki nag³ówkowe biblioteki Firebird.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe biblioteki Firebird.
 
 %package static
 Summary:	Static Firebird library
-Summary(pl):	Statyczna biblioteka Firebird
+Summary(pl.UTF-8):   Statyczna biblioteka Firebird
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static Firebird library (libgds).
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka Firebird (libgds).
 
 %package doc
 Summary:	Extensive InterBase and Firebird documentation
-Summary(pl):	Obszerna dokumentacja do baz InterBase i Firebird
+Summary(pl.UTF-8):   Obszerna dokumentacja do baz InterBase i Firebird
 Group:		Documentation
 
 %description doc
 Extensive InterBase and Firebird documentation.
 
-%description doc -l pl
+%description doc -l pl.UTF-8
 Obszerna dokumentacja do baz InterBase i Firebird.
 
 %prep
