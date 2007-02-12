@@ -4,8 +4,8 @@
 #   (see firebird2 on debian how to do it)
 %bcond_with	ss	# Super Server
 Summary:	Firebird SQL Database Server and Client tools
-Summary(de.UTF-8):   Firebird - relationalen Open-Source- Datenbankmanagementsystems
-Summary(pl.UTF-8):   Firebird - serwer baz danych SQL oraz narzędzia klienckie
+Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
+Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	1.5.3.4870
@@ -84,7 +84,7 @@ auch Datenbankdateien über 2GB erzeugt werden können.
 
 %package lib
 Summary:	Firebird shared library
-Summary(pl.UTF-8):   Biblioteka współdzielona Firebird
+Summary(pl.UTF-8):	Biblioteka współdzielona Firebird
 Group:		Libraries
 
 %description lib
@@ -95,7 +95,7 @@ Biblioteka współdzielona Firebird (libgds).
 
 %package devel
 Summary:	Header files for Firebird library
-Summary(pl.UTF-8):   Pliki nagłówkowe biblioteki Firebird
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki Firebird
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	libstdc++-devel
@@ -108,7 +108,7 @@ Pliki nagłówkowe biblioteki Firebird.
 
 %package static
 Summary:	Static Firebird library
-Summary(pl.UTF-8):   Statyczna biblioteka Firebird
+Summary(pl.UTF-8):	Statyczna biblioteka Firebird
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -120,7 +120,7 @@ Statyczna biblioteka Firebird (libgds).
 
 %package doc
 Summary:	Extensive InterBase and Firebird documentation
-Summary(pl.UTF-8):   Obszerna dokumentacja do baz InterBase i Firebird
+Summary(pl.UTF-8):	Obszerna dokumentacja do baz InterBase i Firebird
 Group:		Documentation
 
 %description doc
