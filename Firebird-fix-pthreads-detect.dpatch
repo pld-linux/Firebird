@@ -6,8 +6,8 @@
 
 @DPATCH@
 
---- firebird2-1.5.2.orig/src/common/classes/locks.h
-+++ firebird2-1.5.2/src/common/classes/locks.h
+--- firebird-1.5.4.4910/src/common/classes/locks.h.orig	2007-01-22 13:27:50.000000000 +0100
++++ firebird-1.5.4.4910/src/common/classes/locks.h	2007-02-17 23:02:48.169652007 +0100
 @@ -29,24 +29,22 @@
  #include "firebird.h"
  
@@ -42,8 +42,8 @@
  
  /* Process-local spinlock. Used to manage memory heaps in threaded environment. */
  // Pthreads version of the class
--#if !defined(SOLARIS) && !defined(DARWIN) && !defined(FREEBSD)
-+#if !defined(SOLARIS) && !defined(DARWIN) && !defined(FREEBSD) && !defined(_POSIX_THREAD_IS_GNU_PTH)
+-#if !defined(SOLARIS) && !defined(DARWIN) && !defined(FREEBSD) && !defined(AIX) && !defined(HPUX)
++#if !defined(SOLARIS) && !defined(DARWIN) && !defined(FREEBSD) && !defined(AIX) && !defined(HPUX) && !defined(_POSIX_THREAD_IS_GNU_PTH)
  class Spinlock {
  private:
  	pthread_spinlock_t spinlock;
@@ -51,8 +51,8 @@
  			system_call_failed::raise();
  	}
  };
--#else  // DARWIN and FREEBSD
-+#else  // DARWIN, FREEBSD and gnu pth
+-#else  // DARWIN, FREEBSD, AIX, HPUX
++#else  // DARWIN, FREEBSD, AIX, HPUX and gnu pth
  class Spinlock {
  private:
  	pthread_mutex_t mlock;

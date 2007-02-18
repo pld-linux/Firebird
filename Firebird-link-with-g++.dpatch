@@ -6,9 +6,9 @@
 
 @DPATCH@
 
---- firebird2-1.5.2.orig/builds/posix/make.rules
-+++ firebird2-1.5.2/builds/posix/make.rules
-@@ -91,16 +91,16 @@
+--- firebird-1.5.4.4910/builds/posix/make.rules.orig	2006-11-05 15:37:30.000000000 +0100
++++ firebird-1.5.4.4910/builds/posix/make.rules	2007-02-17 23:05:38.259344867 +0100
+@@ -91,17 +91,17 @@
  ifdef UseLibToolForLink
  
  
@@ -25,8 +25,9 @@
 +    STATICEXE_LINK = libtool $(CXX) -all-static
  else
  
--    LIB_LINK= $(CC)
-+    LIB_LINK= $(CXX)
+     ifndef LIB_LINK
+-	LIB_LINK= $(CC)
++	LIB_LINK= $(CXX)
+     endif
+     
      STATICLIB_LINK= ar cruvs
- #    LIB_LINK_OPTIONS = -soname libgds.$(SHRLIB_EXT) -rpath /usr/lib
- #    LIB_LINK_OPTIONS = -soname libgds.$(SHRLIB_EXT).2 -rpath /usr/lib
