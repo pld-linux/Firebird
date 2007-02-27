@@ -29,3 +29,1432 @@
  		tdgbl->file_desc = fil->fil_fd;
  		tdgbl->gbl_sw_files = fil->fil_next;
  	}
+--- Firebird/src/common/config/config.cpp.org	2007-02-27 23:26:11.922623000 +0100
++++ Firebird/src/common/config/config.cpp	2007-02-27 23:28:52.958623000 +0100
+@@ -261,12 +261,12 @@
+ 
+ int Config::getSortMemBlockSize()
+ {
+-	return (int) sysConfig.values[KEY_SORT_MEM_BLOCK_SIZE];
++	return (int)(IPTR) sysConfig.values[KEY_SORT_MEM_BLOCK_SIZE];
+ }
+ 
+ int Config::getSortMemUpperLimit()
+ {
+-	return (int) sysConfig.values[KEY_SORT_MEM_UPPER_LIMIT];
++	return (int)(IPTR) sysConfig.values[KEY_SORT_MEM_UPPER_LIMIT];
+ }
+ 
+ bool Config::getRemoteFileOpenAbility()
+@@ -276,12 +276,12 @@
+ 
+ int Config::getGuardianOption()
+ {
+-	return (int) sysConfig.values[KEY_GUARDIAN_OPTION];
++	return (int)(IPTR) sysConfig.values[KEY_GUARDIAN_OPTION];
+ }
+ 
+ int Config::getCpuAffinityMask()
+ {
+-	return (int) sysConfig.values[KEY_CPU_AFFINITY_MASK];
++	return (int)(IPTR) sysConfig.values[KEY_CPU_AFFINITY_MASK];
+ }
+ 
+ bool Config::getOldParameterOrdering()
+@@ -291,7 +291,7 @@
+ 
+ int Config::getTcpRemoteBufferSize()
+ {
+-	return (int) sysConfig.values[KEY_TCP_REMOTE_BUFFER_SIZE];
++	return (int)(IPTR) sysConfig.values[KEY_TCP_REMOTE_BUFFER_SIZE];
+ }
+ 
+ bool Config::getTcpNoNagle()
+@@ -301,37 +301,37 @@
+ 
+ int Config::getIpcMapSize()
+ {
+-	return (int) sysConfig.values[KEY_IPC_MAP_SIZE];
++	return (int)(IPTR) sysConfig.values[KEY_IPC_MAP_SIZE];
+ }
+ 
+ int Config::getDefaultDbCachePages()
+ {
+-	return (int) sysConfig.values[KEY_DEFAULT_DB_CACHE_PAGES];
++	return (int)(IPTR) sysConfig.values[KEY_DEFAULT_DB_CACHE_PAGES];
+ }
+ 
+ int Config::getConnectionTimeout()
+ {
+-	return (int) sysConfig.values[KEY_CONNECTION_TIMEOUT];
++	return (int)(IPTR) sysConfig.values[KEY_CONNECTION_TIMEOUT];
+ }
+ 
+ int Config::getDummyPacketInterval()
+ {
+-	return (int) sysConfig.values[KEY_DUMMY_PACKET_INTERVAL];
++	return (int)(IPTR) sysConfig.values[KEY_DUMMY_PACKET_INTERVAL];
+ }
+ 
+ int Config::getLockMemSize()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_MEM_SIZE];
++	return (int)(IPTR) sysConfig.values[KEY_LOCK_MEM_SIZE];
+ }
+ 
+ int Config::getLockSemCount()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_SEM_COUNT];
++	return (int)(IPTR) sysConfig.values[KEY_LOCK_SEM_COUNT];
+ }
+ 
+ int Config::getLockSignal()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_SIGNAL];
++	return (int)(IPTR) sysConfig.values[KEY_LOCK_SIGNAL];
+ }
+ 
+ bool Config::getLockGrantOrder()
+@@ -341,27 +341,27 @@
+ 
+ int Config::getLockHashSlots()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_HASH_SLOTS];
++	return (int)(IPTR) sysConfig.values[KEY_LOCK_HASH_SLOTS];
+ }
+ 
+ int Config::getLockAcquireSpins()
+ {
+-	return (int) sysConfig.values[KEY_LOCK_ACQUIRE_SPINS];
++	return (int)(IPTR) sysConfig.values[KEY_LOCK_ACQUIRE_SPINS];
+ }
+ 
+ int Config::getEventMemSize()
+ {
+-	return (int) sysConfig.values[KEY_EVENT_MEM_SIZE];
++	return (int)(IPTR) sysConfig.values[KEY_EVENT_MEM_SIZE];
+ }
+ 
+ int Config::getDeadlockTimeout()
+ {
+-	return (int) sysConfig.values[KEY_DEADLOCK_TIMEOUT];
++	return (int)(IPTR) sysConfig.values[KEY_DEADLOCK_TIMEOUT];
+ }
+ 
+ int Config::getSolarisStallValue()
+ {
+-	return (int) sysConfig.values[KEY_SOLARIS_STALL_VALUE];
++	return (int)(IPTR) sysConfig.values[KEY_SOLARIS_STALL_VALUE];
+ }
+ 
+ bool Config::getTraceMemoryPools()
+@@ -371,7 +371,7 @@
+ 
+ int Config::getPrioritySwitchDelay()
+ {
+-	int rc = (int) sysConfig.values[KEY_PRIORITY_SWITCH_DELAY];
++	int rc = (int) (IPTR) sysConfig.values[KEY_PRIORITY_SWITCH_DELAY];
+ 	if (rc < 1)
+ 		rc = 1;
+ 	return rc;
+@@ -379,7 +379,7 @@
+ 
+ int Config::getDeadThreadsCollection()
+ {
+-	int rc = (int) sysConfig.values[KEY_DEAD_THREADS_COLLECTION];
++	int rc = (int) (IPTR) sysConfig.values[KEY_DEAD_THREADS_COLLECTION];
+ 	if (rc < 1)
+ 		rc = 1;
+ 	return rc;
+@@ -387,7 +387,7 @@
+ 
+ int Config::getPriorityBoost()
+ {
+-	int rc = (int) sysConfig.values[KEY_PRIORITY_BOOST];
++	int rc = (int) (IPTR) sysConfig.values[KEY_PRIORITY_BOOST];
+ 	if (rc < 1)
+ 		rc = 1;
+ 	if (rc > 1000)
+@@ -402,7 +402,7 @@
+ 
+ int Config::getRemoteServicePort()
+ {
+-	return (int) sysConfig.values[KEY_REMOTE_SERVICE_PORT];
++	return (int)(IPTR) sysConfig.values[KEY_REMOTE_SERVICE_PORT];
+ }
+ 
+ const char *Config::getRemotePipeName()
+@@ -417,17 +417,17 @@
+ 
+ int Config::getMaxUnflushedWrites()
+ {
+-	return (int) sysConfig.values[KEY_MAX_UNFLUSHED_WRITES];
++	return (int)(IPTR) sysConfig.values[KEY_MAX_UNFLUSHED_WRITES];
+ }
+ 
+ int Config::getMaxUnflushedWriteTime()
+ {
+-	return (int) sysConfig.values[KEY_MAX_UNFLUSHED_WRITE_TIME];
++	return (int)(IPTR) sysConfig.values[KEY_MAX_UNFLUSHED_WRITE_TIME];
+ }
+ 
+ int Config::getProcessPriorityLevel()
+ {
+-	return (int) sysConfig.values[KEY_PROCESS_PRIORITY_LEVEL];
++	return (int)(IPTR) sysConfig.values[KEY_PROCESS_PRIORITY_LEVEL];
+ }
+ 
+ bool Config::getCreateInternalWindow()
+@@ -443,7 +443,7 @@
+ int Config::getRemoteAuxPort()
+ {
+ #ifdef SUPERSERVER
+-	return (int) sysConfig.values[KEY_REMOTE_AUX_PORT];
++	return (int)(IPTR) sysConfig.values[KEY_REMOTE_AUX_PORT];
+ #else
+ 	return 0;
+ #endif
+--- Firebird/src/jrd/common.h.org	2007-02-27 23:37:36.050623000 +0100
++++ Firebird/src/jrd/common.h	2007-02-27 23:38:29.062623000 +0100
+@@ -874,8 +874,8 @@
+ 
+ #define JRD_BUGCHK 15			/* facility code for bugcheck messages */
+ #ifndef OFFSET
+-#define OFFSET(struct,fld)      ((int) &((struct) 0)->fld)
+-#define OFFSETA(struct,fld)     ((int) ((struct) 0)->fld)
++#define OFFSET(struct,fld)      ((int)(IPTR) &((struct) 0)->fld)
++#define OFFSETA(struct,fld)     ((int)(IPTR) ((struct) 0)->fld)
+ #endif
+ 
+ #ifndef ODS_ALIGNMENT
+--- Firebird/src/jrd/gds.cpp.org	2007-02-27 23:31:23.778623000 +0100
++++ Firebird/src/jrd/gds.cpp	2007-02-27 23:39:16.538623000 +0100
+@@ -2287,7 +2287,7 @@
+ 		return result;
+ 
+ 	if (stdio_flag)
+-		if (!(result = ib_fdopen((int) result, "w+")))
++		if (!(result = ib_fdopen((int)(IPTR) result, "w+")))
+ 			return (void *)-1;
+ 
+ 	if (expanded_string)
+--- Firebird/src/gpre/cme.cpp.org	2007-02-27 23:39:38.878623000 +0100
++++ Firebird/src/gpre/cme.cpp	2007-02-27 23:40:09.686623000 +0100
+@@ -251,7 +251,7 @@
+ // ** Begin date/time/timestamp support *
+ 	case nod_extract:
+ 		STUFF(blr_extract);
+-		switch ((KWWORDS) (int) node->nod_arg[0])
++		switch ((KWWORDS) (int)(IPTR) node->nod_arg[0])
+ 		{
+ 		case KW_YEAR:
+ 			STUFF(blr_extract_year);
+@@ -478,7 +478,7 @@
+ // ** Begin date/time/timestamp support *
+ 	case nod_extract:
+ 		{
+-			KWWORDS kw_word = (KWWORDS) (int) node->nod_arg[0];
++			KWWORDS kw_word = (KWWORDS) (int)(IPTR) node->nod_arg[0];
+ 			CME_get_dtype(node->nod_arg[1], f);
+ 			switch (f->fld_dtype)
+ 			{
+--- Firebird/src/gpre/c_cxx.cpp.org	2007-02-27 23:40:26.886623000 +0100
++++ Firebird/src/gpre/c_cxx.cpp	2007-02-27 23:41:05.806623000 +0100
+@@ -2184,7 +2184,7 @@
+ 
+ 	args.pat_database = (DBB) init->nod_arg[3];
+ 	args.pat_vector1 = status_vector(action);
+-	args.pat_long1 = (int) init->nod_arg[2];
++	args.pat_long1 = (int)(IPTR) init->nod_arg[2];
+ 	args.pat_value2 = (int) event_list->nod_count;
+ 
+ //  generate call to dynamically generate event blocks 
+@@ -2255,7 +2255,7 @@
+ 		event_init = (GPRE_NOD) event_action->act_object;
+ 		stack_name = (SYM) event_init->nod_arg[0];
+ 		if (!strcmp(event_name->sym_string, stack_name->sym_string)) {
+-			ident = (int) event_init->nod_arg[2];
++			ident = (int)(IPTR) event_init->nod_arg[2];
+ 			database = (DBB) event_init->nod_arg[3];
+ 		}
+ 	}
+--- Firebird/src/jrd/sdl.cpp.org	2007-02-27 23:41:38.546623000 +0100
++++ Firebird/src/jrd/sdl.cpp	2007-02-27 23:41:48.982623000 +0100
+@@ -701,7 +701,7 @@
+ 			}
+ 			element_desc = array_desc->ads_rpt[value].ads_desc;
+ 			element_desc.dsc_address = (BLOB_PTR *) arg->sdl_arg_array +
+-				(SLONG) element_desc.dsc_address +
++				(SLONG)(IPTR) element_desc.dsc_address +
+ 				(array_desc->ads_element_length * subscript);
+ 
+ 			/* Is this element within the array bounds? */
+--- Firebird/src/jrd/blb.cpp.org	2007-02-27 23:45:22.954623000 +0100
++++ Firebird/src/jrd/blb.cpp	2007-02-27 23:45:34.610623000 +0100
+@@ -861,7 +861,7 @@
+ 	source = (BID) from_desc->dsc_address;
+ 	destination = (BID) to_desc->dsc_address;
+ 	id = (USHORT) (IPTR) field->nod_arg[e_fld_id];
+-	rpb = &request->req_rpb[(int) field->nod_arg[e_fld_stream]];
++	rpb = &request->req_rpb[(int) (IPTR) field->nod_arg[e_fld_stream]];
+ 	relation = rpb->rpb_relation;
+ 	record = rpb->rpb_record;
+ 
+--- Firebird/src/jrd/cmp.cpp.org	2007-02-27 23:45:52.962623000 +0100
++++ Firebird/src/jrd/cmp.cpp	2007-02-27 23:46:14.266623000 +0100
+@@ -1661,7 +1661,7 @@
+ 		return;
+ 
+ 	case nod_extract:
+-		if ((ULONG) node->nod_arg[e_extract_part] == blr_extract_second) {
++		if ((ULONG) (IPTR) node->nod_arg[e_extract_part] == blr_extract_second) {
+ 			/* QUADDATE - SECOND returns a float, or scaled! */
+ 			desc->dsc_dtype = dtype_long;
+ 			desc->dsc_length = sizeof(ULONG);
+@@ -1720,7 +1720,7 @@
+ 
+ 			message = node->nod_arg[e_arg_message];
+ 			format = (FMT) message->nod_arg[e_msg_format];
+-			*desc = format->fmt_desc[(int) node->nod_arg[e_arg_number]];
++			*desc = format->fmt_desc[(int) (IPTR) node->nod_arg[e_arg_number]];
+ 			return;
+ 		}
+ 
+--- Firebird/src/jrd/evl.cpp.org	2007-02-27 23:46:46.350623000 +0100
++++ Firebird/src/jrd/evl.cpp	2007-02-27 23:49:01.206623000 +0100
+@@ -248,7 +248,7 @@
+ 		arg_number = (int)(IPTR)node->nod_arg[e_arg_number];
+ 		desc = &format->fmt_desc[arg_number];
+ 		impure->vlu_desc.dsc_address =
+-			(UCHAR *) request + message->nod_impure + (int) desc->dsc_address;
++			(UCHAR *) request + message->nod_impure + (int) (IPTR) desc->dsc_address;
+ 		impure->vlu_desc.dsc_dtype = desc->dsc_dtype;
+ 		impure->vlu_desc.dsc_length = desc->dsc_length;
+ 		impure->vlu_desc.dsc_scale = desc->dsc_scale;
+@@ -288,7 +288,7 @@
+ 		// may happen. I checked triggers and insert/update statements.
+ 		// All seem to work fine.
+ 		record =
+-			request->req_rpb[(int) node->nod_arg[e_fld_stream]].rpb_record;
++			request->req_rpb[(int) (IPTR) node->nod_arg[e_fld_stream]].rpb_record;
+ 		EVL_field(0, record, (USHORT) (IPTR) node->nod_arg[e_fld_id],
+ 				  &impure->vlu_desc);
+ 		if (!impure->vlu_desc.dsc_address)
+@@ -828,10 +828,10 @@
+ 			}
+ 			message = node->nod_arg[e_arg_message];
+ 			format = (FMT) message->nod_arg[e_msg_format];
+-			desc = &format->fmt_desc[(int) node->nod_arg[e_arg_number]];
++			desc = &format->fmt_desc[(int) (IPTR) node->nod_arg[e_arg_number]];
+ 
+ 			impure->vlu_desc.dsc_address = (UCHAR *) request +
+-				message->nod_impure + (int) desc->dsc_address;
++				message->nod_impure + (int) (IPTR) desc->dsc_address;
+ 			impure->vlu_desc.dsc_dtype = desc->dsc_dtype;
+ 			impure->vlu_desc.dsc_length = desc->dsc_length;
+ 			impure->vlu_desc.dsc_scale = desc->dsc_scale;
+@@ -851,7 +851,7 @@
+ 	case nod_field:
+ 		{
+ 			REC record =
+-				request->req_rpb[(int)node->nod_arg[e_fld_stream]].rpb_record;
++				request->req_rpb[(int)(IPTR)node->nod_arg[e_fld_stream]].rpb_record;
+ 			/* In order to "map a null to a default" value (in EVL_field()), 
+ 			 * the relation block is referenced. 
+ 			 * Reference: Bug 10116, 10424 
+@@ -997,7 +997,7 @@
+ 			ULONG extract_part;
+ 
+ 			impure = (VLU) ((SCHAR *) request + node->nod_impure);
+-			extract_part = (ULONG) node->nod_arg[e_extract_part];
++			extract_part = (ULONG) (IPTR) node->nod_arg[e_extract_part];
+ 			value = EVL_expr(tdbb, node->nod_arg[e_extract_value]);
+ 
+ 			impure->vlu_desc.dsc_dtype = dtype_short;
+@@ -1174,7 +1174,7 @@
+ 		switch (node->nod_type) {
+ 		case nod_gen_id:		/* return a 32-bit generator value */
+ 			impure->vlu_misc.vlu_long = (SLONG) DPM_gen_id(tdbb,
+-														   (SLONG)
++														   (SLONG) (IPTR)
+ 														   node->nod_arg
+ 														   [e_gen_id], 0,
+ 														   MOV_get_int64
+@@ -1189,7 +1189,7 @@
+ 
+ 		case nod_gen_id2:
+ 			impure->vlu_misc.vlu_int64 = DPM_gen_id(tdbb,
+-													(SLONG)
++													(SLONG) (IPTR)
+ 													node->nod_arg[e_gen_id],
+ 													0,
+ 													MOV_get_int64(values[0],
+@@ -1383,7 +1383,7 @@
+ 		return FALSE;
+ 	}
+ 
+-	desc->dsc_address = record->rec_data + (int) desc->dsc_address;
++	desc->dsc_address = record->rec_data + (int) (IPTR) desc->dsc_address;
+ 
+ 	if (TEST_NULL(record, id)) {
+ 		desc->dsc_flags |= DSC_null;
+@@ -1727,7 +1727,7 @@
+ 		field = (*ptr)->nod_arg[e_asgn_to];
+ 		id = (USHORT) (IPTR) field->nod_arg[e_fld_id];
+ 		record =
+-			request->req_rpb[(int) field->nod_arg[e_fld_stream]].rpb_record;
++			request->req_rpb[(int) (IPTR) field->nod_arg[e_fld_stream]].rpb_record;
+ 		impure = (VLUX) ((SCHAR *) request + from->nod_impure);
+ 		switch (from->nod_type)
+ 		{
+@@ -3395,7 +3395,7 @@
+ 
+ 	request = tdbb->tdbb_request;
+ 	impure = (VLU) ((SCHAR *) request + node->nod_impure);
+-	rpb = &request->req_rpb[(int) node->nod_arg[0]];
++	rpb = &request->req_rpb[(int)(IPTR) node->nod_arg[0]];
+ 	relation = rpb->rpb_relation;
+ 
+ /* Format dbkey as vector of relation id, record number */
+@@ -4487,7 +4487,7 @@
+ 
+ 	request = tdbb->tdbb_request;
+ 	impure = (VLU) ((SCHAR *) request + node->nod_impure);
+-	rpb = &request->req_rpb[(int) node->nod_arg[0]];
++	rpb = &request->req_rpb[(int)(IPTR) node->nod_arg[0]];
+ 
+ /* If the current transaction has updated the record, the record version
+  * coming in from DSQL will have the original transaction # (or current
+--- Firebird/src/jrd/exe.cpp.org	2007-02-27 23:49:26.026623000 +0100
++++ Firebird/src/jrd/exe.cpp	2007-02-27 23:50:30.090623000 +0100
+@@ -376,7 +376,7 @@
+ 	if (to->nod_type == nod_field)
+ 	{
+ 		SSHORT id = (USHORT) (IPTR) to->nod_arg[e_fld_id];
+-		REC record = request->req_rpb[(int) to->nod_arg[e_fld_stream]].rpb_record;
++		REC record = request->req_rpb[(int)(IPTR) to->nod_arg[e_fld_stream]].rpb_record;
+ 		if (null) {
+ 			SET_NULL(record, id);
+ 		} else {
+@@ -1049,7 +1049,7 @@
+ 		desc = &format->fmt_desc[n];
+ 		if (!desc->dsc_address)
+ 			continue;
+-		p = record->rec_data + (SLONG) desc->dsc_address;
++		p = record->rec_data + (SLONG)(IPTR) desc->dsc_address;
+ 		if (TEST_NULL(record, n))
+ 		{
+ 			if (length = desc->dsc_length)
+@@ -1134,7 +1134,7 @@
+ 
+ 	request = tdbb->tdbb_request;
+ 	transaction = request->req_transaction;
+-	rpb = &request->req_rpb[(int) node->nod_arg[e_erase_stream]];
++	rpb = &request->req_rpb[(int)(IPTR) node->nod_arg[e_erase_stream]];
+ 	relation = rpb->rpb_relation;
+ 
+ #ifdef PC_ENGINE
+@@ -2652,7 +2652,7 @@
+ 				DSC *desc;
+ 
+ 				desc = EVL_expr(tdbb, node->nod_arg[e_gen_value]);
+-				(void) DPM_gen_id(tdbb, (SLONG) node->nod_arg[e_gen_id], 1,
++				(void) DPM_gen_id(tdbb, (SLONG)(IPTR) node->nod_arg[e_gen_id], 1,
+ 								  MOV_get_int64(desc, 0));
+ 				request->req_operation = jrd_req::req_return;
+ 			}
+@@ -2664,7 +2664,7 @@
+ 				DSC *desc;
+ 
+ 				desc = EVL_expr(tdbb, node->nod_arg[e_gen_value]);
+-				(void) DPM_gen_id(tdbb, (SLONG) node->nod_arg[e_gen_id], 1,
++				(void) DPM_gen_id(tdbb, (SLONG)(IPTR) node->nod_arg[e_gen_id], 1,
+ 								  MOV_get_int64(desc, 0));
+ 				request->req_operation = jrd_req::req_return;
+ 			}
+--- Firebird/src/jrd/ext.cpp.org	2007-02-27 23:50:53.198623000 +0100
++++ Firebird/src/jrd/ext.cpp	2007-02-27 23:51:19.166623000 +0100
+@@ -299,7 +299,7 @@
+ 			continue;
+ 		if ( (literal = (LIT) field->fld_missing_value) ) {
+ 			desc = *desc_ptr;
+-			desc.dsc_address = record->rec_data + (int) desc.dsc_address;
++			desc.dsc_address = record->rec_data + (int) (IPTR) desc.dsc_address;
+ 			if (!MOV_compare(&literal->lit_desc, &desc))
+ 				continue;
+ 		}
+@@ -512,7 +512,7 @@
+ 			desc_ptr->dsc_length &&
+ 			TEST_NULL(record, i))
+ 		{
+-			p = record->rec_data + (int) desc_ptr->dsc_address;
++			p = record->rec_data + (int) (IPTR) desc_ptr->dsc_address;
+ 			if ( (literal = (LIT) field->fld_missing_value) ) {
+ 				desc = *desc_ptr;
+ 				desc.dsc_address = p;
+--- Firebird/src/jrd/idx.cpp.org	2007-02-27 23:51:42.758623000 +0100
++++ Firebird/src/jrd/idx.cpp	2007-02-27 23:51:52.130623000 +0100
+@@ -1058,7 +1058,7 @@
+ 				(UCHAR) (IPTR) (*idx->idx_foreign_primaries)[index_number]) continue;
+ 			partner_relation =
+ 				MET_relation(tdbb,
+-							 (int) (*idx->idx_foreign_relations)[index_number]);
++							 (int) (IPTR) (*idx->idx_foreign_relations)[index_number]);
+ 			index_id =
+ 				(USHORT) (IPTR) (*idx->idx_foreign_indexes)[index_number];
+ 			if ( (result =
+--- Firebird/src/jrd/inf.cpp.org	2007-02-27 23:52:13.402623000 +0100
++++ Firebird/src/jrd/inf.cpp	2007-02-27 23:52:25.830623000 +0100
+@@ -973,7 +973,7 @@
+ 			node = request->req_message;
+ 			if (item == gds_info_message_number)
+ 				length =
+-					INF_convert((SLONG) node->nod_arg[e_msg_number],
++					INF_convert((SLONG)(IPTR) node->nod_arg[e_msg_number],
+ 								buffer_ptr);
+ 			else {
+ 				format = (FMT) node->nod_arg[e_msg_format];
+--- Firebird/src/jrd/jrd.cpp.org	2007-02-27 23:52:47.034623000 +0100
++++ Firebird/src/jrd/jrd.cpp	2007-02-27 23:53:44.414623000 +0100
+@@ -3877,9 +3877,9 @@
+ 	{
+ 		if ( (node = csb->csb_rpt[i].csb_message) )
+ 		{
+-			if ((int) node->nod_arg[e_msg_number] == 0) {
++			if ((int)(IPTR) node->nod_arg[e_msg_number] == 0) {
+ 				in_message = node;
+-			} else if ((int) node->nod_arg[e_msg_number] == 1) {
++			} else if ((int)(IPTR) node->nod_arg[e_msg_number] == 1) {
+ 				out_message = node;
+ 			}
+ 		}
+--- Firebird/src/jrd/jrd.h.org	2007-02-27 23:54:08.442623000 +0100
++++ Firebird/src/jrd/jrd.h	2007-02-27 23:54:30.994623000 +0100
+@@ -1050,8 +1050,10 @@
+ 
+ #if !defined(REQUESTER)
+ 
++extern "C" {
+ extern int debug;
+ extern IHNDL internal_db_handles;
++}
+ 
+ #endif /* REQUESTER */
+ 
+--- Firebird/src/jrd/jrn.cpp.org	2007-02-27 23:55:28.466623000 +0100
++++ Firebird/src/jrd/jrn.cpp	2007-02-27 23:57:02.762623000 +0100
+@@ -836,7 +836,7 @@
+ 	for (loop = 0; loop < 20; loop++) {
+ 		for (;;) {
+ 			journal->jrn_channel = (int *) socket(AF_INET, SOCK_STREAM, 0);
+-			if ((int) journal->jrn_channel != -1)
++			if ((int) (IPTR)journal->jrn_channel != -1)
+ 				break;
+ 			if (!SYSCALL_INTERRUPTED(errno)) {
+ 				error(status_vector, journal, errno, "socket");
+@@ -859,18 +859,18 @@
+ 			return ret_val;
+ 		}
+ 
+-		if (!connect((int) journal->jrn_channel, (sockaddr*)&address, sizeof(address)))
++		if (!connect((int)(IPTR) journal->jrn_channel, (sockaddr*)&address, sizeof(address)))
+ 			break;
+ 
+ 		sleep(3);
+ 
+ 		if (loop < 16) {
+-			close((int) journal->jrn_channel);
++			close((int)(IPTR) journal->jrn_channel);
+ 			continue;
+ 		}
+ 		if (!SYSCALL_INTERRUPTED(errno)) {
+ 			if (retry) {
+-				close((int) journal->jrn_channel);
++				close((int)(IPTR) journal->jrn_channel);
+ 				gds__free(journal);
+ 				*ret_jrn = (JRN) NULL;
+ 				return FB_SUCCESS;
+@@ -879,7 +879,7 @@
+ 			gds__free(journal);
+ 			return FB_FAILURE;
+ 		}
+-		close((int) journal->jrn_channel);
++		close((int)(IPTR) journal->jrn_channel);
+ 	}
+ #endif
+ 
+@@ -939,7 +939,7 @@
+ 		if (retry)
+ 		{
+ #ifdef BSD_SOCKETS
+-			close((int) journal->jrn_channel);
++			close((int)(IPTR) journal->jrn_channel);
+ #endif
+ 
+ #ifdef WIN_NT
+@@ -1056,7 +1056,7 @@
+     with us, so keep trying until successful.  */
+ 
+ 	do {
+-		l = recv((int) journal->jrn_channel, (char *) reply, sizeof(struct jrnr), 0);
++		l = recv((int)(IPTR) journal->jrn_channel, (char *) reply, sizeof(struct jrnr), 0);
+ 	} while (l < 0 && SYSCALL_INTERRUPTED(errno));
+ 
+ 	if (l < 0) {
+@@ -1095,7 +1095,7 @@
+  **************************************/
+ 
+ #ifdef BSD_SOCKETS
+-	if (close((int) journal->jrn_channel) < 0) {
++	if (close((int)(IPTR) journal->jrn_channel) < 0) {
+ 		error(status_vector, journal, errno, "close");
+ 		return FB_FAILURE;
+ 	}
+@@ -1166,7 +1166,7 @@
+     with us, so keep trying until successful.  */
+ 
+ 	do {
+-		l = send((int) journal->jrn_channel, (char *) buffer, (int) length, 0);
++		l = send((int)(IPTR) journal->jrn_channel, (char *) buffer, (int) length, 0);
+ 	} while (l < 0 && SYSCALL_INTERRUPTED(errno));
+ 
+ 	if (l < 0) {
+--- Firebird/src/jrd/nav.cpp.org	2007-02-27 23:57:33.730623000 +0100
++++ Firebird/src/jrd/nav.cpp	2007-02-27 23:59:12.262623000 +0100
+@@ -487,7 +487,7 @@
+ 
+ 	init_fetch(impure);
+ 	idx =
+-		(IDX *) ((SCHAR *) impure + (SLONG) rsb->rsb_arg[RSB_NAV_idx_offset]);
++		(IDX *) ((SCHAR *) impure + (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_idx_offset]);
+ 
+ /* The bitmap is only valid when we are continuing on in one 
+    direction.  It is of no help when we change direction,
+@@ -521,12 +521,12 @@
+ #ifdef SCROLLABLE_CURSORS
+ 		MOVE_FAST(
+ 				  (impure->irsb_nav_data +
+-				   (2 * (SLONG) rsb->rsb_arg[RSB_NAV_key_length])),
++				   (2 * (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length])),
+ 				  upper.key_data, upper.key_length);
+ #else
+ 		MOVE_FAST(
+ 				  (impure->irsb_nav_data +
+-				   (SLONG) rsb->rsb_arg[RSB_NAV_key_length]), upper.key_data,
++				   (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length]), upper.key_data,
+ 				  upper.key_length);
+ #endif
+ 	}
+@@ -534,7 +534,7 @@
+ 		lower.key_length = impure->irsb_nav_lower_length;
+ 		MOVE_FAST(
+ 				  (impure->irsb_nav_data +
+-				   (SLONG) rsb->rsb_arg[RSB_NAV_key_length]), lower.key_data,
++				   (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length]), lower.key_data,
+ 				  lower.key_length);
+ 	}
+ 
+@@ -1404,7 +1404,7 @@
+ 	tdbb = GET_THREAD_DATA;
+ 
+ 	idx =
+-		(IDX *) ((SCHAR *) impure + (SLONG) rsb->rsb_arg[RSB_NAV_idx_offset]);
++		(IDX *) ((SCHAR *) impure + (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_idx_offset]);
+ 	page = (BTR) CCH_FETCH(tdbb, window, LCK_read, pag_index);
+ 
+ /* the outer loop goes through all the sibling pages
+@@ -1619,7 +1619,7 @@
+ 	tdbb = GET_THREAD_DATA;
+ 	request = tdbb->tdbb_request;
+ 	idx =
+-		(IDX *) ((SCHAR *) impure + (SLONG) rsb->rsb_arg[RSB_NAV_idx_offset]);
++		(IDX *) ((SCHAR *) impure + (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_idx_offset]);
+ 
+ 	BOOLEAN result;
+ 
+@@ -1656,7 +1656,7 @@
+ 				rpb->rpb_record,
+ 				reinterpret_cast <
+ 				struct idx *>((SCHAR *) impure +
+-							  (SLONG) rsb->rsb_arg[RSB_NAV_idx_offset]),
++							  (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_idx_offset]),
+ 				&value,
+ 				0);
+ 		if (compare_keys(idx, key->key_data, key->key_length, &value, FALSE)) {
+@@ -1757,7 +1757,7 @@
+ 	retrieval_node = (JRD_NOD) rsb->rsb_arg[RSB_NAV_index];
+ 	retrieval = (IRB) retrieval_node->nod_arg[e_idx_retrieval];
+ 	idx =
+-		(IDX *) ((SCHAR *) impure + (SLONG) rsb->rsb_arg[RSB_NAV_idx_offset]);
++		(IDX *) ((SCHAR *) impure + (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_idx_offset]);
+ 	page =
+ 		BTR_find_page(tdbb, retrieval, window, idx, &lower, &upper,
+ 					  (direction == RSE_get_backward));
+@@ -1770,7 +1770,7 @@
+ 		impure->irsb_nav_lower_length = lower.key_length;
+ 		MOVE_FAST(lower.key_data,
+ 				  (impure->irsb_nav_data +
+-				   (SLONG) rsb->rsb_arg[RSB_NAV_key_length]),
++				   (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length]),
+ 				  lower.key_length);
+ 	}
+ 
+@@ -1778,7 +1778,7 @@
+ 		impure->irsb_nav_upper_length = upper.key_length;
+ 		MOVE_FAST(upper.key_data,
+ 				  (impure->irsb_nav_data +
+-				   (2 * (SLONG) rsb->rsb_arg[RSB_NAV_key_length])),
++				   (2 * (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length])),
+ 				  upper.key_length);
+ 	}
+ 
+@@ -1802,7 +1802,7 @@
+ 			impure->irsb_nav_upper_length = upper.key_length;
+ 			MOVE_FAST(upper.key_data,
+ 					  (impure->irsb_nav_data +
+-					   (SLONG) rsb->rsb_arg[RSB_NAV_key_length]),
++					   (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length]),
+ 					  upper.key_length);
+ 		}
+ 		if (retrieval->irb_lower_count)
+@@ -1813,7 +1813,7 @@
+ 			impure->irsb_nav_lower_length = lower.key_length;
+ 			MOVE_FAST(lower.key_data,
+ 					  (impure->irsb_nav_data +
+-					   (SLONG) rsb->rsb_arg[RSB_NAV_key_length]),
++					   (SLONG)(IPTR) rsb->rsb_arg[RSB_NAV_key_length]),
+ 					  lower.key_length);
+ 		}
+ 		if (retrieval->irb_upper_count)
+--- Firebird/src/jrd/rse.cpp.org	2007-02-28 00:00:03.858623000 +0100
++++ Firebird/src/jrd/rse.cpp	2007-02-28 00:01:21.818623000 +0100
+@@ -2151,7 +2151,7 @@
+ 	}
+ 
+ 	desc = msg_format->fmt_desc[msg_format->fmt_count - 1];
+-	desc.dsc_address = (UCHAR *) (om + (int) desc.dsc_address);
++	desc.dsc_address = (UCHAR *) (om + (int)(IPTR) desc.dsc_address);
+ 	eos_desc.dsc_dtype = dtype_short;
+ 	eos_desc.dsc_scale = 0;
+ 	eos_desc.dsc_length = sizeof(SSHORT);
+@@ -2959,7 +2959,7 @@
+ 	for (item = map->smb_rpt; item < end_item; item++) {
+ 		flag = *(data + item->smb_flag_offset);
+ 		from = item->smb_desc;
+-		from.dsc_address = data + (ULONG) from.dsc_address;
++		from.dsc_address = data + (ULONG)(IPTR) from.dsc_address;
+ 		if ((node = item->smb_node) && node->nod_type != nod_field)
+ 			continue;
+ 
+@@ -3211,7 +3211,7 @@
+ 		end_item = map->smb_rpt + map->smb_count;
+ 		for (item = map->smb_rpt; item < end_item; item++) {
+ 			to = item->smb_desc;
+-			to.dsc_address = data + (ULONG) to.dsc_address;
++			to.dsc_address = data + (ULONG)(IPTR) to.dsc_address;
+ 			flag = FALSE;
+ 			if (item->smb_node) {
+ 				from = EVL_expr(tdbb, item->smb_node);
+@@ -3301,12 +3301,12 @@
+ 	desc2.dsc_flags = 0;
+ 	desc2.dsc_address = (UCHAR *) & indicator;
+ 	desc1 = *flag_desc;
+-	desc1.dsc_address = msg + (int) flag_desc->dsc_address;
++	desc1.dsc_address = msg + (int)(IPTR) flag_desc->dsc_address;
+ 	MOV_move(&desc1, &desc2);
+ 	if (indicator) {
+ 		SET_NULL(record, to_id);
+ 		l = to_desc->dsc_length;
+-		p = record->rec_data + (int) to_desc->dsc_address;
++		p = record->rec_data + (int)(IPTR) to_desc->dsc_address;
+ 		switch (to_desc->dsc_dtype) {
+ 		case dtype_text:
+ 			/* YYY - not necessarily the right thing to do */
+@@ -3336,9 +3336,9 @@
+ 	else {
+ 		CLEAR_NULL(record, to_id);
+ 		desc1 = *from_desc;
+-		desc1.dsc_address = msg + (int) desc1.dsc_address;
++		desc1.dsc_address = msg + (int)(IPTR) desc1.dsc_address;
+ 		desc2 = *to_desc;
+-		desc2.dsc_address = record->rec_data + (int) desc2.dsc_address;
++		desc2.dsc_address = record->rec_data + (int)(IPTR) desc2.dsc_address;
+ 		if (!DSC_EQUIV((&desc1), (&desc2)))
+ 			MOV_move(&desc1, &desc2);
+ 
+@@ -3817,7 +3817,7 @@
+ 	if (!sfb_->sfb_file_name) {
+ 		TEXT file_name[128];
+ 
+-		sfb_->sfb_file = (int) gds__temp_file(FALSE, SCRATCH, file_name);
++		sfb_->sfb_file = (int)(IPTR) gds__temp_file(FALSE, SCRATCH, file_name);
+ 		if (sfb_->sfb_file == -1)
+ 			SORT_error(tdbb->tdbb_status_vector, sfb_, "open", isc_io_error,
+ 					   errno);
+--- Firebird/src/jrd/sort.cpp.org	2007-02-28 00:01:47.478623000 +0100
++++ Firebird/src/jrd/sort.cpp	2007-02-28 00:02:06.390623000 +0100
+@@ -1787,7 +1787,7 @@
+ 			/* Create a scratch file */
+ 
+ 			sfb->sfb_file =
+-				(int) gds__temp_file(FALSE, SCRATCH, file_name,
++				(int)(IPTR) gds__temp_file(FALSE, SCRATCH, file_name,
+ 									 sfb->sfb_dls->dls_directory, TRUE);
+ 
+ 			/* allocate the file name even if the file is not open,
+--- Firebird/src/dsql/ddl.cpp.org	2007-02-28 00:02:23.650623000 +0100
++++ Firebird/src/dsql/ddl.cpp	2007-02-28 00:04:37.514623000 +0100
+@@ -1126,12 +1126,12 @@
+ 	if (constant)
+ 	{
+ 		request->append_number(gds_dyn_trg_sequence,
+-				   (SSHORT)(SLONG) (constant ? constant->nod_arg[0] : 0));
++				   (SSHORT)(SLONG)(IPTR) (constant ? constant->nod_arg[0] : 0));
+ 	}
+ 
+ 	if ((constant = node->nod_arg[e_cnstr_type]) != NULL)
+ 	{
+-		const SSHORT type = (SSHORT)(SLONG) constant->nod_arg[0];
++		const SSHORT type = (SSHORT)(SLONG)(IPTR) constant->nod_arg[0];
+ 		request->append_number(gds_dyn_trg_type, type);
+ 	}
+ 
+@@ -1270,7 +1270,7 @@
+ 
+ 			switch (element->nod_type) {
+ 			case nod_file_length:
+-				start = (SLONG) (element->nod_arg[0]) + 1;
++				start = (SLONG)(IPTR) (element->nod_arg[0]) + 1;
+ 				break;
+ 
+ 			default:
+@@ -1336,25 +1336,25 @@
+ 
+ 			case nod_group_commit_wait:
+ 				request->append_uchar(gds_dyn_log_group_commit_wait);
+-				temp_long = (SLONG) (element->nod_arg[0]);
++				temp_long = (SLONG)(IPTR) (element->nod_arg[0]);
+ 				request->append_ulong_with_length(temp_long);
+ 				break;
+ 
+ 			case nod_check_point_len:
+ 				request->append_uchar(gds_dyn_log_check_point_length);
+-				temp_long = (SLONG) (element->nod_arg[0]);
++				temp_long = (SLONG)(IPTR) (element->nod_arg[0]);
+ 				request->append_ulong_with_length(temp_long);
+ 				break;
+ 
+ 			case nod_num_log_buffers:
+ 				request->append_uchar(gds_dyn_log_num_of_buffers);
+-				temp_short = (SSHORT)(SLONG) (element->nod_arg[0]);
++				temp_short = (SSHORT)(SLONG)(IPTR) (element->nod_arg[0]);
+ 				request->append_ushort_with_length(temp_short);
+ 				break;
+ 
+ 			case nod_log_buffer_size:
+ 				request->append_uchar(gds_dyn_log_buffer_size);
+-				temp_short = (SSHORT)(SLONG) (element->nod_arg[0]);
++				temp_short = (SSHORT)(SLONG)(IPTR) (element->nod_arg[0]);
+ 				request->append_ushort_with_length(temp_short);
+ 				break;
+ 
+@@ -1637,11 +1637,11 @@
+ 		request->append_number(gds_dyn_def_dimension, position);
+ 		DSQL_NOD element = *ptr++;
+ 		request->append_uchar(gds_dyn_dim_lower);
+-		SLONG lrange = (SLONG) (element->nod_arg[0]);
++		SLONG lrange = (SLONG)(IPTR) (element->nod_arg[0]);
+ 		request->append_ulong_with_length(lrange);
+ 		element = *ptr;
+ 		request->append_uchar(gds_dyn_dim_upper);
+-		SLONG hrange = (SLONG) (element->nod_arg[0]);
++		SLONG hrange = (SLONG)(IPTR) (element->nod_arg[0]);
+ 		request->append_ulong_with_length(hrange);
+ 		request->append_uchar(gds_dyn_end);
+ 		if (lrange >= hrange)
+@@ -2062,9 +2062,9 @@
+ 	request->append_cstring(gds_dyn_def_filter,
+ 				((STR) (ptr[e_filter_name]))->str_data);
+ 	request->append_number(gds_dyn_filter_in_subtype,
+-			   (SSHORT)(SLONG) ((ptr[e_filter_in_type])->nod_arg[0]));
++			   (SSHORT)(SLONG)(IPTR) ((ptr[e_filter_in_type])->nod_arg[0]));
+ 	request->append_number(gds_dyn_filter_out_subtype,
+-			   (SSHORT)(SLONG) ((ptr[e_filter_out_type])->nod_arg[0]));
++			   (SSHORT)(SLONG)(IPTR) ((ptr[e_filter_out_type])->nod_arg[0]));
+ 	request->append_cstring(gds_dyn_func_entry_point,
+ 				((STR) (ptr[e_filter_entry_pt]))->str_data);
+ 	request->append_cstring(gds_dyn_func_module_name,
+@@ -2670,16 +2670,16 @@
+ 				  gds_arg_gds, gds_dsql_shadow_number_err, 0);
+ 	}
+ 
+-	request->append_number(gds_dyn_def_shadow, (SSHORT)(SLONG) (ptr[e_shadow_number]));
++	request->append_number(gds_dyn_def_shadow, (SSHORT)(SLONG)(IPTR) (ptr[e_shadow_number]));
+ 	request->append_cstring(gds_dyn_def_file, ((STR) (ptr[e_shadow_name]))->str_data);
+ 	request->append_number(gds_dyn_shadow_man_auto,
+-			   (SSHORT)(SLONG) ((ptr[e_shadow_man_auto])->nod_arg[0]));
++			   (SSHORT)(SLONG)(IPTR) ((ptr[e_shadow_man_auto])->nod_arg[0]));
+ 	request->append_number(gds_dyn_shadow_conditional,
+-			   (SSHORT)(SLONG) ((ptr[e_shadow_conditional])->nod_arg[0]));
++			   (SSHORT)(SLONG)(IPTR) ((ptr[e_shadow_conditional])->nod_arg[0]));
+ 
+ 	request->append_file_start(0);
+ 
+-	SLONG length = (SLONG) ptr[e_shadow_length];
++	SLONG length = (SLONG)(IPTR) ptr[e_shadow_length];
+ 	request->append_file_length(length);
+ 
+ 	request->append_uchar(gds_dyn_end);
+@@ -2806,15 +2806,15 @@
+ 
+ 	if (constant = node->nod_arg[e_trg_active])
+ 		request->append_number(gds_dyn_trg_inactive,
+-				   (SSHORT)(SLONG) constant->nod_arg[0]);
++				   (SSHORT)(SLONG)(IPTR) constant->nod_arg[0]);
+ 
+ 	if (constant = node->nod_arg[e_trg_position])
+ 		request->append_number(gds_dyn_trg_sequence,
+-				   (SSHORT)(SLONG) constant->nod_arg[0]);
++				   (SSHORT)(SLONG)(IPTR) constant->nod_arg[0]);
+ 
+ 	if (constant = node->nod_arg[e_trg_type]) {
+-		request->append_number(gds_dyn_trg_type, (SSHORT)(SLONG) constant->nod_arg[0]);
+-		trig_type = (USHORT)(ULONG) constant->nod_arg[0];
++		request->append_number(gds_dyn_trg_type, (SSHORT)(SLONG)(IPTR) constant->nod_arg[0]);
++		trig_type = (USHORT)(ULONG)(IPTR) constant->nod_arg[0];
+ 	}
+ 	else {
+ 		assert(node->nod_type == nod_mod_trigger);
+@@ -2893,7 +2893,7 @@
+ 		for (DSQL_NOD* ptr = temp->nod_arg; ptr < end; ++ptr)
+ 		{
+ 			DSQL_NOD    message = *ptr;
+-			SSHORT number  = (SSHORT)(SLONG) message->nod_arg[e_msg_number];
++			SSHORT number  = (SSHORT)(SLONG)(IPTR) message->nod_arg[e_msg_number];
+ 			if (message->nod_type == nod_del_trigger_msg)
+ 			{
+ 				request->append_number(gds_dyn_delete_trigger_msg, number);
+@@ -2954,7 +2954,7 @@
+         // CVC: This is case of "returns <type> [by value|reference]"
+ 		/* Some data types can not be returned as value */
+ 
+-		if (((int)(SLONG) (ret_val_ptr[1]->nod_arg[0]) == FUN_value) &&
++		if (((int)(SLONG)(IPTR) (ret_val_ptr[1]->nod_arg[0]) == FUN_value) &&
+ 			(field->fld_dtype == dtype_text ||
+ 			 field->fld_dtype == dtype_varying ||
+ 			 field->fld_dtype == dtype_cstring ||
+@@ -2998,7 +2998,7 @@
+         // CVC: This is case of "returns parameter <N>"
+ 
+ 
+-		position = (SSHORT)(SLONG) (ret_val_ptr[1]->nod_arg[0]);
++		position = (SSHORT)(SLONG)(IPTR) (ret_val_ptr[1]->nod_arg[0]);
+ 		/* Function modifies an argument whose value is the function return value */
+ 
+ 		if (!arguments || position > arguments->nod_count || position < 1) {
+@@ -3024,10 +3024,10 @@
+ 		if (field->fld_dtype == dtype_blob)
+ 		{
+         /* CVC: I need to test returning blobs by descriptor before allowing the        change there. For now, I ignore the return type specification. */
+-			BOOLEAN free_it = ((SSHORT)(SLONG) ret_val_ptr[1]->nod_arg[0] < 0);
++			BOOLEAN free_it = ((SSHORT)(SLONG)(IPTR) ret_val_ptr[1]->nod_arg[0] < 0);
+ 			request->append_number(gds_dyn_def_function_arg, blob_position);
+ 			request->append_number(gds_dyn_func_mechanism,
+-					   (SSHORT)(SLONG) ((free_it ? -1 : 1) * FUN_blob_struct));
++					   (SSHORT)(SLONG)(IPTR) ((free_it ? -1 : 1) * FUN_blob_struct));
+ 			/* if we have the free_it set then the blob has
+ 			   to be freed on return */
+ 		}
+@@ -3035,7 +3035,7 @@
+ 		{
+ 			request->append_number(gds_dyn_def_function_arg, (SSHORT) 0);
+ 			request->append_number(gds_dyn_func_mechanism,
+-					   (SSHORT)(SLONG) (ret_val_ptr[1]->nod_arg[0]));
++					   (SSHORT)(SLONG)(IPTR) (ret_val_ptr[1]->nod_arg[0]));
+ 		}
+ 
+ 		request->append_cstring(gds_dyn_function_name, udf_name);
+@@ -3070,7 +3070,7 @@
+ 			request->append_number(gds_dyn_def_function_arg, (SSHORT) position);
+ 
+             if (param_node [e_udf_param_type]) {
+-                SSHORT arg_mechanism = (SSHORT)(SLONG) (param_node [e_udf_param_type]->nod_arg [0]);
++                SSHORT arg_mechanism = (SSHORT)(SLONG)(IPTR) (param_node [e_udf_param_type]->nod_arg [0]);
+ 				request->append_number(gds_dyn_func_mechanism, arg_mechanism);
+             }
+             else if (field->fld_dtype == dtype_blob) {
+@@ -3677,13 +3677,13 @@
+ 	if (constant)
+ 	{
+ 		request->append_number(gds_dyn_trg_sequence,
+-				   (SSHORT)(SLONG) (constant ? constant->nod_arg[0] : 0));
++				   (SSHORT)(SLONG)(IPTR) (constant ? constant->nod_arg[0] : 0));
+ 	}
+ 
+ 	constant = node->nod_arg[e_cnstr_type];
+ 	if (constant)
+ 	{
+-		trig_type = (USHORT)(ULONG) constant->nod_arg[0];
++		trig_type = (USHORT)(ULONG)(IPTR) constant->nod_arg[0];
+ 		request->append_number(gds_dyn_trg_type, trig_type);
+ 	}
+ 	else
+@@ -4173,7 +4173,7 @@
+ 
+ 	case nod_del_shadow:
+ 		request->append_number(gds_dyn_delete_shadow,
+-				   (SSHORT)(SLONG) (node->nod_arg[0]));
++				   (SSHORT)(SLONG)(IPTR) (node->nod_arg[0]));
+ 		request->append_uchar(gds_dyn_end);
+ 		break;
+ 
+@@ -4611,25 +4611,25 @@
+ 
+ 		case nod_group_commit_wait:
+ 			request->append_uchar(gds_dyn_log_group_commit_wait);
+-			temp_long = (SLONG) (element->nod_arg[0]);
++			temp_long = (SLONG)(IPTR) (element->nod_arg[0]);
+ 			request->append_ulong_with_length(temp_long);
+ 			break;
+ 
+ 		case nod_check_point_len:
+ 			request->append_uchar(gds_dyn_log_check_point_length);
+-			temp_long = (SLONG) (element->nod_arg[0]);
++			temp_long = (SLONG)(IPTR) (element->nod_arg[0]);
+ 			request->append_ulong_with_length(temp_long);
+ 			break;
+ 
+ 		case nod_num_log_buffers:
+ 			request->append_uchar(gds_dyn_log_num_of_buffers);
+-			temp_short = (SSHORT)(SLONG) (element->nod_arg[0]);
++			temp_short = (SSHORT)(SLONG)(IPTR) (element->nod_arg[0]);
+ 			request->append_ushort_with_length(temp_short);
+ 			break;
+ 
+ 		case nod_log_buffer_size:
+ 			request->append_uchar(gds_dyn_log_buffer_size);
+-			temp_short = (SSHORT)(SLONG) (element->nod_arg[0]);
++			temp_short = (SSHORT)(SLONG)(IPTR) (element->nod_arg[0]);
+ 			request->append_ushort_with_length(temp_short);
+ 			break;
+ 		case nod_drop_log:
+@@ -5095,7 +5095,7 @@
+ 				const_node = element->nod_arg[e_mod_fld_pos_new_position];
+ 
+                 /* CVC: Since now the parser accepts pos=1..N, let's subtract one here. */
+-                constant = (SSHORT)(SLONG) const_node->nod_arg [0] - 1;
++                constant = (SSHORT)(SLONG)(IPTR) const_node->nod_arg [0] - 1;
+ 
+ 				request->append_cstring(gds_dyn_rel_name,
+ 							relation_name->str_data);
+--- Firebird/src/dsql/dsql.cpp.org	2007-02-28 00:04:57.930623000 +0100
++++ Firebird/src/dsql/dsql.cpp	2007-02-28 00:06:17.478623000 +0100
+@@ -1136,8 +1136,8 @@
+ 			parameter = request->req_blob->blb_segment;
+ 			PAR null = parameter->par_null;
+ 			USHORT* ret_length =
+-				(USHORT *) (dsql_msg + (SLONG) null->par_user_desc.dsc_address);
+-			UCHAR* buffer = dsql_msg + (SLONG) parameter->par_user_desc.dsc_address;
++				(USHORT *) (dsql_msg + (SLONG)(IPTR) null->par_user_desc.dsc_address);
++			UCHAR* buffer = dsql_msg + (SLONG)(IPTR) parameter->par_user_desc.dsc_address;
+ 			THREAD_EXIT;
+ 			s = isc_get_segment(tdsql->tsql_status,
+ 							GDS_REF(request->req_handle),
+@@ -1314,7 +1314,7 @@
+ 			parameter = request->req_blob->blb_segment;
+ 			buffer =
+ 				reinterpret_cast<SCHAR*>(
+-					dsql_msg + (SLONG) parameter->par_user_desc.dsc_address);
++					dsql_msg + (SLONG)(IPTR) parameter->par_user_desc.dsc_address);
+ 			THREAD_EXIT;
+ 			s = isc_put_segment(tdsql->tsql_status,
+ 							GDS_REF(request->req_handle),
+@@ -3210,7 +3210,7 @@
+ 	PAR parameter, null;
+ 
+ 	if (node->nod_type == nod_constant)
+-		return (SSHORT)(SLONG) node->nod_arg[0];
++		return (SSHORT)(SLONG)(IPTR) node->nod_arg[0];
+ 
+ 	parameter = (PAR) node->nod_arg[e_par_parameter];
+ 	if (null = parameter->par_null)
+@@ -3976,7 +3976,7 @@
+ 			 /* Make sure the message given to us is long enough */
+ 
+ 			DSC    desc   = parameter->par_user_desc;
+-			USHORT length = (SLONG) desc.dsc_address + desc.dsc_length;
++			USHORT length = (SLONG)(IPTR) desc.dsc_address + desc.dsc_length;
+ 			if (length > msg_length)
+ 				break;
+ 			if (!desc.dsc_dtype)
+@@ -3985,7 +3985,7 @@
+ 			flag = NULL;
+ 			if ((null = parameter->par_null) != NULL)
+ 			{
+-				USHORT null_offset = (USHORT)(ULONG) (null->par_user_desc.dsc_address);
++				USHORT null_offset = (USHORT)(ULONG)(IPTR) (null->par_user_desc.dsc_address);
+ 				length = null_offset + sizeof(SSHORT);
+ 				if (length > msg_length)
+ 					break;
+@@ -4000,7 +4000,7 @@
+ 				}
+ 			}
+ 
+-			desc.dsc_address = dsql_msg + (SLONG) desc.dsc_address;
++			desc.dsc_address = dsql_msg + (SLONG)(IPTR) desc.dsc_address;
+ 			if (!request)
+ 				MOVD_move(&parameter->par_desc, &desc);
+ 			else if (!flag || *flag >= 0)
+--- Firebird/src/dsql/gen.cpp.org	2007-02-28 00:06:39.246623000 +0100
++++ Firebird/src/dsql/gen.cpp	2007-02-28 00:08:32.954623000 +0100
+@@ -636,7 +636,7 @@
+ 	for (parameter = message->msg_parameters; parameter;
+ 		 parameter = parameter->par_next)
+ 			parameter->par_desc.dsc_address =
+-			message->msg_buffer + (SLONG) parameter->par_desc.dsc_address;
++			message->msg_buffer + (SLONG)(IPTR) parameter->par_desc.dsc_address;
+ }
+ 
+ 
+@@ -1021,7 +1021,7 @@
+ 	case nod_exec_into:
+ 		if (node->nod_arg[e_exec_into_block]) {
+ 			STUFF(blr_label);
+-			STUFF((int)(SLONG) node->nod_arg[e_exec_into_number]);
++			STUFF((int)(SLONG)(IPTR) node->nod_arg[e_exec_into_number]);
+ 		}
+ 		STUFF(blr_exec_into);
+ 		temp = node->nod_arg[e_exec_into_list];
+@@ -1049,12 +1049,12 @@
+ 
+     case nod_label:
+         STUFF(blr_label);
+-        STUFF((int)(SLONG) node->nod_arg[e_label_number]);
++        STUFF((int)(SLONG)(IPTR) node->nod_arg[e_label_number]);
+         return;
+ 	
+     case nod_breakleave:
+         STUFF(blr_leave);
+-        STUFF((int)(SLONG) node->nod_arg[e_breakleave_number]);
++        STUFF((int)(SLONG)(IPTR) node->nod_arg[e_breakleave_number]);
+         return;
+ 
+ 	case nod_store:
+@@ -1069,7 +1069,7 @@
+ 
+ 	case nod_abort:
+ 		STUFF(blr_leave);
+-		STUFF((int)(SLONG) node->nod_arg[e_abrt_number]);
++		STUFF((int)(SLONG)(IPTR) node->nod_arg[e_abrt_number]);
+ 		return;
+ 
+ 	case nod_start_savepoint:
+@@ -1149,14 +1149,14 @@
+ 
+ 	case nod_while:
+ 		STUFF(blr_label);
+-		STUFF((int)(SLONG) node->nod_arg[e_while_number]);
++		STUFF((int)(SLONG)(IPTR) node->nod_arg[e_while_number]);
+ 		STUFF(blr_loop);
+ 		STUFF(blr_begin);
+ 		STUFF(blr_if);
+ 		GEN_expr(request, node->nod_arg[e_while_cond]);
+ 		GEN_statement(request, node->nod_arg[e_while_action]);
+ 		STUFF(blr_leave);
+-		STUFF((int)(SLONG) node->nod_arg[e_while_number]);
++		STUFF((int)(SLONG)(IPTR) node->nod_arg[e_while_number]);
+ 		STUFF(blr_end);
+ 		return;
+ 
+@@ -1556,7 +1556,7 @@
+ 	switch (node->nod_type) {
+ 	case nod_sqlcode:
+ 		STUFF(blr_sql_code);
+-		STUFF_WORD((USHORT)(ULONG) node->nod_arg[0]);
++		STUFF_WORD((USHORT)(ULONG)(IPTR) node->nod_arg[0]);
+ 		return;
+ 
+ 	case nod_gdscode:
+@@ -1667,7 +1667,7 @@
+        what loop is the user trying to abandon? */
+     if (for_select->nod_arg [e_flp_action]) {
+         STUFF (blr_label);
+-        STUFF ((int) for_select->nod_arg [e_flp_number]);
++        STUFF ((int)(IPTR) for_select->nod_arg [e_flp_number]);
+     }
+ 
+ /* Generate FOR loop */
+@@ -2546,7 +2546,7 @@
+ 	for (ptr = list->nod_arg, end = ptr + list->nod_count; ptr < end; ptr++) {
+  		dsql_nod* nulls_placement = (*ptr)->nod_arg[e_order_nulls];
+  		if (nulls_placement) {
+- 			switch ((SLONG)nulls_placement->nod_arg[0]) {
++ 			switch ((SLONG)(IPTR)nulls_placement->nod_arg[0]) {
+  				case NOD_NULLS_FIRST:
+  					STUFF(blr_nullsfirst);
+  					break;
+--- Firebird/src/dsql/parse.y.org	2007-02-28 00:09:38.346623000 +0100
++++ Firebird/src/dsql/parse.y	2007-02-28 00:15:32.978623000 +0100
+@@ -551,7 +551,7 @@
+ 		| set
+ 		| update
+ 		| KW_DEBUG signed_short_integer
+-			{ prepare_console_debug ((int) $2, &yydebug);
++			{ prepare_console_debug ((int)(IPTR) $2, &yydebug);
+ 			  $$ = make_node (nod_null, (int) 0, NULL); }
+ 		;
+ 
+@@ -1158,7 +1158,7 @@
+ 		;
+ 
+ logfile_attr	: KW_SIZE equals long_integer
+-			{ lex.g_file->fil_length = (SLONG) $3; }
++			{ lex.g_file->fil_length = (SLONG)(IPTR) $3; }
+ /*
+ 		| RAW_PARTITIONS equals pos_short_integer
+ 			{ lex.g_file->fil_partitions = (SSHORT) (IPTR) $3; 
+@@ -1178,9 +1178,9 @@
+ 		;
+ 
+ file_clause	: STARTING file_clause_noise long_integer
+-			{ lex.g_file->fil_start = (SLONG) $3;}
++			{ lex.g_file->fil_start = (SLONG)(IPTR) $3;}
+ 		| LENGTH equals long_integer page_noise
+-			{ lex.g_file->fil_length = (SLONG) $3;}
++			{ lex.g_file->fil_length = (SLONG)(IPTR) $3;}
+ 		;
+ 
+ file_clause_noise :
+@@ -2186,7 +2186,7 @@
+ 		;
+ 
+ array_range	: signed_long_integer
+-	    		{ if ((SLONG) $1 < 1)
++	    		{ if ((SLONG)(IPTR) $1 < 1)
+ 		     		$$ = make_node (nod_list, (int) 2, 
+ 					MAKE_constant ((STR) $1, CONSTANT_SLONG), 
+ 					MAKE_constant ((STR) 1, CONSTANT_SLONG)); 
+@@ -2429,10 +2429,10 @@
+ 		    	}
+ 		| '(' signed_long_integer ')'
+ 			{         
+-			if ( ((SLONG) $2 < 1) || ((SLONG) $2 > 18) )
++			if ( ((SLONG)(IPTR) $2 < 1) || ((SLONG)(IPTR) $2 > 18) )
+ 			    yyabandon (-842, isc_precision_err);
+ 				/* Precision most be between 1 and 18. */ 
+-			if ((SLONG) $2 > 9)
++			if ((SLONG)(IPTR) $2 > 9)
+ 			    {
+ 			    if ( ( (client_dialect <= SQL_DIALECT_V5) &&
+ 				   (db_dialect     >  SQL_DIALECT_V5) ) ||
+@@ -2469,7 +2469,7 @@
+ 			        }
+ 			    }
+ 			else 
+-			    if ((SLONG) $2 < 5)
++			    if ((SLONG)(IPTR) $2 < 5)
+ 			    	{
+ 			    	lex.g_field->fld_dtype = dtype_short; 
+ 			    	lex.g_field->fld_length = sizeof (SSHORT); 
+@@ -2483,13 +2483,13 @@
+ 			}
+ 		| '(' signed_long_integer ',' signed_long_integer ')'
+ 			{ 
+-			if ( ((SLONG) $2 < 1) || ((SLONG) $2 > 18) )
++			if ( ((SLONG)(IPTR) $2 < 1) || ((SLONG)(IPTR) $2 > 18) )
+ 			    yyabandon (-842, isc_precision_err);
+ 				/* Precision should be between 1 and 18 */ 
+-			if (((SLONG) $4 > (SLONG) $2) || ((SLONG) $4 < 0))
++			if (((SLONG)(IPTR) $4 > (SLONG)(IPTR) $2) || ((SLONG)(IPTR) $4 < 0))
+ 			    yyabandon (-842, isc_scale_nogt);
+ 				/* Scale must be between 0 and precision */
+-			if ((SLONG) $2 > 9)
++			if ((SLONG)(IPTR) $2 > 9)
+ 			    {
+ 			    if ( ( (client_dialect <= SQL_DIALECT_V5) &&
+ 				   (db_dialect     >  SQL_DIALECT_V5) ) ||
+@@ -2527,7 +2527,7 @@
+ 			    }
+ 			else
+ 			    {
+-			    if ((SLONG) $2 < 5)
++			    if ((SLONG)(IPTR) $2 < 5)
+ 			    	{
+ 			    	lex.g_field->fld_dtype = dtype_short; 
+ 			    	lex.g_field->fld_length = sizeof (SSHORT); 
+@@ -2553,7 +2553,7 @@
+ 
+ float_type	: KW_FLOAT precision_opt
+ 			{ 
+-			if ((SLONG) $2 > 7)
++			if ((SLONG)(IPTR) $2 > 7)
+ 			    {
+ 			    lex.g_field->fld_dtype = dtype_double;
+ 			    lex.g_field->fld_length = sizeof (double); 
+@@ -3706,32 +3706,32 @@
+ 
+ signed_short_integer	:	nonneg_short_integer
+ 		| '-' neg_short_integer
+-			{ $$ = (DSQL_NOD) - (SLONG) $2; }
++			{ $$ = (DSQL_NOD) - (SLONG)(IPTR) $2; }
+ 		;
+ 
+ nonneg_short_integer	: NUMBER
+-			{ if ((SLONG) $1 > SHRT_POS_MAX)
++			{ if ((SLONG)(IPTR) $1 > SHRT_POS_MAX)
+ 			    yyabandon (-842, isc_expec_short);
+ 				/* Short integer expected */
+ 			  $$ = $1;}
+ 		;
+ 
+ neg_short_integer : NUMBER
+-			{ if ((SLONG) $1 > SHRT_NEG_MAX)
++			{ if ((SLONG)(IPTR) $1 > SHRT_NEG_MAX)
+ 			    yyabandon (-842, isc_expec_short);
+ 				/* Short integer expected */
+ 			  $$ = $1;}
+ 		;
+ 
+ pos_short_integer : nonneg_short_integer
+-			{ if ((SLONG) $1 == 0)
++			{ if ((SLONG)(IPTR) $1 == 0)
+ 			    yyabandon (-842, isc_expec_positive);
+ 				/* Positive number expected */
+ 			  $$ = $1;}
+ 		;
+ 
+ unsigned_short_integer : NUMBER
+-			{ if ((SLONG) $1 > SHRT_UNSIGNED_MAX)
++			{ if ((SLONG)(IPTR) $1 > SHRT_UNSIGNED_MAX)
+ 			    yyabandon (-842, isc_expec_ushort);
+ 				/* Unsigned short integer expected */
+ 			  $$ = $1;}
+@@ -3739,7 +3739,7 @@
+ 
+ signed_long_integer	:	long_integer
+ 		| '-' long_integer
+-			{ $$ = (DSQL_NOD) - (SLONG) $2; }
++			{ $$ = (DSQL_NOD) - (SLONG)(IPTR) $2; }
+ 		;
+ 
+ long_integer	: NUMBER
+@@ -3820,14 +3820,14 @@
+ 
+ string_value_function	:  SUBSTRING '(' value FROM pos_short_integer ')'
+ 				{ $$ = make_node (nod_substr, e_substr_count, $3,
+-					MAKE_constant ((STR) ((SLONG)($5) - 1), CONSTANT_SLONG),
++					MAKE_constant ((STR) ((SLONG)(IPTR)($5) - 1), CONSTANT_SLONG),
+ 					MAKE_constant ((STR) SHRT_POS_MAX, CONSTANT_SLONG)); }
+ 			/* CVC: It was easier to provide a constant with maximum value if the
+ 			third parameter -length- is ommitted than to chase and fix the functions
+ 			that treat nod_substr as an aggregate and do not expect NULL arguments. */
+ 			| SUBSTRING '(' value FROM pos_short_integer FOR nonneg_short_integer ')'
+ 				{ $$ = make_node (nod_substr, e_substr_count, $3,
+-					MAKE_constant ((STR) ((SLONG)($5) - 1), CONSTANT_SLONG),
++					MAKE_constant ((STR) ((SLONG)(IPTR)($5) - 1), CONSTANT_SLONG),
+ 					MAKE_constant ((STR) ($7), CONSTANT_SLONG)); }
+ 			| KW_UPPER '(' value ')'
+ 				{ $$ = make_node (nod_upcase, 1, $3); }
+--- Firebird/src/remote/interface.cpp.org	2007-02-28 00:17:46.438623000 +0100
++++ Firebird/src/remote/interface.cpp	2007-02-28 00:18:18.002623000 +0100
+@@ -3230,7 +3230,7 @@
+  		// Nickolay Samofatov: We pass this value to the server (as 32-bit value)
+  		// then it returns it to us and we do not use it. Maybe pass zero here
+  		// to avoid client-side security risks?
+-		event->p_event_ast = (SLONG) ast;
++		event->p_event_ast = (SLONG)(IPTR) ast;
+ 		event->p_event_arg = (SLONG)(IPTR) arg;
+ 
+ 		event->p_event_rid = rem_event->rvnt_id;
+@@ -6225,8 +6225,8 @@
+ 		for (; to_desc < end_desc; from_desc++, to_desc++) {
+ 			from = *from_desc;
+ 			to = *to_desc;
+-			from.dsc_address = from_msg + (SLONG) from.dsc_address;
+-			to.dsc_address = to_msg + (SLONG) to.dsc_address;
++			from.dsc_address = from_msg + (SLONG)(IPTR) from.dsc_address;
++			to.dsc_address = to_msg + (SLONG)(IPTR) to.dsc_address;
+ 			CVT_move(&from, &to, (FPTR_VOID) move_error);
+ 		}
+ 
+--- Firebird/src/remote/protocol.cpp.org	2007-02-28 00:18:40.858623000 +0100
++++ Firebird/src/remote/protocol.cpp	2007-02-28 00:19:05.766623000 +0100
+@@ -984,7 +984,7 @@
+ 	BLOB_PTR *p;
+ 	SSHORT n;
+ 
+-	p = buffer + (ULONG) desc->dsc_address;
++	p = buffer + (ULONG)(IPTR) desc->dsc_address;
+ 
+ 	switch (desc->dsc_dtype) {
+ 	case dtype_text:
+--- Firebird/src/dsql/pass1.cpp	2005-06-16 11:44:39.000000000 +0200
++++ Firebird/src/dsql/pass1.cpp	2007-02-28 00:17:34.114623000 +0100
+@@ -642,7 +642,7 @@
+ 									  TRUE, TRUE,
+ 									  /* Pass 0 here to restore older parameter 
+ 										ordering behavior */
+-									  (USHORT)(ULONG) input->nod_arg[0]);
++									  (USHORT)(ULONG)(IPTR) input->nod_arg[0]);
+ 		return node;
+ 
+ 	case nod_udf:
+@@ -1561,7 +1561,7 @@
+ 				}
+ 				else {
+ 					// we have Count(*)
+-					if (request->req_scope_level == (ULONG) node->nod_arg[1]) {
++					if (request->req_scope_level == (ULONG)(IPTR) node->nod_arg[1]) {
+ 						aggregate = TRUE;
+ 					}
+ 				}
+@@ -4426,7 +4426,7 @@
+ 					(slist_node->nod_type == nod_list))
+ 				{
+ 					/* an select list is there */
+-					position = (ULONG) sub->nod_arg[0];
++					position = (ULONG)(IPTR) sub->nod_arg[0];
+ 					if ((position < 1) || (position > (ULONG) slist_node->nod_count)) 
+ 					{
+ 						ERRD_post(gds_sqlerr, gds_arg_number, (SLONG) - 104,
+@@ -4819,9 +4819,9 @@
+ 		}
+ 
+ 		if (node1->nod_type == nod_constant && node1->nod_desc.dsc_dtype == dtype_long) {
+-			position = (ULONG) (node1->nod_arg[0]);
++			position = (ULONG)(IPTR) (node1->nod_arg[0]);
+ 			if ((position < 1) || !s_list || 
+-				(position > (ULONG) s_list->nod_count)) {
++				(position > (ULONG)(IPTR) s_list->nod_count)) {
+ 				ERRD_post(gds_sqlerr, gds_arg_number, (SLONG) - 104,
+ 					gds_arg_gds, gds_dsql_column_pos_err,
+ 					gds_arg_string, "ORDER BY", 0);
+@@ -5082,7 +5082,7 @@
+ 				ERRD_post(gds_sqlerr, gds_arg_number, (SLONG) - 104,
+ 						  gds_arg_gds, gds_dsql_command_err, gds_arg_gds, gds_order_by_err,	/* invalid ORDER BY clause */
+ 						  0);
+-			number = (SLONG) position->nod_arg[0];
++			number = (SLONG)(IPTR) position->nod_arg[0];
+ 			if (number < 1 || number > union_items->nod_count)
+ 				ERRD_post(gds_sqlerr, gds_arg_number, (SLONG) - 104,
+ 						  gds_arg_gds, gds_dsql_command_err, gds_arg_gds, gds_order_by_err,	/* invalid ORDER BY clause */
+--- Firebird/src/jrd/dpm.epp.org	2007-02-28 00:25:04.202623000 +0100
++++ Firebird/src/jrd/dpm.epp	2007-02-28 00:27:43.810623000 +0100
+@@ -2124,7 +2124,7 @@
+ 	CCH_precedence(tdbb, &rpb->rpb_window, -rpb->rpb_transaction);
+ 	CCH_MARK(tdbb, &rpb->rpb_window);
+ 	page = (DPG) rpb->rpb_window.win_buffer;
+-	size = SQZ_length(tdbb, (SCHAR*) rpb->rpb_address, (int) rpb->rpb_length, &dcc);
++	size = SQZ_length(tdbb, (SCHAR*) rpb->rpb_address, (int)(IPTR) rpb->rpb_length, &dcc);
+ 
+ /* It is critical that the record be padded, if necessary, to the length of
+    a fragmented record header.  Compute the amount of fill required.  */
+@@ -2753,7 +2753,7 @@
+ 	rpb->rpb_page = rpb->rpb_window.win_page;
+ 	rpb->rpb_line = slot;
+ 	rpb->rpb_number =
+-		(SLONG) page->dpg_sequence * dbb->dbb_max_records + slot;
++		(SLONG)(IPTR) page->dpg_sequence * dbb->dbb_max_records + slot;
+ 
+ 	if (record)
+ 		LLS_PUSH((BLK) rpb->rpb_page, &record->rec_precedence);
