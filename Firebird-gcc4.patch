@@ -1438,23 +1438,63 @@
  			if (number < 1 || number > union_items->nod_count)
  				ERRD_post(gds_sqlerr, gds_arg_number, (SLONG) - 104,
  						  gds_arg_gds, gds_dsql_command_err, gds_arg_gds, gds_order_by_err,	/* invalid ORDER BY clause */
---- Firebird/src/jrd/dpm.epp.org	2007-02-28 00:25:04.202623000 +0100
-+++ Firebird/src/jrd/dpm.epp	2007-02-28 00:27:43.810623000 +0100
-@@ -2124,7 +2124,7 @@
+--- Firebird/src/jrd/dpm.epp.org	2007-02-28 00:34:51.294623000 +0100
++++ Firebird/src/jrd/dpm.epp	2007-02-28 00:35:36.046623000 +0100
+@@ -2119,7 +2119,7 @@
+ 
+ 	DEBUG if (stack)
+ 		while (*stack)
+-			CCH_precedence(tdbb, &rpb->rpb_window, (SLONG) LLS_POP(stack));
++			CCH_precedence(tdbb, &rpb->rpb_window, (SLONG)(IPTR) LLS_POP(stack));
+ 
  	CCH_precedence(tdbb, &rpb->rpb_window, -rpb->rpb_transaction);
  	CCH_MARK(tdbb, &rpb->rpb_window);
- 	page = (DPG) rpb->rpb_window.win_buffer;
--	size = SQZ_length(tdbb, (SCHAR*) rpb->rpb_address, (int) rpb->rpb_length, &dcc);
-+	size = SQZ_length(tdbb, (SCHAR*) rpb->rpb_address, (int)(IPTR) rpb->rpb_length, &dcc);
+@@ -2736,7 +2736,7 @@
+    If the page need to be compressed, compress it. */
  
- /* It is critical that the record be padded, if necessary, to the length of
-    a fragmented record header.  Compute the amount of fill required.  */
-@@ -2753,7 +2753,7 @@
- 	rpb->rpb_page = rpb->rpb_window.win_page;
- 	rpb->rpb_line = slot;
- 	rpb->rpb_number =
--		(SLONG) page->dpg_sequence * dbb->dbb_max_records + slot;
-+		(SLONG)(IPTR) page->dpg_sequence * dbb->dbb_max_records + slot;
+ 	while (*stack)
+-		CCH_precedence(tdbb, &rpb->rpb_window, (SLONG) LLS_POP(stack));
++		CCH_precedence(tdbb, &rpb->rpb_window, (SLONG)(IPTR) LLS_POP(stack));
+ 	CCH_MARK(tdbb, &rpb->rpb_window);
+ 	i = page->dpg_count + ((slot) ? 0 : 1);
  
- 	if (record)
- 		LLS_PUSH((BLK) rpb->rpb_page, &record->rec_precedence);
+--- Firebird/src/jrd/met.epp.org	2007-02-28 00:37:37.786623000 +0100
++++ Firebord/src/jrd/met.epp	2007-02-28 00:41:41.830623000 +0100
+@@ -932,7 +932,7 @@
+ 			if (desc->dsc_address)
+ 			{
+ 				format->fmt_length =
+-					(ULONG) desc->dsc_address + desc->dsc_length;
++					(ULONG)(IPTR) desc->dsc_address + desc->dsc_length;
+ 				break;
+ 			}
+ 		}
+@@ -3001,10 +3001,10 @@
+ 		{
+ 			if ( (node = csb_->csb_rpt[i].csb_message) )
+ 			{
+-				if ((int) node->nod_arg[e_msg_number] == 0)
++				if ((int)(IPTR) node->nod_arg[e_msg_number] == 0)
+ 				{
+ 					procedure->prc_input_msg = node;
+-				} else if ((int) node->nod_arg[e_msg_number] == 1)
++				} else if ((int)(IPTR) node->nod_arg[e_msg_number] == 1)
+ 				{
+ 					procedure->prc_output_msg = node;
+ 				}
+@@ -4593,13 +4593,13 @@
+             dpdo_name = (TEXT*) procedure->prc_name->str_data;
+             break;
+         case obj_exception:
+-            number = (SLONG) node->nod_arg [e_dep_object];
++            number = (SLONG)(IPTR) node->nod_arg [e_dep_object];
+             MET_lookup_exception (tdbb, number, name, NULL);
+             dpdo_name = name;
+             break;
+             /* CVC: Here I'm going to track those pesky things named generators and UDFs. */
+         case obj_generator:
+-            number = (SLONG) node->nod_arg [e_dep_object];
++            number = (SLONG)(IPTR) node->nod_arg [e_dep_object];
+             MET_lookup_generator_id (tdbb, number, name);
+             dpdo_name = name;
+             break;
