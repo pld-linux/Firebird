@@ -1498,3 +1498,194 @@
              MET_lookup_generator_id (tdbb, number, name);
              dpdo_name = name;
              break;
+
+--- Firebird/src/burp/canonical.cpp.org	2007-02-28 12:52:58.246623000 +0100
++++ Firebird/src/burp/canonical.cpp	2007-02-28 12:53:13.434623000 +0100
+@@ -505,7 +505,7 @@
+ 	UCHAR *p;
+ 	SSHORT n;
+ 
+-	p = buffer + (int) desc->dsc_address;
++	p = buffer + (int)(IPTR) desc->dsc_address;
+ 
+ 	switch (desc->dsc_dtype)
+ 	{
+--- Firebird/src/remote/inet_server.cpp.org	2007-02-28 12:58:13.158623000 +0100
++++ Firebird/src/remote/inet_server.cpp	2007-02-28 12:58:24.038623000 +0100
+@@ -380,7 +380,7 @@
+ 		if (!debug) {
+ 			FD_ZERO(&mask);
+ 			FD_SET(2, &mask);
+-			divorce_terminal((int) &mask);
++			divorce_terminal((int)(IPTR) &mask);
+ 		}
+ 		{
+ 			ISC_STATUS_ARRAY status_vector;
+--- Firebird/src/remote/server.cpp.org	2007-02-28 12:59:33.298623000 +0100
++++ Firebird/src/remote/server.cpp	2007-02-28 12:59:51.162623000 +0100
+@@ -4361,7 +4361,7 @@
+ 
+ 	// Nickolay Samofatov: We keep this values and even pass them to the client
+ 	// (as 32-bit values) when event is fired, but client ignores them.
+-	p_event->p_event_ast = (SLONG) event->rvnt_ast;
++	p_event->p_event_ast = (SLONG)(IPTR) event->rvnt_ast;
+ 	p_event->p_event_arg = (SLONG)(IPTR) event->rvnt_arg;
+ 
+ 	p_event->p_event_rid = event->rvnt_rid;
+--- Firebird/src/dudley/exe.epp.org	2007-02-28 13:02:34.238623000 +0100
++++ Firebird/src/dudley/exe.epp	2007-02-28 13:03:12.174623000 +0100
+@@ -626,7 +626,7 @@
+ 				break;
+ 
+ 			case act_d_shadow:
+-				drop_shadow((SLONG) action->act_object);
++				drop_shadow((SLONG)(IPTR) action->act_object);
+ 				break;
+ 
+ 			case act_a_generator:
+--- Firebird/src/dudley/generate.cpp.org	2007-02-28 13:03:35.542623000 +0100
++++ Firebird/src/dudley/generate.cpp	2007-02-28 13:03:43.086623000 +0100
+@@ -426,7 +426,7 @@
+ 	case nod_abort:
+ 		CHECK_BLR(2);
+ 		STUFF(blr_leave);
+-		STUFF((int) node->nod_arg[0]);
++		STUFF((int)(IPTR) node->nod_arg[0]);
+ 		return;
+ 
+ 	case nod_erase:
+--- Firebird/src/dudley/trn.cpp.org	2007-02-28 13:04:00.386623000 +0100
++++ Firebird/src/dudley/trn.cpp	2007-02-28 13:04:08.714623000 +0100
+@@ -244,7 +244,7 @@
+ 				break;
+ 
+ 			case act_d_shadow:
+-				drop_shadow(dyn, (SLONG) (action->act_object));
++				drop_shadow(dyn, (SLONG)(IPTR) (action->act_object));
+ 				break;
+ 
+ 			case act_m_trigger_msg:
+--- Firebird/src/qli/eval.cpp.org	2007-02-28 13:04:28.694623000 +0100
++++ Firebird/src/qli/eval.cpp	2007-02-28 13:06:09.946623000 +0100
+@@ -200,10 +200,10 @@
+ 
+ 	if (node->nod_type == nod_rpt_average && node->nod_arg[e_stt_default])
+ 		if (node->nod_desc.dsc_dtype == dtype_long)
+-			*(SLONG *) node->nod_desc.dsc_address /= (SLONG) node->
++			*(SLONG *) node->nod_desc.dsc_address /= (SLONG)(IPTR) node->
+ 				nod_arg[e_stt_default];
+ 		else
+-			*(double *) node->nod_desc.dsc_address /= (SLONG) node->
++			*(double *) node->nod_desc.dsc_address /= (SLONG)(IPTR) node->
+ 				nod_arg[e_stt_default];
+ }
+ 
+@@ -241,7 +241,7 @@
+ 
+ /* If this is the first value, just move it in. */
+ 
+-	count = (SLONG) node->nod_arg[e_stt_default] + 1;
++	count = (SLONG)(IPTR) node->nod_arg[e_stt_default] + 1;
+ 	if (count == 1) {
+ 		if (desc2->dsc_missing)
+ 			desc1->dsc_missing = DSC_missing;
+@@ -374,7 +374,7 @@
+ 	case nod_rpt_min:
+ 	case nod_rpt_total:
+ 	case nod_rpt_average:
+-		if (!(SLONG) node->nod_arg[e_stt_default])
++		if (!(SLONG)(IPTR) node->nod_arg[e_stt_default])
+ 			desc->dsc_missing = DSC_missing;
+ 
+ 	case nod_rpt_count:
+--- Firebird/src/qli/expand.cpp.org	2007-02-28 13:06:27.894623000 +0100
++++ Firebird/src/qli/expand.cpp	2007-02-28 13:06:46.722623000 +0100
+@@ -1830,7 +1830,7 @@
+ 
+ 	}
+ 
+-	item->itm_count = (int) syn_item->syn_arg[0];
++	item->itm_count = (int)(IPTR) syn_item->syn_arg[0];
+ 	return item;
+ }
+ 
+@@ -2131,7 +2131,7 @@
+ /* Handle implicit boolean from SQL xxx IN (yyy FROM relation) */
+ 
+ 	if (input->syn_arg[s_rse_outer]) {
+-		eql_node = MAKE_NODE((enum nod_t)(int)input->syn_arg[s_rse_op], 2);
++		eql_node = MAKE_NODE((enum nod_t)(int)(IPTR)input->syn_arg[s_rse_op], 2);
+ 		eql_node->nod_arg[0] =
+ 			expand_expression(input->syn_arg[s_rse_outer], old_stack);
+ 		eql_node->nod_arg[1] =
+--- Firebird/src/qli/gener.cpp.org	2007-02-28 13:07:08.610623000 +0100
++++ Firebird/src/qli/gener.cpp	2007-02-28 13:07:26.390623000 +0100
+@@ -1556,7 +1556,7 @@
+ 
+ 	rlb = CHECK_RLB(request->req_blr);
+ 
+-	if ((NOD_T) (int) node->nod_arg[e_rse_join_type] == (NOD_T) 0)
++	if ((NOD_T) (int)(IPTR) node->nod_arg[e_rse_join_type] == (NOD_T) 0)
+ 		STUFF(blr_rse);
+ 	else
+ 		STUFF(blr_rs_stream);
+@@ -1625,7 +1625,7 @@
+ 	if (list = node->nod_arg[e_rse_reduced])
+ 		gen_sort(list, request, blr_project);
+ 
+-	join_type = (NOD_T) (int) node->nod_arg[e_rse_join_type];
++	join_type = (NOD_T) (int)(IPTR) node->nod_arg[e_rse_join_type];
+ 	if (join_type != (NOD_T) 0 && join_type != nod_join_inner) {
+ 		STUFF(blr_join_type);
+ 		if (join_type == nod_join_left)
+--- Firebird/src/qli/lex.cpp.org	2007-02-28 13:07:47.518623000 +0100
++++ Firebird/src/qli/lex.cpp	2007-02-28 13:08:00.654623000 +0100
+@@ -597,7 +597,7 @@
+ 	for (temp = QLI_line;
+ 		 temp->line_next && QLI_statements;
+ 		 temp = temp->line_next)
+-if (temp->line_next->line_position == (SLONG) QLI_statements->lls_object) return;
++if (temp->line_next->line_position == (SLONG)(IPTR) QLI_statements->lls_object) return;
+ 
+ 	statement = (LLS) ALLOCP(type_lls);
+ 	statement->lls_object = (BLK) temp->line_position;
+--- Firebird/src/qli/parse.cpp.org	2007-02-28 13:08:33.066623000 +0100
++++ Firebird/src/qli/parse.cpp	2007-02-28 13:09:08.342623000 +0100
+@@ -1524,7 +1524,7 @@
+ 			IBERROR(176);		/* Msg176 No statements issued yet */
+ 
+ 		if (MATCH(KW_ASTERISK))
+-			LEX_edit((SLONG) 0, (SLONG) statement_list->lls_object);
++			LEX_edit((SLONG) 0, (SLONG)(IPTR) statement_list->lls_object);
+ 		else {
+ 			if (KEYWORD(KW_SEMI))
+ 				l = 1;
+@@ -1534,7 +1534,7 @@
+ 			for (start = stop = statement_list;
+ 				 l && start->lls_next; l--, start = start->lls_next);
+ 			command_end();
+-			LEX_edit((SLONG) start->lls_object, (SLONG) stop->lls_object);
++			LEX_edit((SLONG)(IPTR) start->lls_object, (SLONG)(IPTR) stop->lls_object);
+ 		}
+ 	}
+ #ifdef PYXIS
+@@ -2925,7 +2925,7 @@
+ 			node->syn_arg[0] = INT_CAST 1;
+ 			if (op == nod_column || QLI_token->tok_type == tok_number)
+ 				node->syn_arg[0] = INT_CAST parse_ordinal();
+-			if ((op == nod_skip) && ((int) node->syn_arg[0] < 1))
++			if ((op == nod_skip) && ((int)(IPTR) node->syn_arg[0] < 1))
+ 				SYNTAX_ERROR(478);	/* Msg478 number > 0 */
+ 		}
+ 		LLS_PUSH(node, &stack);
+--- Firebird/src/qli/show.epp.org	2007-02-28 13:09:30.726623000 +0100
++++ Firebird/src/qli/show.epp	2007-02-28 13:10:01.410623000 +0100
+@@ -154,7 +154,7 @@
+ 	ptr = node->syn_arg;
+ 
+ 	for (i = 0; i < node->syn_count; i++) {
+-		sw = (ENUM show_t) (int) * ptr++;
++		sw = (ENUM show_t) (int)(IPTR) * ptr++;
+ 		value = *ptr++;
+ 		if (sw != show_matching_language &&
+ 			sw != show_version &&
