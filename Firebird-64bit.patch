@@ -1,0 +1,11 @@
+--- Firebird/src/jrd/tra.h.org	2007-02-28 11:21:45.794623000 +0100
++++ Firebird/src/jrd/tra.h	2007-02-28 11:22:10.666623000 +0100
+@@ -127,7 +127,7 @@
+ #define tra_precommitted    5	/* Transaction is precommitted */
+ 
+ /* The highest transaction number possible.  This is 0x7fffffff if SLONG is 32 bits. */
+-#define MAX_TRA_NUMBER		 (~(1L << (BITS_PER_LONG - 1)))
++#define MAX_TRA_NUMBER		 (MAX_SLONG)
+ /* Savepoint block */
+ 
+ class sav : public pool_alloc<type_sav>
