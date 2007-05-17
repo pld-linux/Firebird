@@ -34,6 +34,7 @@ BuildRequires:	automake
 BuildRequires:	libtool
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
+BuildRequires:	psmisc >= 22.3-2
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
@@ -163,7 +164,7 @@ DARCH=""
 	LIB_CLIENT_LINK_OPTIONS="-lpthread"
 
 # fb_lock_mgr is started during build - try to stop it (if /proc is mounted...)
-/sbin/fuser -k gen/firebird/bin/fb_lock_mgr 2>/dev/null || :
+fuser -k gen/firebird/bin/fb_lock_mgr 2>/dev/null || :
 
 %install
 rm -rf $RPM_BUILD_ROOT
