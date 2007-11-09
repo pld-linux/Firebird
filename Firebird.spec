@@ -231,9 +231,12 @@ ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 
-install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
-install %{SOURCE5}      $RPM_BUILD_ROOT/etc/sysconfig/firebird
-install %{SOURCE6}	$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
+%if %{with ss}
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/firebird
+%else
+install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
