@@ -2,7 +2,10 @@
 # - kill unaligned accesses (create_db,gpre_current,gbak_static,isql_static) on alpha
 # - create classic server/super server subpackages and drop bcond
 #   (see firebird2 on debian how to do it)
-%bcond_with	ss	# Super Server
+#
+# Conditional build:
+%bcond_with	ss	# Super Server (standalone daemon instead of inetd service)
+#
 Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
