@@ -29,11 +29,7 @@ else
 	exit 0
 fi
 
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
-	# Start daemons.
+start() {
 	if [ ! -f /var/lock/subsys/firebird ]; then
 		msg_starting firebird
 		daemon --user firebird $DAEMON -start -forever
@@ -42,9 +38,9 @@ case "$1" in
 	else
 		msg_already_running firebird
 	fi
-	;;
-  stop)
-	# Stop daemons.
+}
+
+stop() {
 	if [ -f /var/lock/subsys/firebird ]; then
 		msg_stopping firebird
 		daemon --user firebird $DAEMON -shut
@@ -52,18 +48,43 @@ case "$1" in
 	else
 		msg_not_running firebird
 	fi
+}
+
+condrestart() {
+	if [ -f /var/lock/subsys/firebird ]; then
+		stop
+		start
+	else
+		msg_not_running firebird
+		RETVAL=$1
+	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
 	;;
-  restart|force-reload)
-	$0 stop
-	$0 start
-	exit $?
+  stop)
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
 	;;
   status)
 	status fb_inet_server
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 esac
 
