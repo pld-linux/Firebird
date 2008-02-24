@@ -11,21 +11,33 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	1.5.5.4926
-Release:	1
+Version:	2.1.0.17735
+Release:	0.1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
-Source0:	http://dl.sourceforge.net/firebird/firebird-%{version}.tar.bz2
-# Source0-md5:	f280d6a790e11fd306ad0d7455bbb0a1
-Source1:	http://www.ibphoenix.com/downloads/60All.zip
-# Source1-md5:	f86a132012361cd4ae88563105741a4c
-Source2:	http://www.ibphoenix.com/downloads/ib_4_0_docs.tar.gz
-# Source2-md5:	f4176d5dec952ee774bb8ee74c1f715d
-Source3:	http://www.ibphoenix.com/downloads/isc_docs.zip
-# Source3-md5:	66eef71c188215d10988788282c014a7
-Source4:	firebird.init
-Source5:	firebird.sysconfig
-Source6:	firebird.inetd
+Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-ReleaseCandidate1.tar.bz2
+# Source0-md5:	69c0fff7c4022e430df6e1eb842e5aaa
+Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.0-QuickStart.pdf
+# Source1-md5:	1ded6a5f6c1ec36a2b8a8b06370afc1a
+Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
+# Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
+Source3:	http://www.firebirdsql.org/pdfmanual/Firebird-Null-Guide.pdf
+# Source3-md5:	d1f8ba75fe3bb9eb9d203ce3f82a1a1a
+Source4:	http://www.firebirdsql.org/pdfmanual/Firebird-Generator-Guide.pdf
+# Source4-md5:	44e7568ef477072a8ad5f381c3e12a75
+Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-Firebird.pdf
+# Source5-md5:	1bd4a168e550910fc899e2aa125d83a3
+Source6:	http://www.firebirdsql.org/pdfmanual/Firebird-nbackup.pdf
+# Source6-md5:	7883243a5685560330430d8b423d2eba
+Source7:	http://www.firebirdsql.org/pdfmanual/Firebird-Utils-WIP.pdf
+# Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
+Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
+# Source8-md5:	ebac312c0afbe97b1850bdc74c553c28
+Source9:	http://www.firebirdsql.org/doc/contrib/fb_2_0_errorcodes.pdf
+# Source9-md5:	2acf2ff63c4ba3a1c590989e19bb253e
+Source100:	firebird.init
+Source101:	firebird.sysconfig
+Source102:	firebird.inetd
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
@@ -49,7 +61,6 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	psmisc >= 22.5-2
 BuildRequires:	rpmbuild(macros) >= 1.268
-BuildRequires:	unzip
 Requires:	%{name}-lib = %{version}-%{release}
 %if %{with ss}
 Requires(post,preun):	/sbin/chkconfig
@@ -135,42 +146,38 @@ Extensive InterBase and Firebird documentation.
 Obszerna dokumentacja do baz InterBase i Firebird.
 
 %prep
-%setup -q -n firebird-%{version}
+%setup -q -n Firebird-%{version}-ReleaseCandidate1
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-
-install -d docs/{IB3.0,IB4.0,IB6.0}
-unzip -q %{SOURCE1} -d docs/IB6.0
-tar xzf %{SOURCE2} -C docs/IB4.0
-unzip -q %{SOURCE3} -d docs/IB3.0
-# standardize extension, also avoids gzipping by compress-doc
-mv -f docs/IB6.0/LANGREF.{PDF,pdf}
+# OBSOLETE?
+# %patch1 -p1
+# ???
+# %patch2 -p1
+# looks obsolete (but not fully)
+# %patch3 -p1
+# %patch4 -p1
+# %patch5 -p1
+# %patch6 -p1
+# %patch7 -p1
+# %patch8 -p1
+# %patch9 -p1
+# %patch10 -p1
+# %patch11 -p1
+# %patch12 -p1
+# %patch13 -p1
 
 # force rebuild
 rm -f src/dsql/parse.cpp
 
 %build
-cd src/extern/editline
-cp -f /usr/share/automake/config.* .
-%{__autoconf}
-cd ../../..
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 
 %configure \
+	--with-editline \
+	--with-system-editline \
+	--with-system-icu \
+	--with-gnu-ld \
 	%{?with_ss:--enable-superserver} \
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
@@ -235,10 +242,10 @@ ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 
 %if %{with ss}
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig/firebird
+install %{SOURCE100} $RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
+install %{SOURCE101} $RPM_BUILD_ROOT/etc/sysconfig/firebird
 %else
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
+install %{SOURCE102} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
 %endif
 
 %clean
