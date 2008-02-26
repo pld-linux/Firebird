@@ -56,6 +56,7 @@ URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
+BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
