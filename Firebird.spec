@@ -11,14 +11,14 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.0.17735
-Release:	0.1
+Version:	2.1.0.17798
+Release:	1
 License:	Interbase Public License 1.0
 Group:		Applications/Databases
-Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-ReleaseCandidate1.tar.bz2
-# Source0-md5:	69c0fff7c4022e430df6e1eb842e5aaa
+Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
+# Source0-md5:	e663417416b4dc808d6ace991e6b783f
 Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.0-QuickStart.pdf
-# Source1-md5:	1ded6a5f6c1ec36a2b8a8b06370afc1a
+# Source1-md5:	d77105c5b24202fe7adbf2a011e71b35
 Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 # Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
 Source3:	http://www.firebirdsql.org/pdfmanual/Firebird-Null-Guide.pdf
@@ -28,7 +28,7 @@ Source4:	http://www.firebirdsql.org/pdfmanual/Firebird-Generator-Guide.pdf
 Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-Firebird.pdf
 # Source5-md5:	1bd4a168e550910fc899e2aa125d83a3
 Source6:	http://www.firebirdsql.org/pdfmanual/Firebird-nbackup.pdf
-# Source6-md5:	7883243a5685560330430d8b423d2eba
+# Source6-md5:	4e195bc085dba520b0f7cd9dcd1f995c
 Source7:	http://www.firebirdsql.org/pdfmanual/Firebird-Utils-WIP.pdf
 # Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
