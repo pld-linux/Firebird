@@ -147,7 +147,7 @@ Extensive InterBase and Firebird documentation.
 Obszerna dokumentacja do baz InterBase i Firebird.
 
 %prep
-%setup -q -n Firebird-%{version}-ReleaseCandidate1
+%setup -q -n Firebird-%{version}-0
 %patch0 -p1
 # OBSOLETE?
 # %patch1 -p1
