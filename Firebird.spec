@@ -230,7 +230,7 @@ install gen/firebird/lib/libfb*.a $RPM_BUILD_ROOT%{_libdir}
 install gen/firebird/lib/libfbembed.so* $RPM_BUILD_ROOT%{_libdir}
 cd gen/buildroot/%{ibdir}
 
-cp -af UDF bin help intl aliases.conf firebird.conf firebird.msg security.fdb \
+cp -af UDF bin help intl aliases.conf firebird.conf firebird.msg security2.fdb \
 	$RPM_BUILD_ROOT%{ibdir}
 install include/* $RPM_BUILD_ROOT%{_includedir}
 cp -df lib/* $RPM_BUILD_ROOT%{_libdir}
@@ -289,7 +289,7 @@ fi
 %attr(755,root,root) %{ibdir}/intl/fbintl
 %{ibdir}/firebird.msg
 # following files should be in /var (*.fdb) and /etc (*.conf)?
-%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/security.fdb
+%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/security2.fdb
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/aliases.conf
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/firebird.conf
 %if %{with ss}
