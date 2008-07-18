@@ -78,14 +78,3 @@
  };
  
  
---- firebird-1.5.1.4500/src/jrd/btr.cpp.orig	2004-08-08 14:17:42.000000000 +0200
-+++ firebird-1.5.1.4500/src/jrd/btr.cpp	2004-08-08 14:16:30.000000000 +0200
-@@ -191,7 +191,7 @@
- //
- inline SLONG BTR_get_quad(const UCHAR* p)
- {
--#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64)
-+#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(__alpha__)
- 	// For IA32 (little-endian) this optimization is a _very_ large speed-up!
- 	return *reinterpret_cast<const SLONG*>(p);
- #else
