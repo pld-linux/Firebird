@@ -6,7 +6,7 @@
  	va_start(args, string);
 -	blr_format(control, string, args);
 +	Firebird::string temp;
-+	temp.vprintf(string, ptr);
++	temp.vprintf(string, args);
 +	control->ctl_string += temp;
  	va_end(args);
  	offset = 0;
