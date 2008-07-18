@@ -18,7 +18,7 @@ Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
 # Source0-md5:	e663417416b4dc808d6ace991e6b783f
 Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.0-QuickStart.pdf
-# Source1-md5:	d77105c5b24202fe7adbf2a011e71b35
+# Source1-md5:	676e5b294a04e3cd12b9298a776e19eb
 Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 # Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
 Source3:	http://www.firebirdsql.org/pdfmanual/Firebird-Null-Guide.pdf
@@ -28,7 +28,7 @@ Source4:	http://www.firebirdsql.org/pdfmanual/Firebird-Generator-Guide.pdf
 Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-Firebird.pdf
 # Source5-md5:	1bd4a168e550910fc899e2aa125d83a3
 Source6:	http://www.firebirdsql.org/pdfmanual/Firebird-nbackup.pdf
-# Source6-md5:	4e195bc085dba520b0f7cd9dcd1f995c
+# Source6-md5:	7ef8a8b9a899d06bec2a5da0bb5fea0e
 Source7:	http://www.firebirdsql.org/pdfmanual/Firebird-Utils-WIP.pdf
 # Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
