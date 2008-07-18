@@ -1,82 +1,80 @@
---- firebird-1.5.1.4500/src/jrd/common.h.orig	2004-05-28 23:36:22.000000000 +0200
-+++ firebird-1.5.1.4500/src/jrd/common.h	2004-05-28 23:44:49.000000000 +0200
-@@ -131,6 +131,14 @@
- #define IMPLEMENTATION  isc_info_db_impl_linux_sparc /* 65  */
- #endif /* sparc */
+--- Firebird-2.1.1.17910-0/src/jrd/common.h.orig	2008-05-27 11:27:23.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/common.h	2008-07-18 22:37:29.266040573 +0200
+@@ -151,6 +151,11 @@
+ #define RISC_ALIGNMENT
+ #endif // IA64
  
-+#ifdef __powerpc__
-+#define IMPLEMENTATION	isc_info_db_impl_linux_ppc
-+#endif
-+
 +#ifdef __alpha__
-+#define IMPLEMENTATION	isc_info_db_impl_linux_alpha
++#define IMPLEMENTATION  isc_info_db_impl_linux_alpha	/* 77 */
++#define RISC_ALIGNMENT
 +#endif
 +
- #define MEMMOVE(from,to,length)		memmove ((void *)to, (void *)from, (size_t) length)
- #define MOVE_FAST(from,to,length)       memcpy (to, from, (int) (length))
- #define MOVE_FASTER(from,to,length)     memcpy (to, from, (int) (length))
---- firebird-1.5.1.4500/src/jrd/ibase.h.orig	2004-03-29 05:50:10.000000000 +0200
-+++ firebird-1.5.1.4500/src/jrd/ibase.h	2004-08-08 00:59:58.069029392 +0200
-@@ -57,7 +57,7 @@
- // It is difficult to detect 64-bit long from the redistributable header
- // we do not care of 16-bit platforms anymore thus we may use plain "int"
- // which is 32-bit on all platforms we support
--#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
-+#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha__)
- typedef	int		ISC_LONG;
- typedef	unsigned int	ISC_ULONG;
+ #define MEMMOVE(from, to, length)		memmove ((void *)to, (void *)from, (size_t) length)
+ #define MOVE_FAST(from, to, length)       memcpy (to, from, (int) (length))
+ #define MOVE_FASTER(from, to, length)     memcpy (to, from, (int) (length))
+--- Firebird-2.1.1.17910-0/src/jrd/inf_pub.h.orig	2008-05-27 11:27:30.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/inf_pub.h	2008-07-18 22:40:03.810034707 +0200
+@@ -205,6 +205,7 @@ enum  info_db_implementations
+ 
+ 	isc_info_db_impl_linux_arm = 75,
+ 	isc_info_db_impl_linux_ia64 = 76,
++	isc_info_db_impl_linux_alpha = 77,
+ 
+ 	isc_info_db_impl_last_value   // Leave this LAST!
+ };
+--- Firebird-2.1.1.17910-0/src/jrd/pag.cpp.orig	2008-05-27 11:27:37.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/pag.cpp	2008-07-18 22:42:52.586039735 +0200
+@@ -158,9 +158,10 @@ static const int CLASS_DARWIN_X64 = 31; 
+ static const int CLASS_SOLARIS_AMD64 = 32;	//Solaris/amd64
+ static const int CLASS_LINUX_ARM = 33;    // LINUX/ARM
+ static const int CLASS_LINUX_IA64 = 34;    // LINUX/IA64
++static const int CLASS_LINUX_ALPHA = 35;    // LINUX/ALPHA
+ 
+ static const int CLASS_MAX10 = CLASS_LINUX_AMD64;	// This should not be changed, no new ports with ODS10
+-static const int CLASS_MAX = CLASS_LINUX_IA64;
++static const int CLASS_MAX = CLASS_LINUX_ALPHA;
+ 
+ // ARCHITECTURE COMPATIBILITY CLASSES
+ 
+@@ -250,7 +251,8 @@ static ArchitectureType archMatrix[CLASS
+ 	archLittleEndian, // CLASS_DARWIN_X64
+ 	archLittleEndian, // CLASS_SOLARIS_AMD64
+ 	archLittleEndian, // CLASS_LINUX_ARM
+-	archLittleEndian  // CLASS_LINUX_IA64
++	archLittleEndian, // CLASS_LINUX_IA64
++	archLittleEndian  // CLASS_LINUX_ALPHA
+ };
+ 
+ #ifdef sun
+@@ -308,6 +310,8 @@ const SSHORT CLASS		= CLASS_LINUX_MIPSEL
+ const SSHORT CLASS		= CLASS_LINUX_MIPS;
+ #elif defined(IA64)
+ const SSHORT CLASS		= CLASS_LINUX_IA64;
++#elif defined(__alpha__)
++const SSHORT CLASS		= CLASS_LINUX_ALPHA;
  #else
-@@ -1577,6 +1577,9 @@
- 	isc_info_db_impl_linux_sparc = 65,
- 	isc_info_db_impl_linux_amd64 = 66,
- 
-+	isc_info_db_impl_linux_ppc = 67,
-+	isc_info_db_impl_linux_alpha = 68,
-+
- 	isc_info_db_impl_last_value   /* Leave this LAST! */
-     };
- 
---- firebird-1.5.1.4500/src/jrd/pag.cpp.orig	2004-05-28 22:16:09.000000000 +0200
-+++ firebird-1.5.1.4500/src/jrd/pag.cpp	2004-05-28 23:58:59.000000000 +0200
-@@ -180,6 +180,12 @@
- #ifdef __sparc__
- #define CLASS           20
+ #error no support on other hardware for Linux
  #endif
-+#ifdef __powerpc__
-+#define CLASS		30
-+#endif
-+#ifdef __alpha__
-+#define CLASS		31
-+#endif
- #endif
- 
- #ifdef FREEBSD
---- firebird-1.5.4.4910/src/remote/xdr.cpp.orig	2007-01-23 16:04:21.000000000 +0100
-+++ firebird-1.5.4.4910/src/remote/xdr.cpp	2007-02-17 22:54:04.743823670 +0100
-@@ -42,10 +42,10 @@
- // The simpliest way to check it is to issue
- // "select abs(2.0/3.0) from rdb$database" from correct client
+--- Firebird-2.1.1.17910-0/src/remote/xdr.cpp.orig	2008-05-27 11:27:51.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/remote/xdr.cpp	2008-07-18 22:43:33.910037221 +0200
+@@ -42,7 +42,7 @@
+ //   entry_point 'IB_UDF_abs' module_name 'ib_udf';
+ // select abs2(2.0 / 3.0) from rdb$database;
  // It will return big strange value in case of invalid define
--#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64)
-+#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(__alpha__)
+-#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(ARM) || defined(MIPSEL) || defined(DARWIN64) || defined(IA64)
++#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(ARM) || defined(MIPSEL) || defined(DARWIN64) || defined(IA64) || defined(__alpha__)
  #define		SWAP_DOUBLE
- #else
--#if !defined(sparc) && !defined(PowerPC) && !defined(HPUX)
-+#if !defined(sparc) && !defined(PowerPC) && !defined(HPUX) && !defined(__powerpc__)
- #error "Define SWAP_DOUBLE for your platform correctly !"
- #endif
- #endif
---- firebird-1.5.1.4500/src/jrd/utl.cpp.orig	2004-03-29 05:50:11.000000000 +0200
-+++ firebird-1.5.1.4500/src/jrd/utl.cpp	2004-08-08 14:13:50.000000000 +0200
-@@ -255,7 +255,10 @@
-     "Firebird/Darwin/PowerPC",	/* 63 */
-     "Firebird/SINIX-Z",	/* 64 */
-     "Firebird/linux Sparc",	/* 65 */
--    "Firebird/linux AMD64"	/* 66 */
-+    "Firebird/linux AMD64",	/* 66 */
-+
-+    "Firebird/linux PPC",	/* 67 */
-+    "Firebird/linux alpha"	/* 68 */
+ #elif defined(sparc) || defined(PowerPC) || defined(PPC) || defined(__ppc__) || defined(HPUX) || defined(MIPS)
+ #undef		SWAP_DOUBLE
+--- Firebird-2.1.1.17910-0/src/jrd/utl.cpp.orig	2008-05-27 11:27:40.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/utl.cpp	2008-07-18 22:44:17.890038059 +0200
+@@ -243,7 +243,8 @@ static const TEXT* const impl_implementa
+ 	"Firebird/Darwin/Intel64",	/* 73 */
+     "Firebird/sun/amd64",	/* 74 */	
+     "Firebird/linux ARM",	/* 75 */
+-    "Firebird/linux IA64"	// 76
++    "Firebird/linux IA64",	// 76
++    "Firebird/linux ALPHA"	/* 77 */
  };
  
  
@@ -91,14 +89,3 @@
  	// For IA32 (little-endian) this optimization is a _very_ large speed-up!
  	return *reinterpret_cast<const SLONG*>(p);
  #else
---- firebird-1.5.1.4500/src/include/fb_types.h.orig	2004-03-29 05:49:42.000000000 +0200
-+++ firebird-1.5.1.4500/src/include/fb_types.h	2004-10-08 11:25:29.000000000 +0200
-@@ -74,7 +74,7 @@
- // Temporarly restrict new definition until ULONG clash with Windows
- // type is solved. Win64 port is not possible before that point.
- // Cannot use SIZEOF_LONG define here because we are in a public header
--#if defined(_LP64) || defined(__LP64__) || defined(__arch64__)
-+#if defined(_LP64) || defined(__LP64__) || defined(__arch64__) || defined(__alpha__)
- 	/* EKU: Firebird requires (S)LONG to be 32 bit */
- #   define LONG_DEFINED
-     typedef int SLONG;
