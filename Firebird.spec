@@ -1,5 +1,6 @@
 # TODO:
 # - kill unaligned accesses (create_db,gpre_current,gbak_static,isql_static) on alpha
+#   - check if it's fixed now (RISC_ALIGNMENT is defined)
 # - create classic server/super server subpackages and drop bcond
 #   (see firebird2 on debian how to do it)
 #
@@ -11,16 +12,17 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.0.17798
+Version:	2.1.1.17910
 Release:	1
-License:	Interbase Public License 1.0
+License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
-# Source0-md5:	e663417416b4dc808d6ace991e6b783f
-Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.0-QuickStart.pdf
+# Source0-md5:	c8bed24245440cb21b9c4fe16aae70bb
+Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.1-QuickStart.pdf
 # Source1-md5:	676e5b294a04e3cd12b9298a776e19eb
-Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
-# Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
+# distfiles refuses this, would require some audit to allow '('/')' chars
+#Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
+## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
 Source3:	http://www.firebirdsql.org/pdfmanual/Firebird-Null-Guide.pdf
 # Source3-md5:	d1f8ba75fe3bb9eb9d203ce3f82a1a1a
 Source4:	http://www.firebirdsql.org/pdfmanual/Firebird-Generator-Guide.pdf
@@ -42,20 +44,11 @@ Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
-Patch4:		%{name}-gcc4.patch
-Patch5:		%{name}-fix-os-detection.dpatch
-Patch6:		%{name}-fix-pthreads-detect.dpatch
-Patch7:		%{name}-link-with-g++.dpatch
-Patch8:		%{name}-no-custom-errno-and-sys_XXerrXX.dpatch
-Patch9:		%{name}-opt-bypass-redundant-sort.dpatch
-Patch10:	%{name}-security-remote-preauth-crash.dpatch
-Patch11:	%{name}-separate-file-and-sem-perms.dpatch
-Patch12:	%{name}-ppc.patch
-Patch13:	%{name}-64bit.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
+BuildRequires:	libedit-devel
 BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
@@ -149,25 +142,15 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %prep
 %setup -q -n Firebird-%{version}-0
 %patch0 -p1
-# OBSOLETE?
-# %patch1 -p1
-# ???
-# %patch2 -p1
-# looks obsolete (but not fully)
-# %patch3 -p1
-# %patch4 -p1
-# %patch5 -p1
-# %patch6 -p1
-# %patch7 -p1
-# %patch8 -p1
-# %patch9 -p1
-# %patch10 -p1
-# %patch11 -p1
-# %patch12 -p1
-# %patch13 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 # force rebuild
 rm -f src/dsql/parse.cpp
+
+mkdir docs
+cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
 
 %build
 %{__libtoolize}
@@ -183,8 +166,6 @@ rm -f src/dsql/parse.cpp
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
 
-# OPTFLAGS for editline
-export OPTFLAGS="%{rpmcflags}"
 DARCH=""
 %ifarch %{x8664}
 DARCH="-DAMD64"
@@ -197,16 +178,6 @@ DARCH="-DPPC"
 %endif
 
 %{__make} -j1 \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
-	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch $DARCH" \
-	LIB_LINK_RPATH_LINE= \
-	LIB_CLIENT_LINK_OPTIONS="-lpthread"
-
-# my name is hack. dirty hack.
-# why isn't that build in previous make call?
-%{__make} -C src -f ../gen/Makefile.libfbembed libfbembed \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
@@ -234,11 +205,11 @@ cp -af UDF bin help intl aliases.conf firebird.conf firebird.msg security2.fdb \
 	$RPM_BUILD_ROOT%{ibdir}
 install include/* $RPM_BUILD_ROOT%{_includedir}
 cp -df lib/* $RPM_BUILD_ROOT%{_libdir}
-install examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -rf examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 # or libfbembed?
-ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
-ln -sf libfbclient.so.1 $RPM_BUILD_ROOT%{_libdir}/libgds.so
+ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
+ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 
@@ -279,7 +250,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
+%doc doc/{license,sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
 %attr(755,root,root) %{_libdir}/libib_util.so
 %dir %attr(770,root,firebird) %{ibdir}
 %attr(755,root,root) %{ibdir}/UDF
@@ -287,6 +258,8 @@ fi
 %{ibdir}/help
 %dir %attr(770,root,firebird) %{ibdir}/intl
 %attr(755,root,root) %{ibdir}/intl/fbintl
+# should it be moved to /etc and marked as config?
+%{ibdir}/intl/fbintl.conf
 %{ibdir}/firebird.msg
 # following files should be in /var (*.fdb) and /etc (*.conf)?
 %attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/security2.fdb
@@ -302,9 +275,9 @@ fi
 %files lib
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfbclient.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfbclient.so.[0-9]
+%attr(755,root,root) %ghost %{_libdir}/libfbclient.so.2
 %attr(755,root,root) %{_libdir}/libfbembed.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.[0-9]
+%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.2.1
 
 # InterBase/old Firebird compatibility symlinks
 %attr(755,root,root) %{_libdir}/libgds.so.0
@@ -316,12 +289,14 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfbclient.so
 %attr(755,root,root) %{_libdir}/libfbembed.so
-%{_includedir}/*.h
+%{_includedir}/ib_util.h
+%{_includedir}/ibase.h
+%{_includedir}/iberror.h
+%{_includedir}/perf.h
 %{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libfbcommon.a
 %{_libdir}/libfbstatic.a
 # compat link
 %{_libdir}/libgds.a
