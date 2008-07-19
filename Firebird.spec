@@ -45,7 +45,7 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
 URL:		http://www.firebirdsql.org/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	libedit-devel
@@ -60,10 +60,10 @@ Requires:	%{name}-lib = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 %endif
-# official ports are x86, sparc and x86_64
-# alpha and ppc added in morearchs patch
-# see morearchs patch if you want to add support for more archs
-ExclusiveArch:	%{ix86} %{x8664} sparc sparcv9 alpha ppc
+# official ports are x86, x86_64, ppc, sparc, arm, mips/mipsel, ia64
+# alpha is added in morearchs patch
+# see morearchs patch if you want more
+ExclusiveArch:	%{ix86} %{x8664} arm ia64 mips mipsel ppc sparc sparcv9 alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
