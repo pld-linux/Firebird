@@ -275,6 +275,7 @@ fi
 %dir %{ibdir}
 %attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin
+%exclude %{ibdir}/bin/fb_config
 %{ibdir}/help
 %dir %attr(770,root,firebird) %{ibdir}/intl
 %attr(755,root,root) %{ibdir}/intl/fbintl
@@ -309,6 +310,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfbclient.so
 %attr(755,root,root) %{_libdir}/libfbembed.so
+%attr(755,root,root) %{ibdir}/bin/fb_config
 %{_includedir}/ib_util.h
 %{_includedir}/ibase.h
 %{_includedir}/iberror.h
