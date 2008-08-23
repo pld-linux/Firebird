@@ -3,6 +3,7 @@
 #   - check if it's fixed now (RISC_ALIGNMENT is defined)
 # - create classic server/super server subpackages and drop bcond
 #   (see firebird2 on debian how to do it)
+# - logrotate script
 #
 # Conditional build:
 %bcond_with	ss	# Super Server (standalone daemon instead of inetd service)
@@ -13,7 +14,7 @@ Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	2.1.1.17910
-Release:	1
+Release:	2
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
@@ -44,6 +45,7 @@ Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
+Patch4:		%{name}-FHS.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -145,6 +147,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # force rebuild
 rm -f src/dsql/parse.cpp
@@ -159,9 +162,10 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 
 %configure \
 	--with-editline \
+	--with-gnu-ld \
+	--with-gpre-pascal \
 	--with-system-editline \
 	--with-system-icu \
-	--with-gnu-ld \
 	%{?with_ss:--enable-superserver} \
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
@@ -193,17 +197,20 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C src -f ../gen/Makefile.install buildImageDir
 
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig/rc-inetd}
+install -d $RPM_BUILD_ROOT/etc/{firebird,rc.d/init.d,sysconfig/rc-inetd}
 install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
+install -d $RPM_BUILD_ROOT/var/{log,lib/firebird} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 install gen/firebird/lib/libfb*.a $RPM_BUILD_ROOT%{_libdir}
 install gen/firebird/lib/libfbembed.so* $RPM_BUILD_ROOT%{_libdir}
-cd gen/buildroot/%{ibdir}
+touch $RPM_BUILD_ROOT/var/log/firebird.log
 
-cp -af UDF bin help intl aliases.conf firebird.conf firebird.msg security2.fdb \
-	$RPM_BUILD_ROOT%{ibdir}
+cd gen/buildroot/%{ibdir}
+install security2.fdb $RPM_BUILD_ROOT/var/lib/firebird
+install *.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 install include/* $RPM_BUILD_ROOT%{_includedir}
+cp -af UDF bin help intl firebird.msg $RPM_BUILD_ROOT%{ibdir}
 cp -df lib/* $RPM_BUILD_ROOT%{_libdir}
 cp -rf examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -248,11 +255,24 @@ fi
 %post	lib -p /sbin/ldconfig
 %postun	lib -p /sbin/ldconfig
 
+%triggerpostun -- %{name} < 2.1.1.17910-2
+if [ -f %{ibdir}/aliases.conf.rpmsave ]; then
+  mv -f %{ibdir}/aliases.conf.rpmsave %{_sysconfdir}/firebird/aliases.conf
+fi
+if [ -f %{ibdir}/firebird.conf.rpmsave ]; then
+  mv -f %{ibdir}/firebird.conf.rpmsave %{_sysconfdir}/firebird/firebird.conf
+fi
+if [ -f %{ibdir}/security2.fdb.rpmsave ]; then
+  mv -f %{ibdir}/security2.fdb.rpmsave /var/lib/firebird/security2.fdb
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc doc/{license,sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
+%dir %{_sysconfdir}/firebird
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/*.conf
 %attr(755,root,root) %{_libdir}/libib_util.so
-%dir %attr(770,root,firebird) %{ibdir}
+%dir %{ibdir}
 %attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin
 %{ibdir}/help
@@ -261,10 +281,10 @@ fi
 # should it be moved to /etc and marked as config?
 %{ibdir}/intl/fbintl.conf
 %{ibdir}/firebird.msg
-# following files should be in /var (*.fdb) and /etc (*.conf)?
-%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/security2.fdb
-%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/aliases.conf
-%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{ibdir}/firebird.conf
+%dir %attr(770,root,firebird) /var/lib/firebird
+%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/lib/firebird/security2.fdb
+%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/log/firebird.log
+
 %if %{with ss}
 %attr(754,root,root) /etc/rc.d/init.d/firebird
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/firebird
