@@ -8,4 +8,4 @@ USER=firebird
 GROUP=firebird
 SERVER=tcpd
 DAEMON=/usr/lib/interbase/bin/fb_inet_server
-DAEMONARGS=""
+DAEMONARGS="-el /var/lib/firebird"
