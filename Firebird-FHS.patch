@@ -1,0 +1,121 @@
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/builds/install/misc/createAliasDB.sh.in Firebird-2.1.1.17910-0/builds/install/misc/createAliasDB.sh.in
+--- Firebird-2.1.1.17910-0~/builds/install/misc/createAliasDB.sh.in	2005-08-16 12:03:22.000000000 +0200
++++ Firebird-2.1.1.17910-0/builds/install/misc/createAliasDB.sh.in	2008-08-23 15:52:25.000000000 +0200
+@@ -125,7 +125,7 @@
+     aliasName=$1
+     newDB=$2
+ 
+-    AliasFile=$FBRootDir/aliases.conf
++    AliasFile=/etc/firebird/aliases.conf
+ 
+ 
+     checkNameStartsWithSlash $newDB
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/db_alias.cpp Firebird-2.1.1.17910-0/src/jrd/db_alias.cpp
+--- Firebird-2.1.1.17910-0~/src/jrd/db_alias.cpp	2006-05-19 17:16:45.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/db_alias.cpp	2008-08-23 17:58:51.000000000 +0200
+@@ -45,8 +45,7 @@
+ 
+ bool ResolveDatabaseAlias(const string& alias, string& database)
+ {
+-	string alias_filename;
+-	Firebird::Prefix(alias_filename, ALIAS_FILE);
++	string alias_filename = "/etc/firebird/aliases.conf";
+ 	ConfigFile aliasConfig(false);
+ 	aliasConfig.setConfigFilePath(alias_filename);
+ 
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/gds.cpp Firebird-2.1.1.17910-0/src/jrd/gds.cpp
+--- Firebird-2.1.1.17910-0~/src/jrd/gds.cpp	2008-08-23 13:50:58.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/gds.cpp	2008-08-23 18:02:40.000000000 +0200
+@@ -139,7 +139,7 @@
+ #endif /* WIN_NT */
+ 
+ static char fb_prefix_val[MAXPATHLEN];
+-static char fb_prefix_lock_val[MAXPATHLEN];
++static char fb_prefix_lock_val[MAXPATHLEN] = "/var/lib/firebird";
+ static char fb_prefix_msg_val[MAXPATHLEN];
+ static char fbTempDir[MAXPATHLEN];
+ #ifdef EMBEDDED
+@@ -1090,7 +1090,7 @@
+ 	while (true) {
+ 		if (trace_file_handle == INVALID_HANDLE_VALUE) {
+ 			TEXT name[MAXPATHLEN];
+-			gds__prefix(name, LOGFILE);
++			sprintf(name, "/var/log/%s", LOGFILE);
+ 			// We do not care to close this file. 
+ 			// It will be closed automatically when our process terminates.
+ 			trace_file_handle = CreateFile(name, GENERIC_WRITE, 
+@@ -1116,7 +1116,7 @@
+ 	TEXT name[MAXPATHLEN];
+ 
+ 	// Note: signal-safe code
+-	gds__prefix(name, LOGFILE);
++	sprintf(name, "/var/log/%s", LOGFILE);
+ 	int file = open(name, O_CREAT | O_APPEND | O_WRONLY, 0660);
+ 	if (file == -1)
+ 		return;
+@@ -1227,7 +1227,7 @@
+ 	now = time((time_t *)0);
+ #endif
+ 
+-	gds__prefix(name, LOGFILE);
++	sprintf(name, "/var/log/%s", LOGFILE);
+ 
+ #ifdef WIN_NT
+ 	WaitForSingleObject(trace_mutex_handle, INFINITE);
+@@ -1283,7 +1283,7 @@
+ 	now = time((time_t *)0);
+ #endif
+ 
+-	gds__prefix(name, LOGFILE);
++	sprintf(name, "/var/log/%s", LOGFILE);
+ 
+ 	const int oldmask = umask(0111);
+ #ifdef WIN_NT
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/jrd_pwd.h Firebird-2.1.1.17910-0/src/jrd/jrd_pwd.h
+--- Firebird-2.1.1.17910-0~/src/jrd/jrd_pwd.h	2008-05-27 11:27:34.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/jrd_pwd.h	2008-08-23 17:49:56.000000000 +0200
+@@ -60,7 +60,7 @@
+ 					"security2.fdb";
+ #endif
+ 
+-		gds__prefix(path_buffer, USER_INFO_NAME);
++		sprintf(path_buffer, "/var/lib/firebird/%s", USER_INFO_NAME);
+ 	}
+ 
+ 	static void initialize();
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/os/config_root.h Firebird-2.1.1.17910-0/src/jrd/os/config_root.h
+--- Firebird-2.1.1.17910-0~/src/jrd/os/config_root.h	2007-04-05 14:47:15.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/os/config_root.h	2008-08-23 16:09:04.000000000 +0200
+@@ -83,7 +83,7 @@
+ 	{
+ 		GetRoot();
+ 		install_dir = root_dir;
+-		config_file = root_dir + string(CONFIG_FILE);
++		config_file = "/etc/firebird/" + string(CONFIG_FILE);
+ 	}
+ 
+ 
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/svc.cpp Firebird-2.1.1.17910-0/src/jrd/svc.cpp
+--- Firebird-2.1.1.17910-0~/src/jrd/svc.cpp	2008-05-27 11:27:40.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/jrd/svc.cpp	2008-08-23 18:01:19.000000000 +0200
+@@ -2037,7 +2037,7 @@
+ #endif
+ 
+ 	TEXT name[MAXPATHLEN];
+-	gds__prefix(name, LOGFILE);
++	sprintf(name, "/var/log/%s", LOGFILE);
+ 	FILE* file = fopen(name, "r");
+ 	if (file != NULL) {
+ #ifdef SERVICE_THREAD
+diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/utilities/ibmgr/srvrmgr.cpp Firebird-2.1.1.17910-0/src/utilities/ibmgr/srvrmgr.cpp
+--- Firebird-2.1.1.17910-0~/src/utilities/ibmgr/srvrmgr.cpp	2007-03-28 06:20:36.000000000 +0200
++++ Firebird-2.1.1.17910-0/src/utilities/ibmgr/srvrmgr.cpp	2008-08-23 16:16:02.000000000 +0200
+@@ -272,7 +272,7 @@
+ 		rs = "can not quit now, use shut -ign";
+ 		break;
+ 	case MSG_STARTERR:
+-		rs = "check $FIREBIRD/firebird.log file for errors";
++		rs = "check /var/log/firebird.log file for errors";
+ 		break;
+ 	case MSG_STARTFAIL:
+ 		rs = "can not start server";
