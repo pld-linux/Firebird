@@ -4,6 +4,14 @@
 # - create classic server/super server subpackages and drop bcond
 #   (see firebird2 on debian how to do it)
 # - logrotate script
+# - make -devel not to pull so many deps:
+#Firebird-devel-2.1.1.17910-2.i486 marks Firebird-2.1.1.17910-1.i486 (cap /usr/lib/interbase/bin)
+# Firebird-2.1.1.17910-1.i486 marks rc-inetd-0.17-2.noarch (cap /etc/sysconfig/rc-inetd)
+#  rc-inetd-0.17-2.noarch marks inetd-0.17-12.i486 (cap inetdaemon)
+#   inetd-0.17-12.i486 marks tcp_wrappers-7.6-43.i486 (cap tcp_wrappers)
+#    tcp_wrappers-7.6-43.i486 marks libwrap-7.6-43.i486 (cap libwrap = 7.6-43)
+#error: Firebird-2.1.1.17910-1.i486: req Firebird-lib = 2.1.1.17910-1 not found
+#There are 6 packages to install (5 marked by dependencies):
 #
 # Conditional build:
 %bcond_with	ss	# Super Server (standalone daemon instead of inetd service)
@@ -257,13 +265,13 @@ fi
 
 %triggerpostun -- %{name} < 2.1.1.17910-2
 if [ -f %{ibdir}/aliases.conf.rpmsave ]; then
-  mv -f %{ibdir}/aliases.conf.rpmsave %{_sysconfdir}/firebird/aliases.conf
+	mv -f %{ibdir}/aliases.conf.rpmsave %{_sysconfdir}/firebird/aliases.conf
 fi
 if [ -f %{ibdir}/firebird.conf.rpmsave ]; then
-  mv -f %{ibdir}/firebird.conf.rpmsave %{_sysconfdir}/firebird/firebird.conf
+	mv -f %{ibdir}/firebird.conf.rpmsave %{_sysconfdir}/firebird/firebird.conf
 fi
 if [ -f %{ibdir}/security2.fdb.rpmsave ]; then
-  mv -f %{ibdir}/security2.fdb.rpmsave /var/lib/firebird/security2.fdb
+	mv -f %{ibdir}/security2.fdb.rpmsave /var/lib/firebird/security2.fdb
 fi
 
 %files
