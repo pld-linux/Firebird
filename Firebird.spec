@@ -4,14 +4,6 @@
 # - create classic server/super server subpackages and drop bcond
 #   (see firebird2 on debian how to do it)
 # - logrotate script
-# - make -devel not to pull so many deps:
-#Firebird-devel-2.1.1.17910-2.i486 marks Firebird-2.1.1.17910-1.i486 (cap /usr/lib/interbase/bin)
-# Firebird-2.1.1.17910-1.i486 marks rc-inetd-0.17-2.noarch (cap /etc/sysconfig/rc-inetd)
-#  rc-inetd-0.17-2.noarch marks inetd-0.17-12.i486 (cap inetdaemon)
-#   inetd-0.17-12.i486 marks tcp_wrappers-7.6-43.i486 (cap tcp_wrappers)
-#    tcp_wrappers-7.6-43.i486 marks libwrap-7.6-43.i486 (cap libwrap = 7.6-43)
-#error: Firebird-2.1.1.17910-1.i486: req Firebird-lib = 2.1.1.17910-1 not found
-#There are 6 packages to install (5 marked by dependencies):
 #
 # Conditional build:
 %bcond_with	ss	# Super Server (standalone daemon instead of inetd service)
@@ -21,14 +13,14 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.1.17910
-Release:	2
+Version:	2.1.2.18118
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
-# Source0-md5:	c8bed24245440cb21b9c4fe16aae70bb
+# Source0-md5:	063b3825a06d328f726b733fd74614b1
 Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.1-QuickStart.pdf
-# Source1-md5:	676e5b294a04e3cd12b9298a776e19eb
+# Source1-md5:	46bb1af4b94e8c8acee1d6ef2055b2d3
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
@@ -54,6 +46,7 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
 Patch4:		%{name}-FHS.patch
+Patch5:		%{name}-64bit.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -65,6 +58,7 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	psmisc >= 22.5-2
 BuildRequires:	rpmbuild(macros) >= 1.268
+Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 %if %{with ss}
 Requires(post,preun):	/sbin/chkconfig
@@ -102,6 +96,17 @@ Bugfix-Version mit nur wenigen Erweiterungen angesehen werden kann.
 Eine Erweiterung von Firebird 1.0 ist der 64-Bit File I/O, so dass
 auch Datenbankdateien über 2GB erzeugt werden können.
 
+%package dirs
+Summary:	Firebird SQL Database common directories
+Summary(pl.UTF-8):	Firebird - wspólne katalogi
+Group:		Applications/Databases
+
+%description dirs
+Firebird SQL Database common directories.
+
+%description dirs -l pl.UTF-8
+Firebird - wspólne katalogi.
+
 %package lib
 Summary:	Firebird shared library
 Summary(pl.UTF-8):	Biblioteka współdzielona Firebird
@@ -117,6 +122,7 @@ Biblioteka współdzielona Firebird (libgds).
 Summary:	Header files for Firebird library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki Firebird
 Group:		Development/Libraries
+Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	libstdc++-devel
 
@@ -156,6 +162,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # force rebuild
 rm -f src/dsql/parse.cpp
@@ -280,9 +287,8 @@ fi
 %dir %{_sysconfdir}/firebird
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/*.conf
 %attr(755,root,root) %{_libdir}/libib_util.so
-%dir %{ibdir}
 %attr(755,root,root) %{ibdir}/UDF
-%attr(755,root,root) %{ibdir}/bin
+%attr(755,root,root) %{ibdir}/bin/*
 %exclude %{ibdir}/bin/fb_config
 %{ibdir}/help
 %dir %attr(770,root,firebird) %{ibdir}/intl
@@ -300,6 +306,11 @@ fi
 %else
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/firebird
 %endif
+
+%files dirs
+%defattr(644,root,root,755)
+%dir %{ibdir}
+%dir %{ibdir}/bin
 
 %files lib
 %defattr(644,root,root,755)
