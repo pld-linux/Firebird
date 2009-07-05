@@ -55,7 +55,6 @@ BuildRequires:	libedit-devel
 BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
-BuildRequires:	ncurses-devel
 BuildRequires:	psmisc >= 22.5-2
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	%{name}-dirs = %{version}-%{release}
