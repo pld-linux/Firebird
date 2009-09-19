@@ -26,15 +26,6 @@ diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/db_alias.cpp Firebird-2
 diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/gds.cpp Firebird-2.1.1.17910-0/src/jrd/gds.cpp
 --- Firebird-2.1.1.17910-0~/src/jrd/gds.cpp	2008-08-23 13:50:58.000000000 +0200
 +++ Firebird-2.1.1.17910-0/src/jrd/gds.cpp	2008-08-23 18:02:40.000000000 +0200
-@@ -139,7 +139,7 @@
- #endif /* WIN_NT */
- 
- static char fb_prefix_val[MAXPATHLEN];
--static char fb_prefix_lock_val[MAXPATHLEN];
-+static char fb_prefix_lock_val[MAXPATHLEN] = "/var/lib/firebird";
- static char fb_prefix_msg_val[MAXPATHLEN];
- static char fbTempDir[MAXPATHLEN];
- #ifdef EMBEDDED
 @@ -1090,7 +1090,7 @@
  	while (true) {
  		if (trace_file_handle == INVALID_HANDLE_VALUE) {
@@ -71,15 +62,29 @@ diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/gds.cpp Firebird-2.1.1.
  
  	const int oldmask = umask(0111);
  #ifdef WIN_NT
-diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/jrd/jrd_pwd.h Firebird-2.1.1.17910-0/src/jrd/jrd_pwd.h
---- Firebird-2.1.1.17910-0~/src/jrd/jrd_pwd.h	2008-05-27 11:27:34.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/jrd/jrd_pwd.h	2008-08-23 17:49:56.000000000 +0200
+@@ -1844,8 +1844,13 @@
+ 	fb_utils::snprintf(buf, MAXPATHLEN, root, fbEmbeddedRoot);
+ 	root = buf;
+ #endif
++	const char *lockdir = "/var/lib/firebird";
++	struct stat sb;
++	if (stat(lockdir, &sb) == 0 && (sb.st_mode & S_IFMT) == S_IFDIR)
++		strcpy(string, lockdir);
++	else
++		strcpy(string, fb_prefix_lock);	// safe - no BO
+ 
+-	strcpy(string, fb_prefix_lock);	// safe - no BO
+ 	safe_concat_path(string, root);
+ }
+ #endif
+--- Firebird-2.1.3.18185-0/src/jrd/jrd_pwd.h.orig	2008-04-03 19:00:51.000000000 +0200
++++ Firebird-2.1.3.18185-0/src/jrd/jrd_pwd.h	2009-09-19 05:52:40.000000000 +0200
 @@ -60,7 +60,7 @@
  					"security2.fdb";
  #endif
  
 -		gds__prefix(path_buffer, USER_INFO_NAME);
-+		sprintf(path_buffer, "/var/lib/firebird/%s", USER_INFO_NAME);
++		gds__prefix_lock(path_buffer, USER_INFO_NAME);
  	}
  
  	static void initialize();
