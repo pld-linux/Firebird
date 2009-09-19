@@ -13,12 +13,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.2.18118
+Version:	2.1.3.18185
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
-# Source0-md5:	063b3825a06d328f726b733fd74614b1
+# Source0-md5:	ec42bd5c85dc2f65baef185228bcc5ca
 Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.1-QuickStart.pdf
 # Source1-md5:	46bb1af4b94e8c8acee1d6ef2055b2d3
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -36,8 +36,8 @@ Source7:	http://www.firebirdsql.org/pdfmanual/Firebird-Utils-WIP.pdf
 # Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
 # Source8-md5:	ebac312c0afbe97b1850bdc74c553c28
-Source9:	http://www.firebirdsql.org/doc/contrib/fb_2_0_errorcodes.pdf
-# Source9-md5:	2acf2ff63c4ba3a1c590989e19bb253e
+Source9:	http://www.firebirdsql.org/doc/contrib/fb_2_1_errorcodes.pdf
+# Source9-md5:	9ab392dc349657dbcf9a9c35acd8e8db
 Source100:	firebird.init
 Source101:	firebird.sysconfig
 Source102:	firebird.inetd
@@ -57,6 +57,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	psmisc >= 22.5-2
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed >= 4.0
 Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 %if %{with ss}
@@ -162,6 +163,8 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+
+%{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
 
 # force rebuild
 rm -f src/dsql/parse.cpp
