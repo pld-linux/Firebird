@@ -47,6 +47,7 @@ Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
 Patch4:		%{name}-FHS.patch
 Patch5:		%{name}-64bit.patch
+Patch6:		%{name}-gcc-icu.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -163,6 +164,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p0
 
 %{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
 
