@@ -1,0 +1,2 @@
+- adapterized
+- added fb_lock_print,gbak,gdef,gds_drop,gfix,gpre,gsec,gsplit,gstat,nbackup symlinks
