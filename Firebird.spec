@@ -17,22 +17,22 @@ Version:	2.1.3.18185
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	http://dl.sourceforge.net/firebird/Firebird-%{version}-0.tar.bz2
+Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
 # Source0-md5:	ec42bd5c85dc2f65baef185228bcc5ca
-Source1:	http://www.firebirdsql.org/pdfmanual/Firebird-2.1-QuickStart.pdf
+Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.1-QuickStart.pdf
 # Source1-md5:	46bb1af4b94e8c8acee1d6ef2055b2d3
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
-Source3:	http://www.firebirdsql.org/pdfmanual/Firebird-Null-Guide.pdf
+Source3:	http://www.firebirdsql.org/pdfmanual/%{name}-Null-Guide.pdf
 # Source3-md5:	d1f8ba75fe3bb9eb9d203ce3f82a1a1a
-Source4:	http://www.firebirdsql.org/pdfmanual/Firebird-Generator-Guide.pdf
+Source4:	http://www.firebirdsql.org/pdfmanual/%{name}-Generator-Guide.pdf
 # Source4-md5:	44e7568ef477072a8ad5f381c3e12a75
-Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-Firebird.pdf
+Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-%{name}.pdf
 # Source5-md5:	1bd4a168e550910fc899e2aa125d83a3
-Source6:	http://www.firebirdsql.org/pdfmanual/Firebird-nbackup.pdf
+Source6:	http://www.firebirdsql.org/pdfmanual/%{name}-nbackup.pdf
 # Source6-md5:	7ef8a8b9a899d06bec2a5da0bb5fea0e
-Source7:	http://www.firebirdsql.org/pdfmanual/Firebird-Utils-WIP.pdf
+Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-Utils-WIP.pdf
 # Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
 # Source8-md5:	ebac312c0afbe97b1850bdc74c553c28
@@ -157,7 +157,7 @@ Extensive InterBase and Firebird documentation.
 Obszerna dokumentacja do baz InterBase i Firebird.
 
 %prep
-%setup -q -n Firebird-%{version}-0
+%setup -q -n %{name}-%{version}-0
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -216,8 +216,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C src -f ../gen/Makefile.install buildImageDir
 
-install -d $RPM_BUILD_ROOT/etc/{firebird,rc.d/init.d,sysconfig/rc-inetd}
-install -d $RPM_BUILD_ROOT{%{ibdir},%{_libdir},%{_includedir}} \
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/{firebird,rc.d/init.d,sysconfig/rc-inetd}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{ibdir},%{_libdir},%{_includedir}} \
 install -d $RPM_BUILD_ROOT/var/{log,lib/firebird} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -238,6 +238,10 @@ ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
 ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
+
+for f in bin/{fb_lock_print,gbak,gdef,gds_drop,gfix,gpre,gsec,gsplit,gstat,nbackup}; do
+	ln -sf %{ibdir}/$f $RPM_BUILD_ROOT%{_bindir}/$ff
+done
 
 %if %{with ss}
 install %{SOURCE100} $RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
@@ -290,6 +294,9 @@ fi
 %doc doc/{license,sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
 %dir %{_sysconfdir}/firebird
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/*.conf
+%attr(755,root,root) %{_bindir}/fb_lock_print
+%attr(755,root,root) %{_bindir}/g*
+%attr(755,root,root) %{_bindir}/nbackup
 %attr(755,root,root) %{_libdir}/libib_util.so
 %attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin/*
@@ -297,7 +304,7 @@ fi
 %{ibdir}/help
 %dir %attr(770,root,firebird) %{ibdir}/intl
 %attr(755,root,root) %{ibdir}/intl/fbintl
-# should it be moved to /etc and marked as config?
+# should it be moved to %{_sysconfdir} and marked as config?
 %{ibdir}/intl/fbintl.conf
 %{ibdir}/firebird.msg
 %dir %attr(770,root,firebird) /var/lib/firebird
