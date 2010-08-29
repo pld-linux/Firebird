@@ -49,6 +49,7 @@ Patch4:		%{name}-FHS.patch
 Patch5:		%{name}-64bit.patch
 Patch6:		%{name}-gcc-icu.patch
 Patch7:		%{name}-btyacc-segv.patch
+Patch8:		%{name}-opt.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -167,6 +168,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch5 -p1
 %patch6 -p0
 %patch7 -p1
+%patch8 -p1
 
 %{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
 
@@ -175,6 +177,10 @@ rm -f src/dsql/parse.cpp
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
+
+# not processed by configure
+%{__sed} -i -e 's/^CFLAGS.*$/& %{rpmcflags}/' extern/btyacc/Makefile
+%{__sed} -i -e 's/^\(CC.*= \)gcc$/\1 %{__cc}/' extern/btyacc/Makefile
 
 %build
 %{__libtoolize}
@@ -191,22 +197,9 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
 
-DARCH=""
-%ifarch %{x8664}
-DARCH="-DAMD64"
-%endif
-%ifarch sparc sparcv9
-DARCH="-Dsparc"
-%endif
-%ifarch ppc
-DARCH="-DPPC"
-%endif
-
 %{__make} -j1 \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
-	PROD_FLAGS="%{rpmcflags} -DNDEBUG -DLINUX -pipe -MMD -fPIC $DARCH" \
-	DEV_FLAGS="%{rpmcflags} -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -fPIC -Wall -Wno-switch $DARCH" \
 	LIB_LINK_RPATH_LINE= \
 	LIB_CLIENT_LINK_OPTIONS="-lpthread"
 
