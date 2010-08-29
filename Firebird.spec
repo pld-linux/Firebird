@@ -50,6 +50,7 @@ Patch5:		%{name}-64bit.patch
 Patch6:		%{name}-gcc-icu.patch
 Patch7:		%{name}-btyacc-segv.patch
 Patch8:		%{name}-opt.patch
+Patch9:		%{name}-rpath.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -169,6 +170,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch6 -p0
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
 
@@ -180,7 +182,7 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 
 # not processed by configure
 %{__sed} -i -e 's/^CFLAGS.*$/& %{rpmcflags}/' extern/btyacc/Makefile
-%{__sed} -i -e 's/^\(CC.*= \)gcc$/\1 %{__cc}/' extern/btyacc/Makefile
+%{__sed} -i -e 's/^\(CC\|LINKER\)\(.*= \)gcc$/\1\2 %{__cc}/' extern/btyacc/Makefile
 
 %build
 %{__libtoolize}
@@ -197,11 +199,7 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 	--prefix=%{ibdir} \
 	%{?debug:--enable-debug}
 
-%{__make} -j1 \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	LIB_LINK_RPATH_LINE= \
-	LIB_CLIENT_LINK_OPTIONS="-lpthread"
+%{__make} -j1
 
 # fb_lock_mgr is started during build - try to stop it (if /proc is mounted...)
 fuser -k gen/firebird/bin/fb_lock_mgr 2>/dev/null || :
