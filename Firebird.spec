@@ -13,14 +13,14 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.3.18185
-Release:	3
+Version:	2.5.0.26074
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	ec42bd5c85dc2f65baef185228bcc5ca
-Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.1-QuickStart.pdf
-# Source1-md5:	46bb1af4b94e8c8acee1d6ef2055b2d3
+# Source0-md5:	780f162ee71f087fc277adf09f966529
+Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.5-QuickStart.pdf
+# Source1-md5:	a7776f1eae45ba0b2543c203cd5271ae
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
@@ -51,10 +51,12 @@ Patch6:		%{name}-gcc-icu.patch
 Patch7:		%{name}-btyacc-segv.patch
 Patch8:		%{name}-opt.patch
 Patch9:		%{name}-rpath.patch
+Patch10:	%{name}-noroot.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
 BuildRequires:	bison
+BuildRequires:	libatomic_ops
 BuildRequires:	libedit-devel
 BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
@@ -171,11 +173,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-
-%{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
-
-# force rebuild
-rm -f src/dsql/parse.cpp
+%patch10 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
@@ -191,6 +189,10 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 
 %configure \
 	--with-editline \
+	--with-fbconf=%{_sysconfdir}/firebird \
+	--with-fblib=%{_libdir} \
+	--with-fblog=/var/log \
+	--with-fbsecure-db=/var/lib/firebird \
 	--with-gnu-ld \
 	--with-gpre-pascal \
 	--with-system-editline \
@@ -215,15 +217,16 @@ install -d $RPM_BUILD_ROOT/var/{log,lib/firebird} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 install gen/firebird/lib/libfb*.a $RPM_BUILD_ROOT%{_libdir}
-install gen/firebird/lib/libfbembed.so* $RPM_BUILD_ROOT%{_libdir}
 touch $RPM_BUILD_ROOT/var/log/firebird.log
 
-cd gen/buildroot/%{ibdir}
-install security2.fdb $RPM_BUILD_ROOT/var/lib/firebird
-install *.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
+cd gen/buildroot
+install var/lib/firebird/security2.fdb $RPM_BUILD_ROOT/var/lib/firebird
+install etc/firebird/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
+cp -df usr/lib/*.so* $RPM_BUILD_ROOT%{_libdir}
+cd .%{ibdir}
 install include/* $RPM_BUILD_ROOT%{_includedir}
-cp -af UDF bin help intl firebird.msg $RPM_BUILD_ROOT%{ibdir}
-cp -df lib/* $RPM_BUILD_ROOT%{_libdir}
+cp -af UDF bin help intl plugins firebird.msg de_DE.msg fr_FR.msg $RPM_BUILD_ROOT%{ibdir}
+chmod 755 examples examples/{api,dyn,include,stat,udf} # allow further cleaning
 cp -rf examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 # or libfbembed?
@@ -232,8 +235,8 @@ ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
 ln -sf libfbstatic.a $RPM_BUILD_ROOT%{_libdir}/libgds.a
 
-for f in bin/{fb_lock_print,gbak,gdef,gds_drop,gfix,gpre,gsec,gsplit,gstat,nbackup}; do
-	ln -sf %{ibdir}/$f $RPM_BUILD_ROOT%{_bindir}/$ff
+for f in bin/{fb_lock_print,gbak,gdef,gfix,gpre,gsec,gsplit,gstat,nbackup}; do
+	ln -sf %{ibdir}/$f $RPM_BUILD_ROOT%{_bindir}/${f#bin/}
 done
 
 %if %{with ss}
@@ -286,9 +289,17 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{license,sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
 %dir %{_sysconfdir}/firebird
-%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/*.conf
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/aliases.conf
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/fbtrace.conf
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/firebird.conf
 %attr(755,root,root) %{_bindir}/fb_lock_print
-%attr(755,root,root) %{_bindir}/g*
+%attr(755,root,root) %{_bindir}/gbak
+%attr(755,root,root) %{_bindir}/gdef
+%attr(755,root,root) %{_bindir}/gfix
+%attr(755,root,root) %{_bindir}/gpre
+%attr(755,root,root) %{_bindir}/gsec
+%attr(755,root,root) %{_bindir}/gsplit
+%attr(755,root,root) %{_bindir}/gstat
 %attr(755,root,root) %{_bindir}/nbackup
 %attr(755,root,root) %{_libdir}/libib_util.so
 %attr(755,root,root) %{ibdir}/UDF
@@ -299,7 +310,11 @@ fi
 %attr(755,root,root) %{ibdir}/intl/fbintl
 # should it be moved to %{_sysconfdir} and marked as config?
 %{ibdir}/intl/fbintl.conf
+%dir %{ibdir}/plugins
+%attr(755,root,root) %{ibdir}/plugins/libfbtrace.so
 %{ibdir}/firebird.msg
+%lang(de) %{ibdir}/de_DE.msg
+%lang(fr) %{ibdir}/fr_FR.msg
 %dir %attr(770,root,firebird) /var/lib/firebird
 %attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/lib/firebird/security2.fdb
 %attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/log/firebird.log
@@ -321,7 +336,7 @@ fi
 %attr(755,root,root) %{_libdir}/libfbclient.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libfbclient.so.2
 %attr(755,root,root) %{_libdir}/libfbembed.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.2.1
+%attr(755,root,root) %ghost %{_libdir}/libfbembed.so.2.5
 
 # InterBase/old Firebird compatibility symlinks
 %attr(755,root,root) %{_libdir}/libgds.so.0

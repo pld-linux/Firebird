@@ -14,19 +14,3 @@ diff -u -p -r1.71 alloc.h
  
  #ifdef _MSC_VER
  #define THROW_BAD_ALLOC
-@@ -448,15 +449,6 @@ inline void* operator new[](size_t s) TH
- 	);
- }
- 
--inline void* operator new(size_t, void* ptr) throw() 
--{
--	return ptr;
--}
--inline void* operator new[](size_t, void* ptr) throw() 
--{
--	return ptr;
--}
--
- inline void operator delete(void* mem) throw()
- {
- 	Firebird::MemoryPool::globalFree(mem);
