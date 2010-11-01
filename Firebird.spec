@@ -14,7 +14,7 @@ Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	2.5.0.26074
-Release:	1
+Release:	2
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
@@ -179,7 +179,7 @@ mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
 
 # not processed by configure
-%{__sed} -i -e 's/^CFLAGS.*$/& %{rpmcflags}/' extern/btyacc/Makefile
+%{__sed} -i -e 's/^CFLAGS.*$/& %{rpmcflags} %{rpmcppflags}/' extern/btyacc/Makefile
 %{__sed} -i -e 's/^\(CC\|LINKER\)\(.*= \)gcc$/\1\2 %{__cc}/' extern/btyacc/Makefile
 
 %build
@@ -222,7 +222,7 @@ touch $RPM_BUILD_ROOT/var/log/firebird.log
 cd gen/buildroot
 install var/lib/firebird/security2.fdb $RPM_BUILD_ROOT/var/lib/firebird
 install etc/firebird/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
-cp -df usr/lib/*.so* $RPM_BUILD_ROOT%{_libdir}
+cp -df usr/%{_lib}/*.so* $RPM_BUILD_ROOT%{_libdir}
 cd .%{ibdir}
 install include/* $RPM_BUILD_ROOT%{_includedir}
 cp -af UDF bin help intl plugins firebird.msg de_DE.msg fr_FR.msg $RPM_BUILD_ROOT%{ibdir}
