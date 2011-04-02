@@ -1,14 +1,5 @@
 --- Firebird-2.1.1.17910-0/configure.in.orig	2008-05-27 11:26:28.000000000 +0200
 +++ Firebird-2.1.1.17910-0/configure.in	2008-07-18 22:28:11.790034707 +0200
-@@ -399,7 +399,7 @@
- # not need editline in default libs, but need to test for its presence
- saveLIBS=$LIBS
- if test "$STD_EDITLINE" = "true"; then
--  AC_CHECK_LIB(editline, readline, EDITLINE_FLG=Y, STD_EDITLINE=false)
-+  AC_CHECK_LIB(edit, readline, EDITLINE_FLG=Y, STD_EDITLINE=false)
- fi
- LIBS=$saveLIBS
- 
 @@ -566,10 +566,10 @@
  dnl AC_CHECK_LIB(c, main)
  AC_CHECK_LIB(m, main)
@@ -21,14 +12,3 @@
  					AC_MSG_ERROR(termcap support not found)))))  
  	AC_SUBST(TERMLIB)
  	XE_APPEND(-l$TERMLIB, LIBS)
---- Firebird-2.1.1.17910-0/builds/posix/make.defaults.orig	2008-07-18 21:24:32.538046000 +0200
-+++ Firebird-2.1.1.17910-0/builds/posix/make.defaults	2008-07-18 22:29:07.222040573 +0200
-@@ -230,7 +230,7 @@
- 
- ifeq ($(EDITLINE_FLG),Y)
-   ifeq ($(STD_EDITLINE), true)
--	LIBEDITLINE := -leditline
-+	LIBEDITLINE := -ledit
-   else
- 	LIBEDITLINE := $(LIB)/libeditline.a
-   endif

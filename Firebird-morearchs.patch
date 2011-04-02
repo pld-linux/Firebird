@@ -1,80 +1,69 @@
---- Firebird-2.1.1.17910-0/src/jrd/common.h.orig	2008-05-27 11:27:23.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/jrd/common.h	2008-07-18 22:37:29.266040573 +0200
-@@ -151,6 +151,11 @@
+--- Firebird-2.1.4.18393-0/src/jrd/common.h.orig	2011-01-28 08:59:07.000000000 +0100
++++ Firebird-2.1.4.18393-0/src/jrd/common.h	2011-02-25 00:14:10.564425070 +0100
+@@ -174,6 +174,11 @@
  #define RISC_ALIGNMENT
- #endif // IA64
+ #endif /* sheb */
  
 +#ifdef __alpha__
-+#define IMPLEMENTATION  isc_info_db_impl_linux_alpha	/* 77 */
++#define IMPLEMENTATION  isc_info_db_impl_linux_alpha	/* 82 */
 +#define RISC_ALIGNMENT
 +#endif
 +
- #define MEMMOVE(from, to, length)		memmove ((void *)to, (void *)from, (size_t) length)
- #define MOVE_FAST(from, to, length)       memcpy (to, from, (int) (length))
- #define MOVE_FASTER(from, to, length)     memcpy (to, from, (int) (length))
---- Firebird-2.1.1.17910-0/src/jrd/inf_pub.h.orig	2008-05-27 11:27:30.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/jrd/inf_pub.h	2008-07-18 22:40:03.810034707 +0200
-@@ -205,6 +205,7 @@ enum  info_db_implementations
+ #endif /* LINUX */
  
- 	isc_info_db_impl_linux_arm = 75,
- 	isc_info_db_impl_linux_ia64 = 76,
-+	isc_info_db_impl_linux_alpha = 77,
+ 
+--- Firebird-2.5.0.26074-0/src/jrd/inf_pub.h.orig	2010-09-08 10:43:27.000000000 +0200
++++ Firebird-2.5.0.26074-0/src/jrd/inf_pub.h	2010-10-28 07:52:00.183734339 +0200
+@@ -213,6 +213,7 @@
+ 
+ 	isc_info_db_impl_linux_sh = 80,
+ 	isc_info_db_impl_linux_sheb = 81,
++	isc_info_db_impl_linux_alpha = 82,
  
  	isc_info_db_impl_last_value   // Leave this LAST!
  };
---- Firebird-2.1.1.17910-0/src/jrd/pag.cpp.orig	2008-05-27 11:27:37.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/jrd/pag.cpp	2008-07-18 22:42:52.586039735 +0200
-@@ -158,9 +158,10 @@ static const int CLASS_DARWIN_X64 = 31; 
- static const int CLASS_LINUX_ARM = 33;    // LINUX/ARM
- static const int CLASS_LINUX_IA64 = 34;    // LINUX/IA64
- static const int CLASS_DARWIN_PPC64 = 35; // Darwin/PowerPC64
-+static const int CLASS_LINUX_ALPHA = 36;    // LINUX/ALPHA
+--- Firebird-2.5.0.26074-0/src/jrd/pag.cpp.orig	2010-09-08 10:43:27.000000000 +0200
++++ Firebird-2.5.0.26074-0/src/jrd/pag.cpp	2010-10-28 07:58:22.771734339 +0200
+@@ -160,9 +160,10 @@
+ static const int CLASS_LINUX_S390 = 37;		// LINUX/s390
+ static const int CLASS_LINUX_SH = 38;		// LINUX/SH (little-endian)
+ static const int CLASS_LINUX_SHEB = 39;		// LINUX/SH (big-endian)
++static const int CLASS_LINUX_ALPHA = 40;	// LINUX/Alpha
  
  static const int CLASS_MAX10 = CLASS_LINUX_AMD64;	// This should not be changed, no new ports with ODS10
--static const int CLASS_MAX = CLASS_DARWIN_PPC64;
+-static const int CLASS_MAX = CLASS_LINUX_SHEB;
 +static const int CLASS_MAX = CLASS_LINUX_ALPHA;
  
  // ARCHITECTURE COMPATIBILITY CLASSES
  
-@@ -250,7 +251,8 @@ static ArchitectureType archMatrix[CLASS
- 	archLittleEndian, // CLASS_SOLARIS_AMD64
- 	archLittleEndian, // CLASS_LINUX_ARM
- 	archLittleEndian, // CLASS_LINUX_IA64
--	archBigEndian	  // CLASS_DARWIN_PPC64
-+	archBigEndian,	  // CLASS_DARWIN_PPC64
+@@ -259,7 +260,8 @@
+ 	archBigEndian,	  // CLASS_LINUX_S390X
+ 	archBigEndian,	  // CLASS_LINUX_S390
+ 	archLittleEndian, // CLASS_LINUX_SH
+-	archBigEndian     // CLASS_LINUX_SHEB
++	archBigEndian,    // CLASS_LINUX_SHEB
 +	archLittleEndian  // CLASS_LINUX_ALPHA
  };
  
- #ifdef sun
-@@ -308,6 +310,8 @@ const SSHORT CLASS		= CLASS_LINUX_MIPSEL
- const SSHORT CLASS		= CLASS_LINUX_MIPS;
- #elif defined(IA64)
- const SSHORT CLASS		= CLASS_LINUX_IA64;
+ #ifdef __sun
+@@ -319,6 +321,8 @@
+ const SSHORT CLASS		= CLASS_LINUX_SH;
+ #elif defined(SHEB)
+ const SSHORT CLASS		= CLASS_LINUX_SHEB;
 +#elif defined(__alpha__)
 +const SSHORT CLASS		= CLASS_LINUX_ALPHA;
  #else
  #error no support on other hardware for Linux
  #endif
---- Firebird-2.1.1.17910-0/src/remote/xdr.cpp.orig	2008-05-27 11:27:51.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/remote/xdr.cpp	2008-07-18 22:43:33.910037221 +0200
-@@ -42,7 +42,7 @@
- // select abs2(2.0 / 3.0) from rdb$database;
- // It will return big strange value in case of invalid define
- // ASF: Currently, all little-endian are SWAP_DOUBLE and big-endian aren't.
--#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(ARM) || defined(MIPSEL) || defined(DARWIN64) || defined(IA64)
-+#if defined(i386) || defined(I386) || defined(_M_IX86) || defined(AMD64) || defined(ARM) || defined(MIPSEL) || defined(DARWIN64) || defined(IA64) || defined(__alpha__)
- #define		SWAP_DOUBLE
- #elif defined(sparc) || defined(PowerPC) || defined(PPC) || defined(__ppc__) || defined(HPUX) || defined(MIPS) || defined(__ppc64__)
- #undef		SWAP_DOUBLE
---- Firebird-2.1.1.17910-0/src/jrd/utl.cpp.orig	2008-05-27 11:27:40.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/jrd/utl.cpp	2008-07-18 22:44:17.890038059 +0200
-@@ -243,7 +243,8 @@ static const TEXT* const impl_implementa
-     "Firebird/sun/amd64",	/* 74 */	
-     "Firebird/linux ARM",	/* 75 */
-     "Firebird/linux IA64",	/* 76 */
--	"Firebird/Darwin/PowerPC64"	/* 77 */
-+	"Firebird/Darwin/PowerPC64",	/* 77 */
-+    "Firebird/linux ALPHA"	/* 78 */
+--- Firebird-2.1.4.18393-0/src/jrd/utl.cpp.orig	2011-01-28 08:59:08.000000000 +0100
++++ Firebird-2.1.4.18393-0/src/jrd/utl.cpp	2011-02-25 00:16:44.000425071 +0100
+@@ -248,7 +248,8 @@
+     "Firebird/linux s390x",             // 78
+     "Firebird/linux s390",              // 79
+     "Firebird/linux SH",                // 80
+-    "Firebird/linux SHEB"               // 81
++    "Firebird/linux SHEB",              // 81
++    "Firebird/linux Alpha"              // 82    
  };
  
  
