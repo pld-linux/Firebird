@@ -20,7 +20,7 @@ Group:		Applications/Databases
 Source0:	http://www.firebirdsql.org/download/prerelease/source/%{name}-%{version}-0.RC1.tar.bz2
 # Source0-md5:	8f85169cfde499ad042a65d9b92319af
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.1-QuickStart.pdf
-# Source1-md5:	fd01e6cd471ff92c6019a1d881df5533
+# Source1-md5:	f7df4048fcca609bd09f697542216bae
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
