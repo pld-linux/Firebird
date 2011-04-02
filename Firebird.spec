@@ -13,14 +13,14 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.3.18185
-Release:	3
+Version:	2.1.4.18393
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	ec42bd5c85dc2f65baef185228bcc5ca
+Source0:	http://www.firebirdsql.org/download/prerelease/source/%{name}-%{version}-0.RC1.tar.bz2
+# Source0-md5:	8f85169cfde499ad042a65d9b92319af
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.1-QuickStart.pdf
-# Source1-md5:	46bb1af4b94e8c8acee1d6ef2055b2d3
+# Source1-md5:	fd01e6cd471ff92c6019a1d881df5533
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
@@ -35,7 +35,7 @@ Source6:	http://www.firebirdsql.org/pdfmanual/%{name}-nbackup.pdf
 Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-Utils-WIP.pdf
 # Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
-# Source8-md5:	ebac312c0afbe97b1850bdc74c553c28
+# Source8-md5:	5e192abaf5db4417b29ad871716522b5
 Source9:	http://www.firebirdsql.org/doc/contrib/fb_2_1_errorcodes.pdf
 # Source9-md5:	9ab392dc349657dbcf9a9c35acd8e8db
 Source100:	firebird.init
@@ -51,6 +51,7 @@ Patch6:		%{name}-gcc-icu.patch
 Patch7:		%{name}-btyacc-segv.patch
 Patch8:		%{name}-opt.patch
 Patch9:		%{name}-rpath.patch
+Patch10:	%{name}-fix-CORE-3388.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -171,6 +172,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
 
