@@ -17,10 +17,10 @@ Version:	2.1.4.18393
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	http://www.firebirdsql.org/download/prerelease/source/%{name}-%{version}-0.RC1.tar.bz2
-# Source0-md5:	8f85169cfde499ad042a65d9b92319af
+Source0:	http://www.firebirdsql.org/download/prerelease/source/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	1a236366546d9c8a4e90d0c048419947
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.1-QuickStart.pdf
-# Source1-md5:	f7df4048fcca609bd09f697542216bae
+# Source1-md5:	bc5a859e7965d3f526486bfaa03d371c
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
