@@ -1,0 +1,11 @@
+--- a/src/jrd/scl.epp	2010/10/13 15:15:24	51677
++++ b/src/jrd/scl.epp	2011/03/16 08:04:41	52542
+@@ -141,7 +141,7 @@
+ 	{
+ 		ERR_post(isc_no_priv, isc_arg_string, "(ACL unrecognized)",
+ 				 isc_arg_string, "security_class",
+-				 isc_arg_string, s_class->scl_name,
++				 isc_arg_string, s_class->scl_name.c_str(),
+ 				 isc_arg_end);
+ 	}
+ 
