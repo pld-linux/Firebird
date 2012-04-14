@@ -1,6 +1,6 @@
 diff -uNr firebird-1.5.6.5026.orig/src/jrd/pag.cpp firebird-1.5.6.5026/src/jrd/pag.cpp
---- firebird-1.5.6.5026.orig/src/jrd/pag.cpp	2012-04-14 23:13:40.089510000 +0200
-+++ firebird-1.5.6.5026/src/jrd/pag.cpp	2012-04-14 23:19:10.864768669 +0200
+--- firebird-1.5.6.5026.orig/src/jrd/pag.cpp	2012-04-14 23:33:16.904679000 +0200
++++ firebird-1.5.6.5026/src/jrd/pag.cpp	2012-04-14 23:36:16.126129942 +0200
 @@ -144,7 +144,10 @@
  static const int CLASS_DARWIN_PPC = 23;   // Darwin/PowerPC
  static const int CLASS_LINUX_AMD64 = 24;  // LINUX on AMD64 systems
@@ -21,7 +21,8 @@ diff -uNr firebird-1.5.6.5026.orig/src/jrd/pag.cpp firebird-1.5.6.5026/src/jrd/p
 +	archIntel86, // CLASS_NETBSD_I386
  	archUnknown, // CLASS_DARWIN_PPC
  	archUnknown, // CLASS_LINUX_AMD64
- 	archIntel86  // CLASS_DARWIN_I386
+-	archIntel86  // CLASS_DARWIN_I386
++	archIntel86, // CLASS_DARWIN_I386
 +	archUnknown, // CLASS_FREEBSD_AMD64
 +	archUnknown, // CLASS_WINDOWS_AMD64
 +	archUnknown  // CLASS_LINUX_PPC
