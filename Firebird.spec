@@ -13,12 +13,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.1.4.18393
+Version:	2.1.5.18496
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	http://www.firebirdsql.org/download/prerelease/source/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	1a236366546d9c8a4e90d0c048419947
+Source0:	http://web.firebirdsql.org/download/prerelease/source/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	54b0221d0d6eea50cc83af4efeae0993
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.1-QuickStart.pdf
 # Source1-md5:	bc5a859e7965d3f526486bfaa03d371c
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -29,9 +29,9 @@ Source3:	http://www.firebirdsql.org/pdfmanual/%{name}-Null-Guide.pdf
 Source4:	http://www.firebirdsql.org/pdfmanual/%{name}-Generator-Guide.pdf
 # Source4-md5:	44e7568ef477072a8ad5f381c3e12a75
 Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-%{name}.pdf
-# Source5-md5:	1bd4a168e550910fc899e2aa125d83a3
+# Source5-md5:	230ef237842d255916398f408f459281
 Source6:	http://www.firebirdsql.org/pdfmanual/%{name}-nbackup.pdf
-# Source6-md5:	7ef8a8b9a899d06bec2a5da0bb5fea0e
+# Source6-md5:	863044450cfb996f54a891467b411153
 Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-Utils-WIP.pdf
 # Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
@@ -47,11 +47,9 @@ Patch2:		%{name}-va.patch
 Patch3:		%{name}-morearchs.patch
 Patch4:		%{name}-FHS.patch
 Patch5:		%{name}-64bit.patch
-Patch6:		%{name}-gcc-icu.patch
-Patch7:		%{name}-btyacc-segv.patch
-Patch8:		%{name}-opt.patch
-Patch9:		%{name}-rpath.patch
-Patch10:	%{name}-fix-CORE-3388.patch
+Patch6:		%{name}-gcc.patch
+Patch7:		%{name}-opt.patch
+Patch8:		%{name}-rpath.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -171,8 +169,6 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch6 -p0
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
-%patch10 -p1
 
 %{__sed} -i 's,@prefix@,%{_prefix},' builds/install/misc/fb_config.in
 
