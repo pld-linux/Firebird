@@ -14,7 +14,7 @@ Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	2.5.1.26351
-Release:	1
+Release:	2
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
@@ -44,7 +44,7 @@ Source102:	firebird.inetd
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
-Patch3:		Firebird-fix-CORE-3388.patch
+Patch3:		firebird-2.5.1-svn-CORE-3610.patch
 Patch4:		%{name}-FHS.patch
 
 Patch6:		%{name}-gcc-icu.patch
@@ -166,7 +166,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+%patch3 -p0
 %patch4 -p1
 
 %patch6 -p0
