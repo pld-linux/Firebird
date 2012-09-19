@@ -46,7 +46,7 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		firebird-2.5.1-svn-CORE-3610.patch
 Patch4:		%{name}-FHS.patch
-
+Patch5:		%{name}-opt.patch
 Patch6:		%{name}-gcc-icu.patch
 
 Patch9:		%{name}-rpath.patch
@@ -168,7 +168,7 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p0
 %patch4 -p1
-
+%patch5 -p1
 %patch6 -p0
 
 %patch9 -p1
