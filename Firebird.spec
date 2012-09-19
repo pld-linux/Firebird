@@ -13,12 +13,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.5.0.26074
-Release:	8
+Version:	2.5.1.26351
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	780f162ee71f087fc277adf09f966529
+# Source0-md5:	1772fba4f09c8fc84d989282405f90fd
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.5-QuickStart.pdf
 # Source1-md5:	a7776f1eae45ba0b2543c203cd5271ae
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -44,12 +44,11 @@ Source102:	firebird.inetd
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
-Patch3:		%{name}-morearchs.patch
+Patch3:		Firebird-fix-CORE-3388.patch
 Patch4:		%{name}-FHS.patch
-Patch5:		%{name}-64bit.patch
+
 Patch6:		%{name}-gcc-icu.patch
-Patch7:		%{name}-btyacc-segv.patch
-Patch8:		%{name}-opt.patch
+
 Patch9:		%{name}-rpath.patch
 Patch10:	%{name}-noroot.patch
 URL:		http://www.firebirdsql.org/
@@ -79,6 +78,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		ibdir	%{_libdir}/interbase
 %define		specflags	-fno-strict-aliasing
 %define		debugcflags	-O1 -g -Wall -fno-strict-aliasing
+%define		Werror_cflags	''
 
 %description
 Firebird is a powerful, high-performance relational database designed
@@ -168,10 +168,9 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
+
 %patch6 -p0
-%patch7 -p1
-%patch8 -p1
+
 %patch9 -p1
 %patch10 -p1
 
