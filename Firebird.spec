@@ -13,12 +13,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.5.1.26351
-Release:	2
+Version:	2.5.2.26540
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	1772fba4f09c8fc84d989282405f90fd
+# Source0-md5:	21154d2004e025c8a3666625b0357bb5
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.5-QuickStart.pdf
 # Source1-md5:	a7776f1eae45ba0b2543c203cd5271ae
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -44,13 +44,11 @@ Source102:	firebird.inetd
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
-Patch3:		firebird-2.5.1-svn-CORE-3610.patch
-Patch4:		%{name}-FHS.patch
-Patch5:		%{name}-opt.patch
-Patch6:		%{name}-gcc-icu.patch
-
-Patch9:		%{name}-rpath.patch
-Patch10:	%{name}-noroot.patch
+Patch3:		%{name}-FHS.patch
+Patch4:		%{name}-opt.patch
+Patch5:		%{name}-gcc-icu.patch
+Patch6:		%{name}-rpath.patch
+Patch7:		%{name}-noroot.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.56
 BuildRequires:	automake
@@ -166,13 +164,11 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
+%patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p0
-
-%patch9 -p1
-%patch10 -p1
+%patch5 -p0
+%patch6 -p1
+%patch7 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs

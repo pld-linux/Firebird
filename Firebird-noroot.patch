@@ -1,5 +1,5 @@
---- Firebird-2.5.0.26074-0/builds/install/arch-specific/linux/misc/makeInstallImage.sh.in.orig	2010-09-08 10:41:27.000000000 +0200
-+++ Firebird-2.5.0.26074-0/builds/install/arch-specific/linux/misc/makeInstallImage.sh.in	2010-10-28 20:58:38.779734339 +0200
+--- Firebird-2.5.2.26540-0/builds/install/arch-specific/linux/misc/makeInstallImage.sh.in.orig	2013-03-19 09:37:35.000000000 +0100
++++ Firebird-2.5.2.26540-0/builds/install/arch-specific/linux/misc/makeInstallImage.sh.in	2013-04-13 13:31:09.763259410 +0200
 @@ -28,11 +28,6 @@
  # This script builds an image of the installed system into 
  # the gen/buildroot directory.
@@ -12,7 +12,7 @@
  # Making an assumption that this program is being run in the gen directory
  BuildRootDir=..
  BuiltFBDir=./firebird  # Where the just build fb exists.
-@@ -113,7 +108,6 @@
+@@ -118,7 +113,6 @@
  	for d in $Dirs; do
  		Dir=${TargetDir}${d}
  		mkdir -p $Dir
@@ -20,7 +20,7 @@
  		chmod 0755 $Dir
  	done
  }
-@@ -158,7 +152,6 @@
+@@ -163,7 +157,6 @@
      cp $BuiltFBDir/bin/isql ${TargetDir}@FB_BINDIR@/isql 
      cp $BuiltFBDir/bin/qli ${TargetDir}@FB_BINDIR@/qli 
  
@@ -28,7 +28,7 @@
  	chmod 0755 ${TargetDir}@FB_BINDIR@/*
  
  	#sbin
-@@ -177,7 +170,6 @@
+@@ -182,7 +175,6 @@
      cp $BuiltFBDir/bin/createAliasDB.sh ${TargetDir}@FB_SBINDIR@
      cp $BuiltFBDir/bin/fb_config ${TargetDir}@FB_SBINDIR@
  
@@ -36,7 +36,7 @@
  	chmod 0755 ${TargetDir}@FB_SBINDIR@/*
  	chmod 0700 ${TargetDir}@FB_SBINDIR@/*.sh
  
-@@ -201,19 +193,16 @@
+@@ -206,19 +198,16 @@
  
  	    for i in `find ${TargetDir}@FB_SAMPLEDIR@ -type d -print`
  	    do
@@ -56,13 +56,13 @@
  		chmod 0444 ${TargetDir}@FB_SAMPLEDBDIR@/*.fdb
      fi
  
-@@ -221,13 +210,11 @@
+@@ -226,13 +215,11 @@
      copyIfExists $BuiltFBDir/help/help.gbak ${TargetDir}@FB_HELPDIR@
      cp $BuiltFBDir/help/help.fdb ${TargetDir}@FB_HELPDIR@
  
 -	chown root:root ${TargetDir}@FB_HELPDIR@/*.fdb
  	chmod 0444 ${TargetDir}@FB_HELPDIR@/*.fdb
- 	
+ 
  	#message file
      cp $BuiltFBDir/*.msg ${TargetDir}@FB_MSGDIR@
  
@@ -70,7 +70,7 @@
  	chmod 0444 ${TargetDir}@FB_MSGDIR@/*.msg
  
  	#secureDB (access rights will be set at install time)
-@@ -236,7 +223,6 @@
+@@ -241,7 +228,6 @@
  	#.h files
      cp $BuiltFBDir/include/*.h ${TargetDir}@FB_INCDIR@
  
@@ -78,7 +78,7 @@
  	chmod 0444 ${TargetDir}@FB_INCDIR@/*.h
  
  	#lib
-@@ -245,20 +231,17 @@
+@@ -250,20 +236,17 @@
      cp -f $BuiltFBDir/lib/libib_util.so ${TargetDir}@FB_LIBDIR@/libib_util.so
      copyIfExists $BuiltFBDir/lib/libicu*.so* ${TargetDir}@FB_LIBDIR@
  
@@ -99,25 +99,25 @@
  	chmod 0755 ${TargetDir}@FB_INTLDIR@/fbintl
  	chmod 0644 ${TargetDir}@FB_INTLDIR@/fbintl.conf
  
-@@ -271,7 +254,6 @@
+@@ -276,7 +259,6 @@
      cp $BuildRootDir/src/extlib/ib_udf2.sql ${TargetDir}@FB_UDFDIR@
      cp $BuildRootDir/src/extlib/fbudf/fbudf.sql ${TargetDir}@FB_UDFDIR@
  
 -	chown root:root ${TargetDir}@FB_UDFDIR@/*.so ${TargetDir}@FB_UDFDIR@/*.sql
  	chmod 0755 ${TargetDir}@FB_UDFDIR@/*.so
  	chmod 0644 ${TargetDir}@FB_UDFDIR@/*.sql
- 	    
-@@ -282,9 +264,7 @@
+ 
+@@ -287,9 +269,7 @@
      cp $BuildRootDir/doc/WhatsNew ${TargetDir}@FB_CONFDIR@/WhatsNew
      cp $BuildRootDir/doc/README.user ${TargetDir}@FB_CONFDIR@/README
-     
+ 
 -	chown -R root:root ${TargetDir}@FB_MISCDIR@
  	for i in `find ${TargetDir}@FB_MISCDIR@ -print`; do
 -		chown root:root $i
  		if [ -d $i ]; then
  			chmod 0755 $i
  		else
-@@ -301,7 +281,6 @@
+@@ -306,7 +286,6 @@
  	cp $BuildRootDir/gen/install/misc/firebird.init.d.*			${TargetDir}@FB_MISCDIR@
  	cp $BuildRootDir/gen/install/misc/rc.config.firebird		${TargetDir}@FB_MISCDIR@
  
@@ -125,11 +125,11 @@
  	chmod -R go-rwx ${TargetDir}@FB_MISCDIR@
  
  	#conf
-@@ -309,7 +288,6 @@
+@@ -314,7 +293,6 @@
      cp $BuildRootDir/gen/install/misc/aliases.conf ${TargetDir}@FB_CONFDIR@
      cp $BuildRootDir/gen/install/misc/fbtrace.conf ${TargetDir}@FB_CONFDIR@
  
 -	chown root:root ${TargetDir}@FB_CONFDIR@/*.conf
  	chmod 0644 ${TargetDir}@FB_CONFDIR@/*.conf
  
- # Create links from @libdir@ to install area.
+ 	#license
