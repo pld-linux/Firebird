@@ -14,7 +14,7 @@ Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
 Version:	2.5.2.26540
-Release:	2
+Release:	3
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
@@ -221,6 +221,7 @@ cp -df usr/%{_lib}/*.so* $RPM_BUILD_ROOT%{_libdir}
 cd .%{ibdir}
 install include/* $RPM_BUILD_ROOT%{_includedir}
 cp -af UDF bin help intl plugins firebird.msg de_DE.msg fr_FR.msg $RPM_BUILD_ROOT%{ibdir}
+ln -s %{ibdir}/intl $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 chmod 755 examples examples/{api,dyn,include,stat,udf} # allow further cleaning
 cp -rf examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -238,7 +239,7 @@ done
 install %{SOURCE100} $RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
 install %{SOURCE101} $RPM_BUILD_ROOT/etc/sysconfig/firebird
 %else
-install %{SOURCE102} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
+sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE102} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
 %endif
 
 %clean
