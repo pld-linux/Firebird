@@ -70,7 +70,7 @@ Requires:	rc-scripts
 # official ports are x86, x86_64, ppc, sparc, arm, mips/mipsel, ia64
 # alpha is added in morearchs patch
 # see morearchs patch if you want more
-ExclusiveArch:	%{ix86} %{x8664} arm ia64 mips mipsel ppc sparc sparcv9 alpha
+ExclusiveArch:	%{ix86} %{x8664} x32 arm ia64 mips mipsel ppc sparc sparcv9 alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ibdir	%{_libdir}/interbase
