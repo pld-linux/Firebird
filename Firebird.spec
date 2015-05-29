@@ -13,12 +13,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.5.2.26540
-Release:	5
+Version:	2.5.4.26856
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	21154d2004e025c8a3666625b0357bb5
+# Source0-md5:	7a17ec9889424b98baa29e001a054434
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.5-QuickStart.pdf
 # Source1-md5:	a7776f1eae45ba0b2543c203cd5271ae
 # distfiles refuses this, would require some audit to allow '('/')' chars

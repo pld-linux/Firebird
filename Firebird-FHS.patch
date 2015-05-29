@@ -1,6 +1,6 @@
---- Firebird-2.5.0.26074-0/src/jrd/gds.cpp.orig	2010-10-28 08:01:51.000000000 +0200
-+++ Firebird-2.5.0.26074-0/src/jrd/gds.cpp	2010-10-28 08:33:54.483737691 +0200
-@@ -1751,7 +1751,12 @@
+--- Firebird-2.5.4.26856-0/src/jrd/gds.cpp.orig	2015-05-29 20:19:05.329013419 +0200
++++ Firebird-2.5.4.26856-0/src/jrd/gds.cpp	2015-05-29 20:33:36.775643514 +0200
+@@ -1754,7 +1754,13 @@
  
  	GDS_init_prefix();
  
@@ -11,9 +11,10 @@
 +		strcpy(string, lockdir);
 +	else
 +		strcpy(string, fb_prefix_lock);	// safe - no BO
++
+ 	iscSafeConcatPath(string, root);
+ }
  
- 	// if someone wants to know prefix for lock files,
- 	// sooner of all he wants that directory to exist
 --- Firebird-2.5.0.26074-0/src/jrd/os/config_root.h.orig	2010-09-08 10:43:20.000000000 +0200
 +++ Firebird-2.5.0.26074-0/src/jrd/os/config_root.h	2010-10-28 08:36:33.139734339 +0200
 @@ -91,7 +91,7 @@
