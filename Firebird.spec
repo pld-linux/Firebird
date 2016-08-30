@@ -13,12 +13,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	2.5.4.26856
-Release:	3
+Version:	2.5.6.27020
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	7a17ec9889424b98baa29e001a054434
+# Source0-md5:	5514798d5dca8c3525525c61cf35283e
 Source1:	http://www.firebirdsql.org/pdfmanual/%{name}-2.5-QuickStart.pdf
 # Source1-md5:	a7776f1eae45ba0b2543c203cd5271ae
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -58,7 +58,6 @@ BuildRequires:	libedit-devel
 BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
-BuildRequires:	psmisc >= 22.5-2
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 Requires:	%{name}-dirs = %{version}-%{release}
@@ -198,9 +197,6 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 
 %{__make} -j1
 
-# fb_lock_mgr is started during build - try to stop it (if /proc is mounted...)
-fuser -k gen/firebird/bin/fb_lock_mgr 2>/dev/null || :
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -288,6 +284,7 @@ fi
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/aliases.conf
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/fbtrace.conf
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/firebird.conf
+%{_sysconfdir}/firebird/intl
 %attr(755,root,root) %{_bindir}/fb_lock_print
 %attr(755,root,root) %{_bindir}/gbak
 %attr(755,root,root) %{_bindir}/gdef
