@@ -1,0 +1,11 @@
+--- Firebird-3.0.0.32483-0/builds/posix/Makefile.in.orig	2016-04-14 16:07:29.000000000 +0200
++++ Firebird-3.0.0.32483-0/builds/posix/Makefile.in	2016-09-01 21:59:46.720043484 +0200
+@@ -315,7 +315,7 @@
+ 
+ databases:		yachts.lnk msg.timestamp $(HELP_FDB) $(SECURITY_FDB)
+ 
+-export LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(FIREBIRD)/lib
++export LD_LIBRARY_PATH := $(FIREBIRD)/lib:$(LD_LIBRARY_PATH)
+ 
+ yachts.lnk:		metadata.fdb
+ 	-$(RM) $@

@@ -1,40 +1,11 @@
---- Firebird-2.5.4.26856-0/src/jrd/gds.cpp.orig	2015-05-29 20:19:05.329013419 +0200
-+++ Firebird-2.5.4.26856-0/src/jrd/gds.cpp	2015-05-29 20:33:36.775643514 +0200
-@@ -1754,7 +1754,13 @@
- 
- 	GDS_init_prefix();
- 
--	strcpy(string, fb_prefix_lock);	// safe - no BO
-+	const char *lockdir = "/var/lib/firebird";
-+	struct stat sb;
-+	if (stat(lockdir, &sb) == 0 && (sb.st_mode & S_IFMT) == S_IFDIR)
-+		strcpy(string, lockdir);
-+	else
-+		strcpy(string, fb_prefix_lock);	// safe - no BO
-+
- 	iscSafeConcatPath(string, root);
- }
- 
---- Firebird-2.5.0.26074-0/src/jrd/os/config_root.h.orig	2010-09-08 10:43:20.000000000 +0200
-+++ Firebird-2.5.0.26074-0/src/jrd/os/config_root.h	2010-10-28 08:36:33.139734339 +0200
-@@ -91,7 +91,7 @@
- 	{
- 		GetInstallDir();
- 		GetRoot();
--		config_file = root_dir + string(CONFIG_FILE);
-+		config_file = "/etc/firebird/" + string(CONFIG_FILE);
- 	}
- 
- 	virtual ~ConfigRoot() {}
-diff -U 3 -H -d -r -N -- Firebird-2.1.1.17910-0~/src/utilities/ibmgr/srvrmgr.cpp Firebird-2.1.1.17910-0/src/utilities/ibmgr/srvrmgr.cpp
---- Firebird-2.1.1.17910-0~/src/utilities/ibmgr/srvrmgr.cpp	2007-03-28 06:20:36.000000000 +0200
-+++ Firebird-2.1.1.17910-0/src/utilities/ibmgr/srvrmgr.cpp	2008-08-23 16:16:02.000000000 +0200
-@@ -272,7 +272,7 @@
- 		rs = "can not quit now, use shut -ign";
- 		break;
- 	case MSG_STARTERR:
--		rs = "check $FIREBIRD/firebird.log file for errors";
-+		rs = "check /var/log/firebird.log file for errors";
- 		break;
- 	case MSG_STARTFAIL:
- 		rs = "can not start server";
+--- Firebird-3.0.0.32483-0/src/yvalve/gds.cpp.orig	2016-08-30 21:31:23.418702669 +0200
++++ Firebird-3.0.0.32483-0/src/yvalve/gds.cpp	2016-08-31 20:24:57.044428320 +0200
+@@ -3785,7 +3785,7 @@
+ 		if (!fb_utils::readenv(FB_LOCK_ENV, lockPrefix))
+ 		{
+ #ifndef WIN_NT
+-			PathUtils::concatPath(lockPrefix, WORKFILE, LOCKDIR);
++			PathUtils::concatPath(lockPrefix, "/var/lib", LOCKDIR);
+ #else
+ #ifdef WIN9X_SUPPORT
+ 			// shell32.dll version 5.0 and later supports SHGetFolderPath entry point

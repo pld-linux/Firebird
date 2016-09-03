@@ -7,5 +7,5 @@ FLAGS=nowait
 USER=firebird
 GROUP=firebird
 SERVER=tcpd
-DAEMON=/usr/lib/interbase/bin/fb_inet_server
+DAEMON=/usr/lib/interbase/bin/firebird
 DAEMONARGS="-el /var/lib/firebird"

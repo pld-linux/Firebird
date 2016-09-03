@@ -1,5 +1,5 @@
---- Firebird-2.5.0.26074-0/configure.in.orig	2010-09-08 10:44:05.000000000 +0200
-+++ Firebird-2.5.0.26074-0/configure.in	2010-10-27 22:32:38.567739367 +0200
+--- Firebird-3.0.0.32483-0/configure.ac.orig	2010-09-08 10:44:05.000000000 +0200
++++ Firebird-3.0.0.32483-0/configure.ac	2010-10-27 22:32:38.567739367 +0200
 @@ -652,10 +652,10 @@
  AC_SEARCH_LIBS(dlopen, dl)
  AC_CHECK_LIB(m, main)

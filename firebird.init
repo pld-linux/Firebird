@@ -17,7 +17,8 @@ if [ -f /etc/sysconfig/firebird ]; then
 	. /etc/sysconfig/firebird
 fi
 
-DAEMON=/usr/lib/interbase/bin/fbmgr.bin
+GUARDIAN=/usr/lib/interbase/bin/fbguard
+PIDFILE=/var/run/firebird/firebird.pid
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
@@ -32,7 +33,7 @@ fi
 start() {
 	if [ ! -f /var/lock/subsys/firebird ]; then
 		msg_starting firebird
-		daemon --user firebird $DAEMON -start -forever
+		daemon --user firebird $GUARDIAN -pidfile $PIDFILE -daemon -forever
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/firebird
 	else
@@ -43,7 +44,7 @@ start() {
 stop() {
 	if [ -f /var/lock/subsys/firebird ]; then
 		msg_stopping firebird
-		daemon --user firebird $DAEMON -shut
+		killproc --pidfile $PIDFILE $GUARDIAN
 		rm -f /var/lock/subsys/firebird >/dev/null 2>&1
 	else
 		msg_not_running firebird
