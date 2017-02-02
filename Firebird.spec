@@ -17,12 +17,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 # FirebirdCS/FirebirdSS (Classic Server/Super Server)?
-Version:	3.0.0.32483
+Version:	3.0.1.32609
 Release:	0.1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	821260b61dafc22899d1464d4e91ee6a
+# Source0-md5:	85e2ace3d6950793d4c6917473e00c74
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/Firebird-3-QuickStart.pdf
 # Source1-md5:	8e029d449e9cb3e1da8213ac6c11ad02
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -52,7 +52,10 @@ Patch3:		%{name}-FHS.patch
 Patch4:		%{name}-opt.patch
 Patch5:		%{name}-gcc-icu.patch
 Patch6:		%{name}-libpath.patch
-Patch7:		%{name}-noroot.patch
+Patch7:		Make-the-generated-code-compatible-with-gcc-6-in-C-1.patch
+Patch8:		Provide-sized-global-delete-operators-when-compiled.patch
+Patch9:		parallel-build.patch
+Patch10:	no-copy-from-icu.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.67
 BuildRequires:	automake
@@ -63,6 +66,8 @@ BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtommath-devel
 BuildRequires:	libtool >= 2:2
+# for lockfile
+BuildRequires:	procmail
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	zlib-devel
@@ -163,6 +168,9 @@ Obszerna dokumentacja do baz InterBase i Firebird.
 %patch5 -p0
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
@@ -177,8 +185,9 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 %{__autoconf}
 
 %configure \
+	CFLAGS="%{rpmcflags} -fno-delete-null-pointer-checks" \
 	--prefix=%{ibdir} \
-	--with-editline \
+	--with-system-editline \
 	--with-fbconf=%{_sysconfdir}/firebird \
 	--with-fbinclude=%{_includedir} \
 	--with-fblib=%{_libdir} \
@@ -190,6 +199,7 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 	--with-system-editline \
 	%{?debug:--enable-debug} \
 	--disable-rpath \
+	--disable-binreloc \
 	%{?with_ss:--enable-superserver} \
 
 %{__make} -j1
