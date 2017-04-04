@@ -1,0 +1,8 @@
+--- Firebird-3.0.2.32703-0/builds/install/misc/firebird.conf.in.orig	2017-03-21 10:11:35.000000000 +0100
++++ Firebird-3.0.2.32703-0/builds/install/misc/firebird.conf.in	2017-04-03 12:24:52.184150250 +0200
+@@ -919,3 +919,5 @@
+ # Type: string
+ #
+ #ServerMode = Super
++
++include conf.d/*.conf
