@@ -160,22 +160,30 @@ Extensive InterBase and Firebird documentation.
 Obszerna dokumentacja do baz InterBase i Firebird.
 
 %package ss
-Summary:	Firebird Superserver init scripts
-Group:		Applications/Databases
+Summary:	Firebird SuperServer init scripts
+Summary(pl.UTF-8):	Skrypty startowe Firebirda jako SuperServera
+Group:		Daemons
 Requires:	%{name} = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 
 %description ss
-Firebird Superserver init scripts.
+Firebird SuperServer init scripts.
+
+%description ss -l pl.UTF-8
+Skrypty startowe Firebirda jako SuperServera.
 
 %package classic
 Summary:	Firebird Classic init scripts
-Group:		Applications/Databases
+Summary(pl.UTF-8):	Skrypty startowe Firebirda w wersji Classic
+Group:		Daemons
 Requires:	%{name} = %{version}-%{release}
 
 %description classic
-Firebird Classic init scripts.
+Firebird Classic (inetd) init scripts.
+
+%description classic -l pl.UTF-8
+Skrypty startowe Firebirda w wersji Classic (inetd).
 
 %prep
 %setup -q -n %{name}-%{version}-0
