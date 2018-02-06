@@ -15,12 +15,12 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	3.0.2.32703
+Version:	3.0.3.32900
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	http://downloads.sourceforge.net/firebird/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	1fdc121ab04d2c2772d778e45ecd5689
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_3/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	52b00b8d24ee5f996a35b55675c0a3e0
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/Firebird-3-QuickStart.pdf
 # Source1-md5:	8e029d449e9cb3e1da8213ac6c11ad02
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -56,11 +56,11 @@ Patch3:		%{name}-FHS.patch
 Patch4:		%{name}-opt.patch
 Patch5:		%{name}-gcc-icu.patch
 Patch6:		%{name}-libpath.patch
-Patch7:		Make-the-generated-code-compatible-with-gcc-6-in-C-1.patch
 Patch8:		Provide-sized-global-delete-operators-when-compiled.patch
 Patch9:		parallel-build.patch
 Patch10:	no-copy-from-icu.patch
 Patch11:	config.patch
+Patch12:	chown.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.67
 BuildRequires:	automake
@@ -194,11 +194,11 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 %patch4 -p1
 %patch5 -p0
 %patch6 -p1
-%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
@@ -354,7 +354,7 @@ fi
 %exclude %{ibdir}/bin/gpre
 %exclude %{ibdir}/bin/fbguard
 %{ibdir}/help
-%dir %attr(770,root,firebird) %{ibdir}/intl
+%dir %{ibdir}/intl
 %attr(755,root,root) %{ibdir}/intl/fbintl
 # should it be moved to %{_sysconfdir} and marked as config?
 %{ibdir}/intl/fbintl.conf

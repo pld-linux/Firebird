@@ -1,0 +1,11 @@
+--- Firebird-3.0.2.32703-0/src/common/os/posix/os_utils.cpp.orig	2017-03-21 10:11:35.000000000 +0100
++++ Firebird-3.0.2.32703-0/src/common/os/posix/os_utils.cpp	2017-04-10 11:47:34.434975291 +0200
+@@ -123,7 +123,7 @@
+ 	void changeFileRights(const char* pathname, const mode_t mode)
+ 	{
+ 		uid_t uid = geteuid() == 0 ? get_user_id(FIREBIRD) : -1;
+-		gid_t gid = get_user_group_id(FIREBIRD);
++		gid_t gid = geteuid() == 0 ? get_user_group_id(FIREBIRD) : -1;
+ 		while (chown(pathname, uid, gid) < 0 && SYSCALL_INTERRUPTED(errno))
+ 			;
+ 

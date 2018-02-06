@@ -1,25 +1,25 @@
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux.orig	2016-08-31 20:27:07.834426824 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux	2016-08-31 20:30:34.847757793 +0200
+--- Firebird-3.0.3.32900-0/builds/posix/prefix.linux.orig	2018-02-06 10:17:17.200397879 +0100
++++ Firebird-3.0.3.32900-0/builds/posix/prefix.linux	2018-02-06 10:23:07.027756831 +0100
 @@ -18,8 +18,8 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
--COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0
+-COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
 -OPTIMIZE_FLAGS=-O3 -march=i586 -mtune=i686 -fno-omit-frame-pointer
-+COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0
++COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer
  WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-narrowing
  
  PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_amd64.orig	2016-08-31 20:27:07.834426824 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_amd64	2016-08-31 20:38:55.474418743 +0200
+--- Firebird-3.0.3.32900-0/builds/posix/prefix.linux_amd64.orig	2018-02-06 10:17:17.200397879 +0100
++++ Firebird-3.0.3.32900-0/builds/posix/prefix.linux_amd64	2018-02-06 10:26:29.919529687 +0100
 @@ -18,8 +18,8 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
--COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0
+-COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
 -OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer 
-+COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0
++COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer 
  WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-invalid-offsetof -Wno-narrowing -Wno-unused-local-typedefs
  
@@ -55,14 +55,14 @@
 -DEV_FLAGS=-ggdb -DLINUX -DARM64 -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
 +PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
 +DEV_FLAGS=$(COMMON_FLAGS) -Wall -Wno-non-virtual-dtor
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_generic.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_generic	2016-08-31 20:52:54.584409169 +0200
+--- Firebird-3.0.3.32900-0/builds/posix/prefix.linux_generic.orig	2018-02-06 10:17:17.200397879 +0100
++++ Firebird-3.0.3.32900-0/builds/posix/prefix.linux_generic	2018-02-06 10:28:29.771946030 +0100
 @@ -18,7 +18,8 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
--COMMON_FLAGS=-DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL
+-COMMON_FLAGS=-DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL -std=gnu++03 -fno-delete-null-pointer-checks
++COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL -std=gnu++03 -fno-delete-null-pointer-checks
 +OPTIMIZE_FLAGS=
  
 -PROD_FLAGS=-ggdb -O3 $(COMMON_FLAGS)
