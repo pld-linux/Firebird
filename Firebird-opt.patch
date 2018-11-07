@@ -1,68 +1,71 @@
---- Firebird-3.0.3.32900-0/builds/posix/prefix.linux.orig	2018-02-06 10:17:17.200397879 +0100
-+++ Firebird-3.0.3.32900-0/builds/posix/prefix.linux	2018-02-06 10:23:07.027756831 +0100
-@@ -18,8 +18,8 @@
+--- Firebird-3.0.4.33054-0/builds/posix/prefix.linux.orig	2018-10-22 15:04:00.969062218 +0200
++++ Firebird-3.0.4.33054-0/builds/posix/prefix.linux	2018-10-31 07:52:26.717188011 +0100
+@@ -18,9 +18,9 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
--COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
+-COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -fno-delete-null-pointer-checks
++COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -fno-delete-null-pointer-checks
+ CXXFLAGS=-std=gnu++03
 -OPTIMIZE_FLAGS=-O3 -march=i586 -mtune=i686 -fno-omit-frame-pointer
-+COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer
  WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-narrowing
  
  PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
---- Firebird-3.0.3.32900-0/builds/posix/prefix.linux_amd64.orig	2018-02-06 10:17:17.200397879 +0100
-+++ Firebird-3.0.3.32900-0/builds/posix/prefix.linux_amd64	2018-02-06 10:26:29.919529687 +0100
-@@ -18,8 +18,8 @@
+--- Firebird-3.0.4.33054-0/builds/posix/prefix.linux_amd64.orig	2018-10-22 15:04:00.969062218 +0200
++++ Firebird-3.0.4.33054-0/builds/posix/prefix.linux_amd64	2018-10-31 08:03:59.521778075 +0100
+@@ -18,9 +18,9 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
--COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
--OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer 
-+COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0 -std=gnu++03 -fno-delete-null-pointer-checks
-+OPTIMIZE_FLAGS=-fno-omit-frame-pointer 
+-COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0 -fno-delete-null-pointer-checks
++COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0 -fno-delete-null-pointer-checks
+ CXXFLAGS=-std=gnu++03
+-OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer
++OPTIMIZE_FLAGS=-fno-omit-frame-pointer
  WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-invalid-offsetof -Wno-narrowing -Wno-unused-local-typedefs
  
  PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_arm.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_arm	2016-08-31 20:40:23.017751079 +0200
-@@ -20,8 +20,8 @@
+--- Firebird-3.0.4.33054-0/builds/posix/prefix.linux_arm.orig	2018-10-22 15:04:00.969062218 +0200
++++ Firebird-3.0.4.33054-0/builds/posix/prefix.linux_arm	2018-10-31 08:15:50.260068447 +0100
+@@ -20,8 +20,9 @@
  
  #LD=@CXX@
  
 -#PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
 -#DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch
--
--PROD_FLAGS=-O3 -DLINUX -DARM -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
--DEV_FLAGS=-ggdb -DLINUX -DARM -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -DARM -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
+ 
+-PROD_FLAGS=-O3 -DLINUX -DARM -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0 -DFB_SEND_FLAGS=MSG_NOSIGNAL
+-DEV_FLAGS=-ggdb -DLINUX -DARM -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor -DFB_SEND_FLAGS=MSG_NOSIGNAL
++COMMON_FLAGS=@CFLAGS@ -DLINUX -DARM -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0 -DFB_SEND_FLAGS=MSG_NOSIGNAL
 +OPTIMIZE_FLAGS=
 +
 +PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
-+DEV_FLAGS=$(COMMON_FLAGS) -Wno-non-virtual-dtor
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_arm64.orig	2016-04-14 16:07:29.000000000 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_arm64	2016-08-31 21:08:27.381065178 +0200
++DEV_FLAGS=$(COMMON_FLAGS) -Wall -Wno-non-virtual-dtor
+--- Firebird-3.0.4.33054-0/builds/posix/prefix.linux_arm64.orig	2018-10-22 15:04:00.969062218 +0200
++++ Firebird-3.0.4.33054-0/builds/posix/prefix.linux_arm64	2018-10-31 07:58:52.167509266 +0100
 @@ -20,8 +20,8 @@
  
  #LD=@CXX@
  
 -#PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
 -#DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -DARM64 -pipe -MMD -fPIC -fsigned-char -fmessage-length=0
++COMMON_FLAGS=@CFLAGS@ -DLINUX -DARM64 -pipe -MMD -fPIC -fsigned-char -fmessage-length=0 -DFB_SEND_FLAGS=MSG_NOSIGNAL
 +OPTIMIZE_FLAGS=
  
--PROD_FLAGS=-O3 -DLINUX -DARM64 -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
--DEV_FLAGS=-ggdb -DLINUX -DARM64 -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
+-PROD_FLAGS=-O3 -DLINUX -DARM64 -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0 -DFB_SEND_FLAGS=MSG_NOSIGNAL
+-DEV_FLAGS=-ggdb -DLINUX -DARM64 -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor -DFB_SEND_FLAGS=MSG_NOSIGNAL
 +PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
 +DEV_FLAGS=$(COMMON_FLAGS) -Wall -Wno-non-virtual-dtor
---- Firebird-3.0.3.32900-0/builds/posix/prefix.linux_generic.orig	2018-02-06 10:17:17.200397879 +0100
-+++ Firebird-3.0.3.32900-0/builds/posix/prefix.linux_generic	2018-02-06 10:28:29.771946030 +0100
-@@ -18,7 +18,8 @@
+--- Firebird-3.0.4.33054-0/builds/posix/prefix.linux_generic.orig	2018-10-22 15:04:00.969062218 +0200
++++ Firebird-3.0.4.33054-0/builds/posix/prefix.linux_generic	2018-10-31 08:25:12.372864962 +0100
+@@ -18,8 +18,9 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
--COMMON_FLAGS=-DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL -std=gnu++03 -fno-delete-null-pointer-checks
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL -std=gnu++03 -fno-delete-null-pointer-checks
+-COMMON_FLAGS=-DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL -fno-delete-null-pointer-checks
++COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL -fno-delete-null-pointer-checks
+ CXXFLAGS=-std=gnu++03
 +OPTIMIZE_FLAGS=
  
 -PROD_FLAGS=-ggdb -O3 $(COMMON_FLAGS)
