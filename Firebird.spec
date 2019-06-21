@@ -16,12 +16,12 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 Version:	3.0.4.33054
-Release:	1
+Release:	2
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_4/%{name}-%{version}-0.tar.bz2
 # Source0-md5:	43569120299b2db7587dcfbddab1e25a
-Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/Firebird-3-QuickStart.pdf
+Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
 # Source1-md5:	8e029d449e9cb3e1da8213ac6c11ad02
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
@@ -49,6 +49,7 @@ Source105:	firebird-classic.service
 Source106:	firebird-classic.socket
 Source107:	server_mode-ss.conf
 Source108:	server_mode-classic.conf
+Source109:	fb_config
 Patch0:		%{name}-chmod.patch
 Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
@@ -56,11 +57,13 @@ Patch3:		%{name}-FHS.patch
 Patch4:		%{name}-opt.patch
 Patch5:		%{name}-gcc-icu.patch
 Patch6:		%{name}-libpath.patch
+Patch7:		add-pkgconfig-files.patch
 Patch8:		Provide-sized-global-delete-operators-when-compiled.patch
 Patch9:		parallel-build.patch
 Patch10:	no-copy-from-icu.patch
 Patch11:	config.patch
 Patch12:	chown.patch
+Patch13:	cloop-honour-build-flags.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.67
 BuildRequires:	automake
@@ -194,11 +197,13 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 %patch4 -p1
 %patch5 -p0
 %patch6 -p1
+%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
@@ -279,6 +284,7 @@ cp -p %{SOURCE106} $RPM_BUILD_ROOT%{systemdunitdir}/firebird-classic.socket
 
 cp -p %{SOURCE107} $RPM_BUILD_ROOT%{_sysconfdir}/firebird/conf.d/
 cp -p %{SOURCE108} $RPM_BUILD_ROOT%{_sysconfdir}/firebird/conf.d/
+install -p %{_sourcedir}/fb_config $RPM_BUILD_ROOT%{_bindir}/fb_config
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -395,6 +401,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/fb_config
 %attr(755,root,root) %{_libdir}/libfbclient.so
 %attr(755,root,root) %{ibdir}/bin/fb_config
 %attr(755,root,root) %{ibdir}/bin/gpre
