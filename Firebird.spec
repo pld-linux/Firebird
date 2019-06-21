@@ -210,7 +210,7 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 
 # not processed by configure
 %{__sed} -i -e 's/^CFLAGS.*$/& %{rpmcflags} %{rpmcppflags}/' extern/btyacc/Makefile
-%{__sed} -i -e 's/^\(CC\|LINKER\)\(.*= \)gcc$/\1\2 %{__cc}/' extern/btyacc/Makefile
+%{__sed} -i -e 's;^\(CC\|LINKER\)\(.*= \)gcc$;\1\2 %{__cc};' extern/btyacc/Makefile
 
 %build
 %{__libtoolize}
