@@ -16,7 +16,7 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 Version:	3.0.4.33054
-Release:	2
+Release:	3
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_4/%{name}-%{version}-0.tar.bz2
@@ -242,13 +242,15 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C src -f ../gen/Makefile.install buildImageDir
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{firebird{,/conf.d},rc.d/init.d,sysconfig/rc-inetd}
-install -d $RPM_BUILD_ROOT{%{_bindir},%{ibdir},%{_libdir},%{_includedir}} \
+install -d $RPM_BUILD_ROOT{%{_bindir},%{ibdir},%{_libdir},%{_includedir},%{_pkgconfigdir}} \
 install -d $RPM_BUILD_ROOT/var/{log,lib/firebird} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d
 install -d $RPM_BUILD_ROOT%{systemdunitdir}
 cp -p %{SOURCE103} $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d/firebird.conf
 touch $RPM_BUILD_ROOT/var/log/firebird.log
+
+cp -p gen/install/misc/fbclient.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
 cd gen/buildroot
 cp -p var/lib/firebird/security3.fdb $RPM_BUILD_ROOT/var/lib/firebird
@@ -406,6 +408,7 @@ fi
 %attr(755,root,root) %{ibdir}/bin/fb_config
 %attr(755,root,root) %{ibdir}/bin/gpre
 %attr(755,root,root) %{_bindir}/gpre
+%{_pkgconfigdir}/fbclient.pc
 %{_includedir}/firebird
 %{_includedir}/ib_util.h
 %{_includedir}/ibase.h
