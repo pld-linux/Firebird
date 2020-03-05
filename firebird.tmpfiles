@@ -1,1 +1,1 @@
-d /var/run/firebird 0770 root firebird -
+d /run/firebird 0770 root firebird -

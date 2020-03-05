@@ -7,8 +7,8 @@ Conflicts=firebird-classic.socket
 User=firebird
 Group=firebird
 Type=forking
-PIDFile=/var/run/firebird/default.pid
-ExecStart=/usr/lib/interbase/bin/fbguard -pidfile /var/run/firebird/default.pid -daemon -forever
+PIDFile=/run/firebird/default.pid
+ExecStart=/usr/lib/interbase/bin/fbguard -pidfile /run/firebird/default.pid -daemon -forever
 StandardError=syslog
 
 [Install]

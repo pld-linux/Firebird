@@ -38,15 +38,15 @@ Author: Damyan Ivanov <dmn@debian.org>
  	// Return the number of characters of a string.
  	static unsigned charLength(SSHORT charset, unsigned len, const char* str)
  	{
---- a/builds/posix/Makefile.in
-+++ b/builds/posix/Makefile.in
-@@ -454,7 +454,8 @@ $(GSTAT):		$(GSTAT_Objects) $(COMMON_LIB
+--- Firebird-3.0.5.33220-0/builds/posix/Makefile.in.orig	2020-01-13 12:24:58.332032230 +0100
++++ Firebird-3.0.5.33220-0/builds/posix/Makefile.in	2020-01-13 12:37:30.703461522 +0100
+@@ -481,7 +481,8 @@
  isql:			$(ISQL)
  
  $(ISQL):		$(ISQL_Objects) $(COMMON_LIB)
--	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LIBEDITLINE) $(LINK_LIBS)
-+	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) \
-+	    $(LIBEDITLINE) $(LINK_LIBS) $(ICU_LIBS)
+-	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LIBEDITLINE) $(LINK_LIBS) $(call LINK_DARWIN_RPATH,..)
++	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LIBEDITLINE) \
++	$(LINK_LIBS) $(ICU_LIBS) $(call LINK_DARWIN_RPATH,..)
  
  nbackup:		$(NBACKUP)
  

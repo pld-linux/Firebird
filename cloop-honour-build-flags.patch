@@ -2,18 +2,18 @@ Description: make cloop build honor compiler/linker flags from the environment
 Author: Damyan Ivanov <dmn@debian.org>
 Forwarded: no
 
---- a/extern/cloop/Makefile
-+++ b/extern/cloop/Makefile
-@@ -6,7 +6,7 @@ TARGET	:= release
+--- Firebird-3.0.5.33220-0/extern/cloop/Makefile.orig	2020-01-09 10:53:10.000000000 +0100
++++ Firebird-3.0.5.33220-0/extern/cloop/Makefile	2020-01-13 12:47:47.869169239 +0100
+@@ -6,7 +6,7 @@
  
- CC	:= gcc
- CXX	:= g++
+ CC	:= $(CC)
+ CXX	:= $(CXX)
 -LD	:= $(CXX)
 +LD	:= $(CXX) $(LDFLAGS)
  
  SRC_DIR		:= src
  BUILD_DIR	:= build
-@@ -27,8 +27,9 @@ SRCS_CPP := $(foreach sdir,$(SRC_DIRS),$
+@@ -27,8 +27,9 @@
  OBJS_C := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_C))
  OBJS_CPP := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS_CPP))
  

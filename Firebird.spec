@@ -15,12 +15,12 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	3.0.4.33054
-Release:	3
+Version:	3.0.5.33220
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_4/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	43569120299b2db7587dcfbddab1e25a
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_5/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	4844be811fd4022d68f530eac75bd5b8
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
 # Source1-md5:	8e029d449e9cb3e1da8213ac6c11ad02
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -278,7 +278,7 @@ rm -f $RPM_BUILD_ROOT%{ibdir}/bin/{FirebirdUninstall.sh,changeServerMode.sh}
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE100} >$RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
 cp -p %{SOURCE101} $RPM_BUILD_ROOT/etc/sysconfig/firebird
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE104} >$RPM_BUILD_ROOT%{systemdunitdir}/firebird.service
-install -d $RPM_BUILD_ROOT/var/run/firebird
+install -d $RPM_BUILD_ROOT/run/firebird
 
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE102} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/firebird
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE105} >$RPM_BUILD_ROOT%{systemdunitdir}/firebird-classic@.service
@@ -427,7 +427,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/firebird
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/tmpfiles.d/firebird.conf
 %attr(755,root,root) %{ibdir}/bin/fbguard
-%dir %attr(770,root,firebird) /var/run/firebird
+%dir %attr(770,root,firebird) /run/firebird
 %{systemdunitdir}/firebird.service
 
 %files classic

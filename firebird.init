@@ -12,13 +12,13 @@
 . /etc/sysconfig/network
 
 
-# Source oident configureation.
+# Source firebird configuration.
 if [ -f /etc/sysconfig/firebird ]; then
 	. /etc/sysconfig/firebird
 fi
 
 GUARDIAN=/usr/lib/interbase/bin/fbguard
-PIDFILE=/var/run/firebird/firebird.pid
+PIDFILE=/run/firebird/firebird.pid
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
