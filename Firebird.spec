@@ -31,7 +31,7 @@ Source3:	http://www.firebirdsql.org/pdfmanual/%{name}-Null-Guide.pdf
 Source4:	http://www.firebirdsql.org/pdfmanual/%{name}-Generator-Guide.pdf
 # Source4-md5:	44e7568ef477072a8ad5f381c3e12a75
 Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-%{name}.pdf
-# Source5-md5:	1bd4a168e550910fc899e2aa125d83a3
+# Source5-md5:	230ef237842d255916398f408f459281
 Source6:	http://www.firebirdsql.org/pdfmanual/%{name}-nbackup.pdf
 # Source6-md5:	7ef8a8b9a899d06bec2a5da0bb5fea0e
 Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-Utils-WIP.pdf
