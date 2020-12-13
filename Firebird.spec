@@ -15,12 +15,12 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	3.0.6.33328
+Version:	3.0.7.33374
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_6/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	4c5dddbdccf8c722cc2068210d4eab00
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_7/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	84f35c910bb8ba6d9fd985062240c900
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
 # Source1-md5:	8e029d449e9cb3e1da8213ac6c11ad02
 # distfiles refuses this, would require some audit to allow '('/')' chars
