@@ -87,6 +87,7 @@ Requires:	%{name}-lib = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664} x32 arm ia64 mips mipsel ppc sparc sparcv9 alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_debugsource_packages	0
 %define		ibdir	%{_libdir}/interbase
 %define		specflags	-fno-strict-aliasing
 %define		debugcflags	-O1 -g -Wall -fno-strict-aliasing
