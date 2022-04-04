@@ -1,16 +1,11 @@
-# Author: Adriano dos Santos Fernandes
-#Index: src/common/classes/alloc.h
-#===================================================================
-#RCS file: /cvsroot/firebird/firebird2/src/common/classes/alloc.h,v
-#retrieving revision 1.71
-diff -u -p -r1.71 alloc.h
---- src/common/classes/alloc.h	26 Sep 2007 17:48:20 -0000	1.71
-+++ src/common/classes/alloc.h	20 May 2009 02:20:08 -0000
-@@ -47,6 +47,7 @@
- #include <stdlib.h> /* XPG: prototypes for malloc/free have to be in
- 					   stdlib.h (EKU) */
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/src/common/classes/alloc.h Firebird-3.0.7.33374-0/src/common/classes/alloc.h
+--- Firebird-3.0.7.33374-0.org/src/common/classes/alloc.h	2020-10-20 08:40:05.000000000 +0000
++++ Firebird-3.0.7.33374-0/src/common/classes/alloc.h	2022-04-04 17:51:33.923548962 +0000
+@@ -55,6 +55,7 @@
+ #else
+ #include <malloc.h>
  #endif
 +#include <new>
  
- #ifdef _MSC_VER
- #define THROW_BAD_ALLOC
+ #include <memory.h>
+ 

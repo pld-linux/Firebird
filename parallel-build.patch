@@ -8,9 +8,10 @@ Description: allow building with make -jN
 Author: Damyan Ivanov <dmn@debian.org>
 Forwarded: no
 
---- a/builds/posix/Makefile.in
-+++ b/builds/posix/Makefile.in
-@@ -329,8 +329,8 @@ yachts.lnk:		metadata.fdb
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in Firebird-3.0.7.33374-0/builds/posix/Makefile.in
+--- Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in	2022-04-04 17:53:31.957821756 +0000
++++ Firebird-3.0.7.33374-0/builds/posix/Makefile.in	2022-04-04 17:53:33.598825549 +0000
+@@ -359,8 +359,8 @@ yachts.lnk:		metadata.fdb
  
  metadata.fdb:	$(RUN_ISQL) $(SRC_ROOT)/dbs/metadata.sql
  	-$(RM) $@
@@ -21,7 +22,7 @@ Forwarded: no
  	$(CHMOD) 0444 $@
  
  $(HELP_FDB):	help.fdb
-@@ -339,7 +339,7 @@ $(HELP_FDB):	help.fdb
+@@ -369,7 +369,7 @@ $(HELP_FDB):	help.fdb
  	$(CHMOD) 0444 $@
  
  help.fdb:	$(BLD_ROOT)/misc/help.gbak
@@ -30,7 +31,7 @@ Forwarded: no
  	$(CHMOD) 0444 $@
  
  $(SECURITY_FDB):	security.fdb
-@@ -349,18 +349,18 @@ $(SECURITY_FDB):	security.fdb
+@@ -379,18 +379,18 @@ $(SECURITY_FDB):	security.fdb
  security.fdb:	$(SRC_ROOT)/dbs/security.sql
  	-$(RM) $@
  	-$(RM) $(SECURITY_TMP)
@@ -56,7 +57,7 @@ Forwarded: no
  	$(TOUCH) $@
  
  
-@@ -528,7 +528,7 @@ codes:	gen_codes
+@@ -562,7 +562,7 @@ codes:	gen_codes
  ids:	$(IDS)
  
  gen_codes:	$(CODES) msg.timestamp
@@ -64,8 +65,8 @@ Forwarded: no
 +	$(call LOCK_RUN,$(CODES) $(SRC_ROOT)/include/gen $(LNG_ROOT))
  
  $(CODES):	$(CODES_Objects) $(COMMON_LIB)
- 	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS)
-@@ -564,7 +564,7 @@ examples: include_generic
+ 	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(call LINK_DARWIN_RPATH,..)
+@@ -598,7 +598,7 @@ examples: include_generic
  message_file:	$(FIREBIRD_MSG)
  
  $(FIREBIRD_MSG):	$(BUILD_FILE) msg.timestamp
@@ -74,61 +75,9 @@ Forwarded: no
  	$(CHMOD_6) $@
  
  $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_LIB)
---- a/builds/posix/make.defaults
-+++ b/builds/posix/make.defaults
-@@ -378,6 +378,7 @@ GPRE_BOOT       = $(RBIN)/gpre_boot$(EXE
- GPRE            = $(BIN)/gpre$(EXEC_EXT)
- RUN_GPRE        = $(RBIN)/gpre$(EXEC_EXT)
- GPRE_CURRENT    = $(RBIN)/gpre_current$(EXEC_EXT)
-+LOCK_RUN        = sh -x -c "lockfile -1 $(BIN)/build-db.lock && $(subst $$,\$$,$(1)); res=\$$?; rm -f $(BIN)/build-db.lock; exit \$$res"
- 
- 
- # From msgs
---- a/builds/posix/make.rules
-+++ b/builds/posix/make.rules
-@@ -72,17 +72,17 @@ ISQL_GPRE_FLAGS = -m -z -n -ocxx
- .SUFFIXES: .c .e .epp .cpp
- 
- .e.c:
--	$(GPRE_CURRENT) $(GPRE_FLAGS) $< $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(GPRE_FLAGS) $< $@)
- 
- 
- $(OBJ)/jrd/%.cpp: $(SRC_ROOT)/jrd/%.epp
--	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@)
- 
- $(OBJ)/isql/%.cpp: $(SRC_ROOT)/isql/%.epp
--	$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@)
- 
- $(OBJ)/%.cpp: $(SRC_ROOT)/%.epp
--	$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@)
- 
- 
- .SUFFIXES: .lo .o .cpp .c
---- a/builds/posix/make.shared.targets
-+++ b/builds/posix/make.shared.targets
-@@ -65,13 +65,13 @@ $(OBJ)/dsql/Parser.o $(OBJ)/yvalve/keywo
- 
- # Special cases for building cpp from epp
- $(OBJ)/dsql/metd.cpp: $(SRC_ROOT)/dsql/metd.epp
--	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@)
- 
- $(OBJ)/dsql/DdlNodes.cpp: $(SRC_ROOT)/dsql/DdlNodes.epp
--	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@)
- 
- $(OBJ)/dsql/PackageNodes.cpp: $(SRC_ROOT)/dsql/PackageNodes.epp
--	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@)
- 
- # Adding resources as prerequisite for some files
- 
---- a/builds/posix/Makefile.in.examples
-+++ b/builds/posix/Makefile.in.examples
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examples Firebird-3.0.7.33374-0/builds/posix/Makefile.in.examples
+--- Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examples	2020-10-20 08:40:05.000000000 +0000
++++ Firebird-3.0.7.33374-0/builds/posix/Makefile.in.examples	2022-04-04 17:53:33.598825549 +0000
 @@ -123,8 +123,8 @@ $(EXAMPLES_DEST)% : $(EXAMPLES_SRC)%
  
  $(EMPLOYEE_DB):	$(EXAMPLES_DEST)/empbuild$(EXEC_EXT) $(INPUT_Sources) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
@@ -167,3 +116,59 @@ Forwarded: no
  
  
  $(EXAMPLES_DEST)/%.sql: $(EXAMPLES_SRC)/empbuild/%.sql
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.defaults Firebird-3.0.7.33374-0/builds/posix/make.defaults
+--- Firebird-3.0.7.33374-0.org/builds/posix/make.defaults	2022-04-04 17:53:31.949821738 +0000
++++ Firebird-3.0.7.33374-0/builds/posix/make.defaults	2022-04-04 17:53:33.598825549 +0000
+@@ -397,6 +397,7 @@ GPRE_BOOT       = $(RBIN)/gpre_boot$(EXE
+ GPRE            = $(BIN)/gpre$(EXEC_EXT)
+ RUN_GPRE        = $(RBIN)/gpre$(EXEC_EXT)
+ GPRE_CURRENT    = $(RBIN)/gpre_current$(EXEC_EXT)
++LOCK_RUN        = sh -x -c "lockfile -1 $(BIN)/build-db.lock && $(subst $$,\$$,$(1)); res=\$$?; rm -f $(BIN)/build-db.lock; exit \$$res"
+ 
+ 
+ # From msgs
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.rules Firebird-3.0.7.33374-0/builds/posix/make.rules
+--- Firebird-3.0.7.33374-0.org/builds/posix/make.rules	2020-10-20 08:40:05.000000000 +0000
++++ Firebird-3.0.7.33374-0/builds/posix/make.rules	2022-04-04 17:53:33.598825549 +0000
+@@ -72,17 +72,17 @@ ISQL_GPRE_FLAGS = -m -z -n -ocxx
+ .SUFFIXES: .c .e .epp .cpp
+ 
+ .e.c:
+-	$(GPRE_CURRENT) $(GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(GPRE_FLAGS) $< $@)
+ 
+ 
+ $(OBJ)/jrd/%.cpp: $(SRC_ROOT)/jrd/%.epp
+-	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@)
+ 
+ $(OBJ)/isql/%.cpp: $(SRC_ROOT)/isql/%.epp
+-	$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@)
+ 
+ $(OBJ)/%.cpp: $(SRC_ROOT)/%.epp
+-	$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@)
+ 
+ 
+ .SUFFIXES: .lo .o .cpp .c
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.shared.targets Firebird-3.0.7.33374-0/builds/posix/make.shared.targets
+--- Firebird-3.0.7.33374-0.org/builds/posix/make.shared.targets	2020-10-20 08:40:05.000000000 +0000
++++ Firebird-3.0.7.33374-0/builds/posix/make.shared.targets	2022-04-04 17:53:33.598825549 +0000
+@@ -65,13 +65,13 @@ $(OBJ)/dsql/Parser.o $(OBJ)/common/keywo
+ 
+ # Special cases for building cpp from epp
+ $(OBJ)/dsql/metd.cpp: $(SRC_ROOT)/dsql/metd.epp
+-	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@)
+ 
+ $(OBJ)/dsql/DdlNodes.cpp: $(SRC_ROOT)/dsql/DdlNodes.epp
+-	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@)
+ 
+ $(OBJ)/dsql/PackageNodes.cpp: $(SRC_ROOT)/dsql/PackageNodes.epp
+-	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $< $@)
+ 
+ # Adding resources as prerequisite for some files
+ 

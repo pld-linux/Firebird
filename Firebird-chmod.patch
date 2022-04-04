@@ -1,8 +1,9 @@
---- firebird-1.5.0.4290/builds/posix/make.defaults.orig	2003-11-11 02:01:51.000000000 +0100
-+++ firebird-1.5.0.4290/builds/posix/make.defaults	2004-05-24 23:47:17.602325704 +0200
-@@ -92,9 +92,9 @@
- SH=			sh -c
+diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.defaults Firebird-3.0.7.33374-0/builds/posix/make.defaults
+--- Firebird-3.0.7.33374-0.org/builds/posix/make.defaults	2020-10-20 08:40:05.000000000 +0000
++++ Firebird-3.0.7.33374-0/builds/posix/make.defaults	2022-04-04 17:50:57.999465936 +0000
+@@ -142,9 +142,9 @@ SH=			sh -c
  RM=			rm -f
+ RM_R=		rm -rf
  CHMOD=			chmod
 -CHMOD_6=		chmod 666
 -CHMOD_7=		chmod 777
