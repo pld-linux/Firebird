@@ -8,10 +8,9 @@ Description: allow building with make -jN
 Author: Damyan Ivanov <dmn@debian.org>
 Forwarded: no
 
-diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in Firebird-3.0.7.33374-0/builds/posix/Makefile.in
---- Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in	2022-04-04 17:53:31.957821756 +0000
-+++ Firebird-3.0.7.33374-0/builds/posix/Makefile.in	2022-04-04 17:53:33.598825549 +0000
-@@ -359,8 +359,8 @@ yachts.lnk:		metadata.fdb
+--- Firebird-3.0.10.33601-0/builds/posix/Makefile.in.orig	2022-06-24 13:13:29.537501538 +0200
++++ Firebird-3.0.10.33601-0/builds/posix/Makefile.in	2022-06-24 13:15:39.739885352 +0200
+@@ -364,8 +364,8 @@
  
  metadata.fdb:	$(RUN_ISQL) $(SRC_ROOT)/dbs/metadata.sql
  	-$(RM) $@
@@ -22,16 +21,16 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in Fireb
  	$(CHMOD) 0444 $@
  
  $(HELP_FDB):	help.fdb
-@@ -369,7 +369,7 @@ $(HELP_FDB):	help.fdb
+@@ -374,7 +374,7 @@
  	$(CHMOD) 0444 $@
  
  help.fdb:	$(BLD_ROOT)/misc/help.gbak
--	$(RUN_GBAK) -MODE read_only -R $< $@
-+	$(call LOCK_RUN,$(RUN_GBAK) -MODE read_only -R $< $@)
+-	$(RUN_GBAK) -MODE read_only -replace $< $@
++	$(call LOCK_RUN,$(RUN_GBAK) -MODE read_only -replace $< $@)
  	$(CHMOD) 0444 $@
  
  $(SECURITY_FDB):	security.fdb
-@@ -379,18 +379,18 @@ $(SECURITY_FDB):	security.fdb
+@@ -384,18 +384,18 @@
  security.fdb:	$(SRC_ROOT)/dbs/security.sql
  	-$(RM) $@
  	-$(RM) $(SECURITY_TMP)
@@ -57,7 +56,7 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in Fireb
  	$(TOUCH) $@
  
  
-@@ -562,7 +562,7 @@ codes:	gen_codes
+@@ -567,7 +567,7 @@
  ids:	$(IDS)
  
  gen_codes:	$(CODES) msg.timestamp
@@ -65,8 +64,8 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in Fireb
 +	$(call LOCK_RUN,$(CODES) $(SRC_ROOT)/include/gen $(LNG_ROOT))
  
  $(CODES):	$(CODES_Objects) $(COMMON_LIB)
- 	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(call LINK_DARWIN_RPATH,..)
-@@ -598,7 +598,7 @@ examples: include_generic
+ 	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS)
+@@ -603,7 +603,7 @@
  message_file:	$(FIREBIRD_MSG)
  
  $(FIREBIRD_MSG):	$(BUILD_FILE) msg.timestamp

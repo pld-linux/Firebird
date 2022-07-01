@@ -7,7 +7,6 @@ User=firebird
 Group=firebird
 ExecStart=/usr/lib/interbase/bin/firebird -el /var/lib/firebird
 StandardInput=socket
-StandardError=syslog
 
 [Install]
 Also=firebird-classic.socket

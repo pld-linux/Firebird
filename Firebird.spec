@@ -15,31 +15,39 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	3.0.7.33374
-Release:	2
+Version:	3.0.10.33601
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/R3_0_7/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	84f35c910bb8ba6d9fd985062240c900
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v3.0.10/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	849bbc5913276161cc5250d0a9d925d8
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
-# Source1-md5:	8e029d449e9cb3e1da8213ac6c11ad02
+# Source1-md5:	1e7032a176e4dc1eca6b1e9babf297c4
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
 Source3:	http://www.firebirdsql.org/pdfmanual/%{name}-Null-Guide.pdf
-# Source3-md5:	d1f8ba75fe3bb9eb9d203ce3f82a1a1a
+# Source3-md5:	dc8e5e234b2138af9a472feca6565359
 Source4:	http://www.firebirdsql.org/pdfmanual/%{name}-Generator-Guide.pdf
-# Source4-md5:	44e7568ef477072a8ad5f381c3e12a75
+# Source4-md5:	23926037205ab8716cf0a54544585231
 Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-%{name}.pdf
 # Source5-md5:	230ef237842d255916398f408f459281
 Source6:	http://www.firebirdsql.org/pdfmanual/%{name}-nbackup.pdf
-# Source6-md5:	7ef8a8b9a899d06bec2a5da0bb5fea0e
-Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-Utils-WIP.pdf
-# Source7-md5:	39b9a4f3c9d9e27d985e9277ae163ceb
+# Source6-md5:	5fd9de7144610ab45bdbb03cfc491adb
+Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-shell-scripts.pdf
+# Source7-md5:	01c5e91de9f1639f62f93b3e486584c8
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
-# Source8-md5:	ebac312c0afbe97b1850bdc74c553c28
-Source9:	http://www.firebirdsql.org/doc/contrib/fb_2_1_errorcodes.pdf
+# Source8-md5:	5e192abaf5db4417b29ad871716522b5
+Source9:	https://firebirdsql.org/file/documentation/reference_manuals/reference_material/Firebird-2.1-ErrorCodes.pdf
 # Source9-md5:	9ab392dc349657dbcf9a9c35acd8e8db
+Source10:	http://www.firebirdsql.org/pdfmanual/%{name}-gsec.pdf
+# Source10-md5:	326ef6f7afebf369b534838945ee4f74
+Source11:	http://www.firebirdsql.org/pdfmanual/%{name}-gfix.pdf
+# Source11-md5:	22e2cdc1058dd4f764728bcb3a8644f0
+Source12:	http://www.firebirdsql.org/pdfmanual/%{name}-gsplit.pdf
+# Source12-md5:	0147b5d2118e2e80c93762600107a71f
+Source13:	https://firebirdsql.org/file/documentation/pdf/en/refdocs/fblangref30/firebird-30-language-reference.pdf
+# Source13-md5:	20c7cf7d0c102f5b21342fa4472d7938
 Source100:	firebird.init
 Source101:	firebird.sysconfig
 Source102:	firebird.inetd
@@ -64,6 +72,7 @@ Patch10:	no-copy-from-icu.patch
 Patch11:	config.patch
 Patch12:	chown.patch
 Patch13:	cloop-honour-build-flags.patch
+Patch14:	mod_loader.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.67
 BuildRequires:	automake
@@ -87,7 +96,6 @@ Requires:	%{name}-lib = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664} x32 arm ia64 mips mipsel ppc sparc sparcv9 alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_debugsource_packages	0
 %define		ibdir	%{_libdir}/interbase
 %define		specflags	-fno-strict-aliasing
 %define		debugcflags	-O1 -g -Wall -fno-strict-aliasing
@@ -201,13 +209,14 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 mkdir docs
-cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} docs
+cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} \
+  %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} docs
 
 # not processed by configure
 %{__sed} -i -e 's/^CFLAGS.*$/& %{rpmcflags} %{rpmcppflags}/' extern/btyacc/Makefile
@@ -221,7 +230,6 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 %configure \
 	CFLAGS="%{rpmcflags} -fno-delete-null-pointer-checks" \
 	--prefix=%{ibdir} \
-	--with-system-editline \
 	--with-fbconf=%{_sysconfdir}/firebird \
 	--with-fbinclude=%{_includedir} \
 	--with-fblib=%{_libdir} \
@@ -240,7 +248,7 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} -C src -f ../gen/Makefile.install buildImageDir
+%{__make} -C src -f ../gen/Makefile.install buildRoot
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{firebird{,/conf.d},rc.d/init.d,sysconfig/rc-inetd}
 install -d $RPM_BUILD_ROOT{%{_bindir},%{ibdir},%{_libdir},%{_includedir},%{_pkgconfigdir}} \

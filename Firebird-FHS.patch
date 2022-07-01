@@ -1,10 +1,13 @@
---- Firebird-3.0.0.32483-0/src/yvalve/gds.cpp.orig	2016-08-30 21:31:23.418702669 +0200
-+++ Firebird-3.0.0.32483-0/src/yvalve/gds.cpp	2016-08-31 20:24:57.044428320 +0200
-@@ -3785,7 +3785,7 @@
+--- Firebird-3.0.10.33601-0/src/yvalve/gds.cpp.orig	2022-07-01 08:34:37.770832195 +0200
++++ Firebird-3.0.10.33601-0/src/yvalve/gds.cpp	2022-07-01 08:41:44.837560283 +0200
+@@ -3826,10 +3826,7 @@
  		if (!fb_utils::readenv(FB_LOCK_ENV, lockPrefix))
  		{
- #ifndef WIN_NT
--			PathUtils::concatPath(lockPrefix, WORKFILE, LOCKDIR);
+ #if !defined(WIN_NT)
+-			const char* tmp = getTemporaryFolder();
+-			if (!tmp)
+-				tmp = WORKFILE;
+-			PathUtils::concatPath(lockPrefix, tmp, LOCKDIR);
 +			PathUtils::concatPath(lockPrefix, "/var/lib", LOCKDIR);
  #else
  #ifdef WIN9X_SUPPORT
