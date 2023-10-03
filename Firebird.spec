@@ -15,14 +15,14 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	3.0.10.33601
+Version:	3.0.11.33703
 Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v3.0.10/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	849bbc5913276161cc5250d0a9d925d8
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v3.0.11/%{name}-%{version}-0.tar.bz2
+# Source0-md5:	9bd594afdc55690ec66aaf130d8cc2cc
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
-# Source1-md5:	1e7032a176e4dc1eca6b1e9babf297c4
+# Source1-md5:	c69991a4311090d6d672f7faaab6390e
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
@@ -33,7 +33,7 @@ Source4:	http://www.firebirdsql.org/pdfmanual/%{name}-Generator-Guide.pdf
 Source5:	http://www.firebirdsql.org/pdfmanual/MSSQL-to-%{name}.pdf
 # Source5-md5:	230ef237842d255916398f408f459281
 Source6:	http://www.firebirdsql.org/pdfmanual/%{name}-nbackup.pdf
-# Source6-md5:	5fd9de7144610ab45bdbb03cfc491adb
+# Source6-md5:	98d310a374ecc3f1f241e1feac6e4dca
 Source7:	http://www.firebirdsql.org/pdfmanual/%{name}-shell-scripts.pdf
 # Source7-md5:	01c5e91de9f1639f62f93b3e486584c8
 Source8:	http://www.firebirdnews.org/docs/fb2min.pdf
@@ -47,7 +47,7 @@ Source11:	http://www.firebirdsql.org/pdfmanual/%{name}-gfix.pdf
 Source12:	http://www.firebirdsql.org/pdfmanual/%{name}-gsplit.pdf
 # Source12-md5:	0147b5d2118e2e80c93762600107a71f
 Source13:	https://firebirdsql.org/file/documentation/pdf/en/refdocs/fblangref30/firebird-30-language-reference.pdf
-# Source13-md5:	20c7cf7d0c102f5b21342fa4472d7938
+# Source13-md5:	a4a711621697fb1a23c35943a79d763b
 Source100:	firebird.init
 Source101:	firebird.sysconfig
 Source102:	firebird.inetd
