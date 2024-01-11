@@ -24,19 +24,13 @@ index 000000000000..d49fdc5821c5
 +Version: @FIREBIRD_VERSION@
 +Cflags: -I${includedir}/firebird
 +Libs: -L${libdir} -lfbclient
-diff --git a/configure.ac b/configure.ac
-index 717f5eccc53d..60b3aaa5b08b 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1200,6 +1200,7 @@ case "$PLATFORM" in
+--- Firebird-4.0.4.3010-0/configure.ac.orig	2023-12-20 10:52:31.953327516 +0100
++++ Firebird-4.0.4.3010-0/configure.ac	2023-12-20 10:55:11.442202827 +0100
+@@ -1378,6 +1378,7 @@
          gen/install/misc/firebird.init.d.gentoo:builds/install/arch-specific/linux/firebird.init.d.gentoo.in
          gen/install/misc/firebird.init.d.slackware:builds/install/arch-specific/linux/firebird.init.d.slackware.in
          gen/install/misc/rc.config.firebird:builds/install/arch-specific/linux/rc.config.firebird.in
 +        gen/install/misc/fbclient.pc:builds/install/arch-specific/linux/misc/fbclient.pc.in
          gen/Release/firebird/bin/linuxLibrary.sh:builds/install/arch-specific/linux/linuxLibrary.sh.in
-         gen/install/misc/firebird-classic@.service:builds/install/arch-specific/linux/firebird-classic.service.in
-         gen/install/misc/firebird-classic.socket:builds/install/arch-specific/linux/firebird-classic.socket.in
--- 
-2.3.4
-
-
+         gen/install/misc/firebird.service:builds/install/arch-specific/linux/firebird.service.in
+     ],

@@ -2,8 +2,8 @@ Description: make cloop build honor compiler/linker flags from the environment
 Author: Damyan Ivanov <dmn@debian.org>
 Forwarded: no
 
---- Firebird-3.0.5.33220-0/extern/cloop/Makefile.orig	2020-01-09 10:53:10.000000000 +0100
-+++ Firebird-3.0.5.33220-0/extern/cloop/Makefile	2020-01-13 12:47:47.869169239 +0100
+--- Firebird-4.0.4.3010-0/extern/cloop/Makefile.orig	2023-11-08 13:07:47.000000000 +0100
++++ Firebird-4.0.4.3010-0/extern/cloop/Makefile	2023-12-20 11:25:08.527689312 +0100
 @@ -6,7 +6,7 @@
  
  CC	:= $(CC)
@@ -18,10 +18,10 @@ Forwarded: no
  OBJS_CPP := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS_CPP))
  
 -C_FLAGS := -ggdb -fPIC -MMD -MP -W -Wall -Wno-unused-parameter
--CXX_FLAGS := $(C_FLAGS)
+-CXX_FLAGS := $(C_FLAGS) -std=c++11
 +COMMON_C_FLAGS := -ggdb -fPIC -MMD -MP -W -Wall -Wno-unused-parameter
 +C_FLAGS := $(COMMON_C_FLAGS) $(CFLAGS) $(CPPFLAGS)
-+CXX_FLAGS := $(COMMON_C_FLAGS) $(CXXFLAGS) $(CPPFLAGS)
- FPC_FLAGS := -Mdelphi
++CXX_FLAGS := $(COMMON_C_FLAGS) $(CXXFLAGS) $(CPPFLAGS) -std=c++11
+ FPC_FLAGS := -Mdelphi -Cg
  
- ifeq ($(TARGET),release)
+ ifeq ($(shell uname),FreeBSD)

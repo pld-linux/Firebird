@@ -8,9 +8,10 @@ Description: allow building with make -jN
 Author: Damyan Ivanov <dmn@debian.org>
 Forwarded: no
 
---- Firebird-3.0.10.33601-0/builds/posix/Makefile.in.orig	2022-06-24 13:13:29.537501538 +0200
-+++ Firebird-3.0.10.33601-0/builds/posix/Makefile.in	2022-06-24 13:15:39.739885352 +0200
-@@ -364,8 +364,8 @@
+diff -up Firebird-4.0.4.3010-0/builds/posix/Makefile.in.orig Firebird-4.0.4.3010-0/builds/posix/Makefile.in
+--- Firebird-4.0.4.3010-0/builds/posix/Makefile.in.orig	2023-12-20 10:59:23.894063119 +0100
++++ Firebird-4.0.4.3010-0/builds/posix/Makefile.in	2023-12-20 11:04:55.318624451 +0100
+@@ -442,8 +442,8 @@ yachts.lnk:		metadata.fdb
  
  metadata.fdb:	$(RUN_ISQL) $(SRC_ROOT)/dbs/metadata.sql
  	-$(RM) $@
@@ -21,16 +22,16 @@ Forwarded: no
  	$(CHMOD) 0444 $@
  
  $(HELP_FDB):	help.fdb
-@@ -374,7 +374,7 @@
+@@ -452,7 +452,7 @@ $(HELP_FDB):	help.fdb
  	$(CHMOD) 0444 $@
  
  help.fdb:	$(BLD_ROOT)/misc/help.gbak
--	$(RUN_GBAK) -MODE read_only -replace $< $@
-+	$(call LOCK_RUN,$(RUN_GBAK) -MODE read_only -replace $< $@)
+-	$(RUN_GBAK) -MODE read_only -R $< $@
++	$(call LOCK_RUN,$(RUN_GBAK) -MODE read_only -R $< $@)
  	$(CHMOD) 0444 $@
  
  $(SECURITY_FDB):	security.fdb
-@@ -384,18 +384,18 @@
+@@ -462,18 +462,18 @@ $(SECURITY_FDB):	security.fdb
  security.fdb:	$(SRC_ROOT)/dbs/security.sql
  	-$(RM) $@
  	-$(RM) $(SECURITY_TMP)
@@ -56,8 +57,8 @@ Forwarded: no
  	$(TOUCH) $@
  
  
-@@ -567,7 +567,7 @@
- ids:	$(IDS)
+@@ -643,7 +643,7 @@ CODES = $(BIN)/codes$(EXEC_EXT)
+ codes:	gen_codes
  
  gen_codes:	$(CODES) msg.timestamp
 -	$(CODES) $(SRC_ROOT)/include/gen $(LNG_ROOT)
@@ -65,7 +66,7 @@ Forwarded: no
  
  $(CODES):	$(CODES_Objects) $(COMMON_LIB)
  	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS)
-@@ -603,7 +603,7 @@
+@@ -675,7 +675,7 @@ examples: include_generic
  message_file:	$(FIREBIRD_MSG)
  
  $(FIREBIRD_MSG):	$(BUILD_FILE) msg.timestamp
@@ -73,11 +74,11 @@ Forwarded: no
 +	$(call LOCK_RUN,$(BUILD_FILE) -d msg.fdb -f $@)
  	$(CHMOD_6) $@
  
- $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_LIB)
-diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examples Firebird-3.0.7.33374-0/builds/posix/Makefile.in.examples
---- Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examples	2020-10-20 08:40:05.000000000 +0000
-+++ Firebird-3.0.7.33374-0/builds/posix/Makefile.in.examples	2022-04-04 17:53:33.598825549 +0000
-@@ -123,8 +123,8 @@ $(EXAMPLES_DEST)% : $(EXAMPLES_SRC)%
+ tzdata: $(FIREBIRD)/tzdata
+diff -up Firebird-4.0.4.3010-0/builds/posix/Makefile.in.examples.orig Firebird-4.0.4.3010-0/builds/posix/Makefile.in.examples
+--- Firebird-4.0.4.3010-0/builds/posix/Makefile.in.examples.orig	2023-11-08 13:07:47.000000000 +0100
++++ Firebird-4.0.4.3010-0/builds/posix/Makefile.in.examples	2023-12-20 10:59:23.900729743 +0100
+@@ -140,8 +140,8 @@ $(EXAMPLES_DEST)% : $(EXAMPLES_SRC)%
  
  $(EMPLOYEE_DB):	$(EXAMPLES_DEST)/empbuild$(EXEC_EXT) $(INPUT_Sources) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
  	-$(RM) $(EMPLOYEE_DB)
@@ -88,7 +89,7 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examp
  	-$(CHMOD_6) $(EMPLOYEE_DB)
  
  # To get past the fact isql is called from the programs, we create a local link in this directory
-@@ -140,7 +140,7 @@ $(EXAMPLES_DEST)/empbuild.c:	$(EXAMPLES_
+@@ -157,7 +157,7 @@ $(EXAMPLES_DEST)/empbuild.c:	$(EXAMPLES_
  
  $(EXAMPLES_DEST)/empbuild.fdb : $(EXAMPLES_DEST)/empddl.sql $(EXAMPLES_DEST)/empbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
  	-$(RM) $(EXAMPLES_DEST)/empbuild.fdb
@@ -97,7 +98,7 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examp
  
  # The chain for intlemp.fdb is the same a script file to create an empty database
  # to allow a .e program to be compiled, to then create and populate with data
-@@ -148,7 +148,7 @@ $(EXAMPLES_DEST)/empbuild.fdb : $(EXAMPL
+@@ -165,7 +165,7 @@ $(EXAMPLES_DEST)/empbuild.fdb : $(EXAMPL
  
  $(EXAMPLES_DEST)/intlemp.fdb:	$(EXAMPLES_DEST)/intlbld$(EXEC_EXT) $(INTL_Sources) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
  	-$(RM) intlemp.fdb
@@ -106,7 +107,7 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examp
  	-$(CHMOD_6) intlemp.fdb
  
  $(EXAMPLES_DEST)/intlbld$(EXEC_EXT): $(INTLBLD_Objects) $(COMMON_LIB)
-@@ -158,7 +158,7 @@ $(EXAMPLES_DEST)/intlbld.c:	$(EXAMPLES_D
+@@ -175,7 +175,7 @@ $(EXAMPLES_DEST)/intlbld.c:	$(EXAMPLES_D
  
  $(EXAMPLES_DEST)/intlbuild.fdb : $(EXAMPLES_DEST)/intlddl.sql $(EXAMPLES_DEST)/intlbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
  	-$(RM) intlbuild.fdb
@@ -115,21 +116,21 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/Makefile.in.examp
  
  
  $(EXAMPLES_DEST)/%.sql: $(EXAMPLES_SRC)/empbuild/%.sql
-diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.defaults Firebird-3.0.7.33374-0/builds/posix/make.defaults
---- Firebird-3.0.7.33374-0.org/builds/posix/make.defaults	2022-04-04 17:53:31.949821738 +0000
-+++ Firebird-3.0.7.33374-0/builds/posix/make.defaults	2022-04-04 17:53:33.598825549 +0000
-@@ -397,6 +397,7 @@ GPRE_BOOT       = $(RBIN)/gpre_boot$(EXE
+diff -up Firebird-4.0.4.3010-0/builds/posix/make.defaults.orig Firebird-4.0.4.3010-0/builds/posix/make.defaults
+--- Firebird-4.0.4.3010-0/builds/posix/make.defaults.orig	2023-12-20 10:59:23.900729743 +0100
++++ Firebird-4.0.4.3010-0/builds/posix/make.defaults	2023-12-20 11:06:32.591338933 +0100
+@@ -427,6 +427,7 @@ GPRE_BOOT       = $(RBIN)/gpre_boot$(EXE
  GPRE            = $(BIN)/gpre$(EXEC_EXT)
  RUN_GPRE        = $(RBIN)/gpre$(EXEC_EXT)
  GPRE_CURRENT    = $(RBIN)/gpre_current$(EXEC_EXT)
 +LOCK_RUN        = sh -x -c "lockfile -1 $(BIN)/build-db.lock && $(subst $$,\$$,$(1)); res=\$$?; rm -f $(BIN)/build-db.lock; exit \$$res"
  
- 
  # From msgs
-diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.rules Firebird-3.0.7.33374-0/builds/posix/make.rules
---- Firebird-3.0.7.33374-0.org/builds/posix/make.rules	2020-10-20 08:40:05.000000000 +0000
-+++ Firebird-3.0.7.33374-0/builds/posix/make.rules	2022-04-04 17:53:33.598825549 +0000
-@@ -72,17 +72,17 @@ ISQL_GPRE_FLAGS = -m -z -n -ocxx
+ CHECK_MESSAGES  = $(BIN)/check_messages$(EXEC_EXT)
+diff -up Firebird-4.0.4.3010-0/builds/posix/make.rules.orig Firebird-4.0.4.3010-0/builds/posix/make.rules
+--- Firebird-4.0.4.3010-0/builds/posix/make.rules.orig	2023-12-20 10:59:23.900729743 +0100
++++ Firebird-4.0.4.3010-0/builds/posix/make.rules	2023-12-20 11:08:35.277238011 +0100
+@@ -88,20 +88,20 @@ OBJECT_GPRE_FLAGS = -m -z -n -ocxx
  .SUFFIXES: .c .e .epp .cpp
  
  .e.c:
@@ -142,16 +143,20 @@ diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.rules Firebi
 +	$(call LOCK_RUN,$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@)
  
  $(OBJ)/isql/%.cpp: $(SRC_ROOT)/isql/%.epp
--	$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@
-+	$(call LOCK_RUN,$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@)
+-	$(GPRE_CURRENT) $(OBJECT_GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(OBJECT_GPRE_FLAGS) $< $@)
+ 
+ $(OBJ)/burp/%.cpp: $(SRC_ROOT)/burp/%.epp
+-	$(GPRE_CURRENT) $(OBJECT_GPRE_FLAGS) $< $@
++	$(call LOCK_RUN,$(GPRE_CURRENT) $(OBJECT_GPRE_FLAGS) $< $@)
  
  $(OBJ)/%.cpp: $(SRC_ROOT)/%.epp
 -	$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
 +	$(call LOCK_RUN,$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@)
  
  
- .SUFFIXES: .lo .o .cpp .c
-diff -urNp -x '*.orig' Firebird-3.0.7.33374-0.org/builds/posix/make.shared.targets Firebird-3.0.7.33374-0/builds/posix/make.shared.targets
+ .SUFFIXES: .lo .o .cpp .c .cc
+diff -up Firebird-4.0.4.3010-0/builds/posix/make.shared.targets.orig Firebird-4.0.4.3010-0/builds/posix/make.shared.targets
 --- Firebird-3.0.7.33374-0.org/builds/posix/make.shared.targets	2020-10-20 08:40:05.000000000 +0000
 +++ Firebird-3.0.7.33374-0/builds/posix/make.shared.targets	2022-04-04 17:53:33.598825549 +0000
 @@ -65,13 +65,13 @@ $(OBJ)/dsql/Parser.o $(OBJ)/common/keywo

@@ -1,8 +1,18 @@
---- Firebird-3.0.2.32703-0/builds/install/misc/firebird.conf.in.orig	2017-03-21 10:11:35.000000000 +0100
-+++ Firebird-3.0.2.32703-0/builds/install/misc/firebird.conf.in	2017-04-03 12:24:52.184150250 +0200
-@@ -919,3 +919,5 @@
- # Type: string
+diff -up Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf._orig Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf
+--- Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf._orig	2023-11-08 13:07:47.000000000 +0100
++++ Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf	2023-12-20 11:20:04.132941663 +0100
+@@ -735,7 +735,7 @@
  #
- #ServerMode = Super
+ #	Type: string
+ #
+-#DataTypeCompatibility =
++DataTypeCompatibility = 3.0
+ 
+ 
+ # ----------------------------
+@@ -1200,3 +1200,5 @@
+ # Type: integer
+ #
+ #ExtConnPoolLifeTime = 7200
 +
 +include conf.d/*.conf

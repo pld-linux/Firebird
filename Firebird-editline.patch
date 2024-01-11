@@ -1,14 +1,15 @@
---- Firebird-3.0.0.32483-0/configure.ac.orig	2010-09-08 10:44:05.000000000 +0200
-+++ Firebird-3.0.0.32483-0/configure.ac	2010-10-27 22:32:38.567739367 +0200
-@@ -652,10 +652,10 @@
- AC_SEARCH_LIBS(dlopen, dl)
- AC_CHECK_LIB(m, main)
+diff -up Firebird-4.0.4.3010-0/configure.ac._orig Firebird-4.0.4.3010-0/configure.ac
+--- Firebird-4.0.4.3010-0/configure.ac._orig	2024-01-11 13:38:19.046694587 +0100
++++ Firebird-4.0.4.3010-0/configure.ac	2024-01-11 13:48:42.098677678 +0100
+@@ -887,10 +887,10 @@ AC_SUBST(CRYPTLIB)
+ dnl Check for termcap support
  if test "$EDITLINE_FLG" = "Y"; then
-+	AC_CHECK_LIB(tinfo, tgetent, TERMLIB=tinfo, \
- 	AC_CHECK_LIB(curses, tgetent, TERMLIB=curses, \
- 		AC_CHECK_LIB(ncurses, tgetent, TERMLIB=ncurses, \
- 			AC_CHECK_LIB(termcap, tgetent, TERMLIB=termcap, \
--				AC_CHECK_LIB(tinfo, tgetent, TERMLIB=tinfo, \
- 					AC_MSG_ERROR(termcap support not found)))))
+ 	if test -z "$TERMLIB"; then
++		AC_CHECK_LIB(tinfo, tgetent, TERMLIB=tinfo, \
+ 		AC_CHECK_LIB(curses, tgetent, TERMLIB=curses, \
+ 			AC_CHECK_LIB(ncurses, tgetent, TERMLIB=ncurses, \
+ 				AC_CHECK_LIB(termcap, tgetent, TERMLIB=termcap, \
+-					AC_CHECK_LIB(tinfo, tgetent, TERMLIB=tinfo, \
+ 						AC_MSG_ERROR(termcap support not found)))))
+ 	fi
  	AC_SUBST(TERMLIB)
- 	XE_APPEND(-l$TERMLIB, LIBS)

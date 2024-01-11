@@ -1,6 +1,6 @@
---- Firebird-3.0.10.33601-0/src/yvalve/gds.cpp.orig	2022-07-01 08:34:37.770832195 +0200
-+++ Firebird-3.0.10.33601-0/src/yvalve/gds.cpp	2022-07-01 08:41:44.837560283 +0200
-@@ -3826,10 +3826,7 @@
+--- Firebird-4.0.4.3010-0/src/yvalve/gds.cpp.orig	2023-12-20 10:30:04.215137656 +0100
++++ Firebird-4.0.4.3010-0/src/yvalve/gds.cpp	2023-12-20 10:34:30.890122203 +0100
+@@ -3950,10 +3950,7 @@
  		if (!fb_utils::readenv(FB_LOCK_ENV, lockPrefix))
  		{
  #if !defined(WIN_NT)
@@ -10,5 +10,5 @@
 -			PathUtils::concatPath(lockPrefix, tmp, LOCKDIR);
 +			PathUtils::concatPath(lockPrefix, "/var/lib", LOCKDIR);
  #else
- #ifdef WIN9X_SUPPORT
- 			// shell32.dll version 5.0 and later supports SHGetFolderPath entry point
+ 			char cmnData[MAXPATHLEN];
+ 			if (SHGetSpecialFolderPath(NULL, cmnData, CSIDL_COMMON_APPDATA, TRUE))

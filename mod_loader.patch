@@ -1,21 +1,25 @@
 Loosen a bit a module filename check
 
---- Firebird-3.0.11.33703-0/src/common/os/posix/mod_loader.cpp.orig	2023-09-29 13:31:01.412025778 +0200
-+++ Firebird-3.0.11.33703-0/src/common/os/posix/mod_loader.cpp	2023-09-29 14:06:07.234937115 +0200
-@@ -166,7 +166,6 @@
- 	if (!realpath(info.dli_fname, symbolPathBuffer))
- 		symbolPath = info.dli_fname;
+diff -up Firebird-4.0.4.3010-0/src/common/os/posix/mod_loader.cpp._orig Firebird-4.0.4.3010-0/src/common/os/posix/mod_loader.cpp
+--- Firebird-4.0.4.3010-0/src/common/os/posix/mod_loader.cpp._orig	2023-11-08 13:07:47.000000000 +0100
++++ Firebird-4.0.4.3010-0/src/common/os/posix/mod_loader.cpp	2023-12-22 13:56:00.026703313 +0100
+@@ -184,7 +184,6 @@ void* DlfcnModule::findSymbol(ISC_STATUS
+ 	}
  
--	if (PathUtils::isRelative(libraryPath) || PathUtils::isRelative(symbolPath))
+ 	const char* errText = "Actual module name does not match requested";
+-	if (PathUtils::isRelative(fileName) || PathUtils::isRelative(info.dli_fname))
  	{
  		// check only name (not path) of the library
  		Firebird::PathName dummyDir, nm1, nm2;
-@@ -175,8 +174,6 @@
- 		if (nm1 != nm2)
+@@ -196,11 +195,6 @@ void* DlfcnModule::findSymbol(ISC_STATUS
  			return NULL;
+ 		}
  	}
--	else if (libraryPath != symbolPath)
+-	else if (fileName != info.dli_fname)
+-	{
+-		makeErrorStatus(status, errText);
 -		return NULL;
+-	}
  #endif
  
  	return result;

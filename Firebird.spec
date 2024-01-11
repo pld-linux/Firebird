@@ -9,18 +9,18 @@
 # - create SYSDBA user with initial password before first firebird start
 #   eg.:
 #     su firebird
-#     echo "create user SYSDBA password 'masterkey';"|fb_isql -u SYSDBA /var/lib/firebird/security3.fdb
+#     echo "create user SYSDBA password 'masterkey';"|fb_isql -u SYSDBA /var/lib/firebird/security4.fdb
 #
 Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	3.0.11.33703
-Release:	1
+Version:	4.0.4.3010
+Release:	0.3
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v3.0.11/%{name}-%{version}-0.tar.bz2
-# Source0-md5:	9bd594afdc55690ec66aaf130d8cc2cc
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v4.0.4/%{name}-%{version}-0.tar.xz
+# Source0-md5:	25da348775097c75c5458e91a761909f
 Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
 # Source1-md5:	c69991a4311090d6d672f7faaab6390e
 # distfiles refuses this, would require some audit to allow '('/')' chars
@@ -66,7 +66,6 @@ Patch4:		%{name}-opt.patch
 Patch5:		%{name}-gcc-icu.patch
 Patch6:		%{name}-libpath.patch
 Patch7:		add-pkgconfig-files.patch
-Patch8:		Provide-sized-global-delete-operators-when-compiled.patch
 Patch9:		parallel-build.patch
 Patch10:	no-copy-from-icu.patch
 Patch11:	config.patch
@@ -96,6 +95,7 @@ Requires:	%{name}-lib = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664} x32 arm ia64 mips mipsel ppc sparc sparcv9 alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		filterout	-flto
 %define		ibdir	%{_libdir}/interbase
 %define		specflags	-fno-strict-aliasing
 %define		debugcflags	-O1 -g -Wall -fno-strict-aliasing
@@ -207,7 +207,6 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 %patch9 -p1
 %patch11 -p1
 %patch12 -p1
@@ -262,15 +261,15 @@ touch $RPM_BUILD_ROOT/var/log/firebird.log
 cp -p gen/install/misc/fbclient.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
 cd gen/buildroot
-cp -p var/lib/firebird/security3.fdb $RPM_BUILD_ROOT/var/lib/firebird
+cp -p var/lib/firebird/security4.fdb $RPM_BUILD_ROOT/var/lib/firebird
 cp -p etc/firebird/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 chmod 755 usr/include/firebird/impl
 cp -pr usr/include/* $RPM_BUILD_ROOT%{_includedir}
 cp -dp usr/%{_lib}/*.so* $RPM_BUILD_ROOT%{_libdir}
 cd .%{ibdir}
-cp -a UDF bin help intl plugins firebird.msg $RPM_BUILD_ROOT%{ibdir}
+cp -a bin help intl plugins firebird.msg $RPM_BUILD_ROOT%{ibdir}
 ln -s %{ibdir}/intl $RPM_BUILD_ROOT%{_sysconfdir}/firebird
-ln -s %{ibdir}/{UDF,bin,plugins,firebird.msg} $RPM_BUILD_ROOT%{_sysconfdir}/firebird
+ln -s %{ibdir}/{bin,plugins,firebird.msg} $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 chmod u+w -R examples # allow further cleaning
 cp -rf examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -344,15 +343,15 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{license,sql.extensions,Firebird_conf.txt,README.user*,WhatsNew,fb2-todo.txt}
+%doc doc/{license,sql.extensions,Firebird_conf.txt,README.user*}
 %dir %{_sysconfdir}/firebird
 %dir %{_sysconfdir}/firebird/conf.d
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/databases.conf
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/fbtrace.conf
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/firebird.conf
 %attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/plugins.conf
+%attr(640,root,firebird) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/firebird/replication.conf
 %{_sysconfdir}/firebird/intl
-%{_sysconfdir}/firebird/UDF
 %{_sysconfdir}/firebird/bin
 %{_sysconfdir}/firebird/firebird.msg
 %{_sysconfdir}/firebird/plugins
@@ -365,7 +364,6 @@ fi
 %attr(755,root,root) %{_bindir}/gstat
 %attr(755,root,root) %{_bindir}/nbackup
 %attr(755,root,root) %{_libdir}/libib_util.so
-%attr(755,root,root) %{ibdir}/UDF
 %attr(755,root,root) %{ibdir}/bin/*
 %exclude %{ibdir}/bin/fb_config
 %exclude %{ibdir}/bin/gpre
@@ -376,21 +374,22 @@ fi
 # should it be moved to %{_sysconfdir} and marked as config?
 %{ibdir}/intl/fbintl.conf
 %dir %{ibdir}/plugins
+%attr(755,root,root) %{ibdir}/plugins/libChaCha.so
 %attr(755,root,root) %{ibdir}/plugins/libfbtrace.so
-%attr(755,root,root) %{ibdir}/plugins/libCryptKeyHolder_example.so
-%attr(755,root,root) %{ibdir}/plugins/libDbCrypt_example.so
-%attr(755,root,root) %{ibdir}/plugins/libEngine12.so
+%attr(755,root,root) %{ibdir}/plugins/libEngine13.so
 %attr(755,root,root) %{ibdir}/plugins/libLegacy_Auth.so
 %attr(755,root,root) %{ibdir}/plugins/libLegacy_UserManager.so
 %attr(755,root,root) %{ibdir}/plugins/libSrp.so
 %attr(755,root,root) %{ibdir}/plugins/libudr_engine.so
 %dir %{ibdir}/plugins/udr
+%attr(755,root,root) %{ibdir}/plugins/udr/libudf_compat.so
+%{ibdir}/plugins/udr/udf_compat.sql
 %attr(755,root,root) %{ibdir}/plugins/udr/libudrcpp_example.so
 %{ibdir}/plugins/udr_engine.conf
 
 %{ibdir}/firebird.msg
 %dir %attr(770,root,firebird) /var/lib/firebird
-%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/lib/firebird/security3.fdb
+%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/lib/firebird/security4.fdb
 %attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/log/firebird.log
 
 
