@@ -22,7 +22,7 @@ Group:		Applications/Databases
 Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v5.0.0/%{name}-%{version}-0-source.tar.xz
 # Source0-md5:	9d8b64e922df57d6a3f3de1acca4f8e3
 Source1:	https://firebirdsql.org/file/documentation/pdf/en/firebirddocs/qsg5/firebird-5-quickstartguide.pdf
-# Source1-md5:	626ec3f9d58485bf8be2249bb8cded3e
+# Source1-md5:	c02b14827cc050806bf107fd85a18458
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
