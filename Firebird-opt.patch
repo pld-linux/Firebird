@@ -1,6 +1,6 @@
-diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux.orig Firebird-4.0.4.3010-0/builds/posix/prefix.linux
---- Firebird-4.0.4.3010-0/builds/posix/prefix.linux.orig	2023-12-20 10:35:28.286426711 +0100
-+++ Firebird-4.0.4.3010-0/builds/posix/prefix.linux	2023-12-20 10:39:45.031472876 +0100
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux	2024-02-22 08:47:40.412106924 +0100
 @@ -18,8 +18,8 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
@@ -9,12 +9,12 @@ diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux.orig Firebird-4.0.4.301
 -OPTIMIZE_FLAGS=-O3 -march=i586 -mtune=i686 -fno-omit-frame-pointer
 +COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer
- WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-narrowing -Wno-unused-local-typedefs
+ WARN_FLAGS=-Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-narrowing -Wno-unused-local-typedefs
  PLATFORM_PLUSPLUS_FLAGS=-Wno-invalid-offsetof -Wno-class-memaccess
  
-diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_amd64.orig Firebird-4.0.4.3010-0/builds/posix/prefix.linux_amd64
---- Firebird-4.0.4.3010-0/builds/posix/prefix.linux_amd64.orig	2023-12-20 10:35:28.286426711 +0100
-+++ Firebird-4.0.4.3010-0/builds/posix/prefix.linux_amd64	2023-12-20 10:40:32.344507488 +0100
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_amd64._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_amd64
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_amd64._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_amd64	2024-02-22 08:49:50.947915307 +0100
 @@ -18,8 +18,8 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
@@ -23,12 +23,12 @@ diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_amd64.orig Firebird-4.0
 -OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer
 +COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DAMD64 -pipe -MMD -fPIC -fmessage-length=0
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer
- WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-narrowing -Wno-unused-local-typedefs
+ WARN_FLAGS=-Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-narrowing -Wno-unused-local-typedefs
  PLATFORM_PLUSPLUS_FLAGS=-Wno-invalid-offsetof -Wno-class-memaccess
- 
-diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm.orig Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm
---- Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm.orig	2023-12-20 10:35:28.289760024 +0100
-+++ Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm	2023-12-20 10:43:51.513249902 +0100
+ #VALGRIND_FLAGS=-DUSE_VALGRIND
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm	2024-02-22 08:51:24.290642044 +0100
 @@ -20,7 +20,7 @@
  
  #LD=@CXX@
@@ -37,23 +37,23 @@ diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm.orig Firebird-4.0.4
 +COMMON_FLAGS=@CFLAGS@ -DLINUX -DARM -pipe -MMD -fPIC -fsigned-char -fmessage-length=0 -DFB_SEND_FLAGS=MSG_NOSIGNAL
  
 -PROD_FLAGS=$(COMMON_FLAGS) -O3
--DEV_FLAGS=$(COMMON_FLAGS) -p -ggdb -Wall -Wno-non-virtual-dtor
+-DEV_FLAGS=$(COMMON_FLAGS) -p -ggdb -Werror=delete-incomplete -Wall -Wno-non-virtual-dtor
 +PROD_FLAGS=$(COMMON_FLAGS)
-+DEV_FLAGS=$(COMMON_FLAGS) -Wall -Wno-non-virtual-dtor
-diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm64.orig Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm64
---- Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm64.orig	2023-12-20 10:35:28.289760024 +0100
-+++ Firebird-4.0.4.3010-0/builds/posix/prefix.linux_arm64	2023-12-20 10:45:06.012779501 +0100
++DEV_FLAGS=$(COMMON_FLAGS) -Werror=delete-incomplete -Wall -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm64._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm64
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm64._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_arm64	2024-02-22 09:08:58.709795676 +0100
 @@ -23,5 +23,5 @@
  #PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
- #DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch
+ #DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch
  
 -PROD_FLAGS=-O3 -DLINUX -DARM64 -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
--DEV_FLAGS=-ggdb -DLINUX -DARM64 -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
+-DEV_FLAGS=-ggdb -DLINUX -DARM64 -pipe -p -MMD -fPIC -Werror=delete-incomplete -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
 +PROD_FLAGS=@CFLAGS@ -DLINUX -DARM64 -pipe -MMD -fPIC -fsigned-char -fmessage-length=0
-+DEV_FLAGS=@CFLAGS@ -DLINUX -DARM64 -pipe -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
-diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_generic.orig Firebird-4.0.4.3010-0/builds/posix/prefix.linux_generic
---- Firebird-4.0.4.3010-0/builds/posix/prefix.linux_generic.orig	2023-12-20 10:35:28.289760024 +0100
-+++ Firebird-4.0.4.3010-0/builds/posix/prefix.linux_generic	2023-12-20 10:45:58.629113926 +0100
++DEV_FLAGS=@CFLAGS@ -DLINUX -DARM64 -pipe -MMD -fPIC -Werror=delete-incomplete -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_generic._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_generic
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_generic._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_generic	2024-02-22 08:54:40.156050585 +0100
 @@ -18,7 +18,7 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
@@ -62,93 +62,71 @@ diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_generic.orig Firebird-4
 +COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC -DFB_SEND_FLAGS=MSG_NOSIGNAL
  
 -PROD_FLAGS=-ggdb -O3 $(COMMON_FLAGS)
--DEV_FLAGS=-ggdb -p -Wall -Wno-switch $(COMMON_FLAGS) -Wno-non-virtual-dtor
+-DEV_FLAGS=-ggdb -p -Werror=delete-incomplete -Wall -Wno-switch $(COMMON_FLAGS) -Wno-non-virtual-dtor
 +PROD_FLAGS=$(COMMON_FLAGS)
-+DEV_FLAGS=-Wall -Wno-switch $(COMMON_FLAGS) -Wno-non-virtual-dtor
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_ia64.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_ia64	2016-08-31 20:55:10.367740946 +0200
-@@ -18,8 +18,8 @@
- # 2 Oct 2002, Nickolay Samofatov - Major cleanup
- # Adriano dos Santos Fernandes - IA-64 port
- 
--COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DIA64 -pipe -MMD -fPIC -fmessage-length=0
--OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer 
-+COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -DIA64 -pipe -MMD -fPIC -fmessage-length=0
-+OPTIMIZE_FLAGS=-fno-omit-frame-pointer 
- WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-non-virtual-dtor
- 
- PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_mips.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_mips	2016-08-31 20:56:05.504406983 +0200
-@@ -1,5 +1,5 @@
++DEV_FLAGS=-Werror=delete-incomplete -Wall -Wno-switch $(COMMON_FLAGS) -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mips._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mips
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mips._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mips	2024-02-22 08:57:58.424615561 +0100
+@@ -1,7 +1,7 @@
 -COMMON_FLAGS=-ggdb -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0
 -OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer -fno-builtin
 +COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer -fno-builtin
- WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-non-virtual-dtor
+ WARN_FLAGS=-Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-non-virtual-dtor
  
  PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_mipsel.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_mipsel	2016-08-31 21:01:06.977736874 +0200
-@@ -19,7 +19,9 @@
+ #DEV_FLAGS=-DUSE_VALGRIND -p $(COMMON_FLAGS) $(WARN_FLAGS)
+-DEV_FLAGS=-p $(COMMON_FLAGS) $(WARN_FLAGS)
++DEV_FLAGS=$(COMMON_FLAGS) $(WARN_FLAGS)
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mipsel._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mipsel
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mipsel._orig	2024-02-22 08:37:49.342919440 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_mipsel	2024-02-22 08:59:04.557427310 +0100
+@@ -21,5 +21,5 @@ LD=@CXX@
  
- LD=@CXX@
- 
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC
-+OPTIMIZE_FLAGS=-fno-omit-frame-pointer
  # -fno-builtin is used because GCC 3.0-3.2.2 had bug with builtins expansion
  # you may remove it if engine is getting compiled with any other GCC version
 -PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
--DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch -Wno-non-virtual-dtor
-+PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
-+DEV_FLAGS=$(COMMON_FLAGS) -DDEBUG_GDS_ALLOC -Wall -Wno-switch -Wno-non-virtual-dtor
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_powerpc.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_powerpc	2016-08-31 21:03:32.994401873 +0200
-@@ -18,6 +18,9 @@
+-DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch -Wno-non-virtual-dtor
++PROD_FLAGS=@CFLAGS@ -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
++DEV_FLAGS=@CFLAGS@ -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc._orig	2024-02-22 08:37:49.346252747 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc	2024-02-22 09:00:37.110050069 +0100
+@@ -18,6 +18,6 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
 -PROD_FLAGS=-ggdb -fno-omit-frame-pointer -fsigned-char -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -DLINUX -DPowerPC -DPPC -O3
--DEV_FLAGS=-ggdb -O0 -DLINUX -pipe -MMD -p -fPIC -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -fmessage-length=0 -fsigned-char -DLINUX -DPowerPC -DPPC -Wno-non-virtual-dtor
-+COMMON_FLAGS=@CFLAGS@ -fsigned-char -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -DPowerPC -DPPC
-+OPTIMIZE_FLAGS=-fno-omit-frame-pointer
-+
-+PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
-+DEV_FLAGS=$(COMMON_FLAGS) -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-non-virtual-dtor
- #DEV_FLAGS=-DUSE_VALGRIND -ggdb -O0 -DLINUX -pipe -MMD -p -fPIC -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -fmessage-length=0 -DLINUX -DPowerPC -DPPC -Wno-non-virtual-dtor
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_powerpc64.orig	2016-08-31 21:09:42.987730985 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_powerpc64	2016-08-31 21:09:45.644397621 +0200
-@@ -20,8 +20,8 @@
- 
- #LD=@CXX@
- 
--#PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
--#DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -DPPC64 -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
-+OPTIMIZE_FLAGS=
+-DEV_FLAGS=-ggdb -O0 -DLINUX -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -fmessage-length=0 -fsigned-char -DLINUX -DPowerPC -DPPC -Wno-non-virtual-dtor
++PROD_FLAGS=@CFLAGS@ -fno-omit-frame-pointer -fsigned-char -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -DLINUX -DPowerPC -DPPC -O3
++DEV_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -fmessage-length=0 -fsigned-char -DLINUX -DPowerPC -DPPC -Wno-non-virtual-dtor
+ #DEV_FLAGS=-DUSE_VALGRIND -ggdb -O0 -DLINUX -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -fmessage-length=0 -DLINUX -DPowerPC -DPPC -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64._orig	2024-02-22 08:37:49.346252747 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64	2024-02-22 09:01:39.009585755 +0100
+@@ -23,5 +23,5 @@
+ #PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
+ #DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch
  
 -PROD_FLAGS=-O3 -DLINUX -DPPC64 -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
--DEV_FLAGS=-ggdb -DLINUX -DPPC64 -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
-+PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
-+DEV_FLAGS=$(COMON_FLAGS) -Wno-non-virtual-dtor
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_powerpc64el.orig	2016-04-14 16:07:29.000000000 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_powerpc64el	2016-08-31 21:10:53.874396836 +0200
-@@ -20,8 +20,8 @@
- 
- #LD=@CXX@
- 
--#PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
--#DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Wall -Wno-switch
-+COMMON_FLAGS=@CFLAGS@ -DLINUX -DPPC64EL -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
-+OPTIMIZE_FLAGS=
+-DEV_FLAGS=-ggdb -DLINUX -DPPC64 -pipe -p -MMD -fPIC -Werror=delete-incomplete -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
++PROD_FLAGS=@CFLAGS@ -DLINUX -DPPC64 -pipe -MMD -fPIC -fsigned-char -fmessage-length=0
++DEV_FLAGS=@CFLAGS@ -DLINUX -DPPC64 -pipe -MMD -fPIC -Werror=delete-incomplete -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64el._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64el
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64el._orig	2024-02-22 08:37:49.346252747 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_powerpc64el	2024-02-22 09:02:33.409184029 +0100
+@@ -23,5 +23,5 @@
+ #PROD_FLAGS=-ggdb -O3 -fno-omit-frame-pointer -DLINUX -pipe -MMD -fPIC
+ #DEV_FLAGS=-ggdb -DLINUX -DDEBUG_GDS_ALLOC -pipe -MMD -p -fPIC -Werror=delete-incomplete -Wall -Wno-switch
  
 -PROD_FLAGS=-O3 -DLINUX -DPPC64EL -pipe -p -MMD -fPIC -fsigned-char -fmessage-length=0
--DEV_FLAGS=-ggdb -DLINUX -DPPC64EL -pipe -p -MMD -fPIC -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
-+PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
-+DEV_FLAGS=$(COMMON_FLAGS) -Wno-non-virtual-dtor
-diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_s390x.orig Firebird-4.0.4.3010-0/builds/posix/prefix.linux_s390x
---- Firebird-4.0.4.3010-0/builds/posix/prefix.linux_s390x.orig	2023-12-20 10:35:28.289760024 +0100
-+++ Firebird-4.0.4.3010-0/builds/posix/prefix.linux_s390x	2023-12-20 10:48:11.021611175 +0100
+-DEV_FLAGS=-ggdb -DLINUX -DPPC64EL -pipe -p -MMD -fPIC -Werror=delete-incomplete -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
++PROD_FLAGS=@CFLAGS@ -DLINUX -DPPC64EL -pipe -MMD -fPIC -fsigned-char -fmessage-length=0
++DEV_FLAGS=@CFLAGS@ -DLINUX -DPPC64EL -pipe -MMD -fPIC -Werror=delete-incomplete -Wall -fsigned-char -fmessage-length=0 -Wno-non-virtual-dtor
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_s390x._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_s390x
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_s390x._orig	2024-02-22 08:37:49.346252747 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_s390x	2024-02-22 09:03:36.152060506 +0100
 @@ -18,10 +18,10 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
@@ -157,22 +135,22 @@ diff -up Firebird-4.0.4.3010-0/builds/posix/prefix.linux_s390x.orig Firebird-4.0
 -OPTIMIZE_FLAGS=-O3 -fno-omit-frame-pointer -fno-builtin
 +COMMON_FLAGS=@CFLAGS@ -DFB_SEND_FLAGS=MSG_NOSIGNAL -DLINUX -pipe -MMD -fPIC -fmessage-length=0 -fsigned-char -Wno-invalid-offsetof
 +OPTIMIZE_FLAGS=-fno-omit-frame-pointer -fno-builtin
- WARN_FLAGS=-Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-non-virtual-dtor
+ WARN_FLAGS=-Werror=delete-incomplete -Wall -Wno-switch -Wno-parentheses -Wno-unknown-pragmas -Wno-unused-variable -Wno-non-virtual-dtor
  
  PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
  #DEV_FLAGS=-DUSE_VALGRIND -p $(COMMON_FLAGS) $(WARN_FLAGS)
 -DEV_FLAGS=-p $(COMMON_FLAGS) $(WARN_FLAGS)
 +DEV_FLAGS=$(COMMON_FLAGS) $(WARN_FLAGS)
---- Firebird-3.0.0.32483-0/builds/posix/prefix.linux_sparc32.orig	2016-08-31 20:27:07.857760158 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/prefix.linux_sparc32	2016-08-31 21:06:34.644399800 +0200
-@@ -18,6 +18,7 @@
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_sparc32._orig Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_sparc32
+--- Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_sparc32._orig	2024-02-22 08:37:49.346252747 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/prefix.linux_sparc32	2024-02-22 09:05:08.354733545 +0100
+@@ -18,6 +18,6 @@
  #
  # 2 Oct 2002, Nickolay Samofatov - Major cleanup
  
 -COMMON_FLAGS=-DLINUX -pipe -MMD -fPIC -Dsparc -DFB_SEND_FLAGS=MSG_NOSIGNAL
 -PROD_FLAGS=-ggdb -mcpu=ultrasparc -mtune=ultrasparc -O3 $(COMMON_FLAGS)
--DEV_FLAGS=-ggdb -p -Wall -Wno-switch  $(COMMON_FLAGS) -Wno-non-virtual-dtor
+-DEV_FLAGS=-ggdb -p -Werror=delete-incomplete -Wall -Wno-switch  $(COMMON_FLAGS) -Wno-non-virtual-dtor
 +COMMON_FLAGS=@CFLAGS@ -DLINUX -pipe -MMD -fPIC -Dsparc -DFB_SEND_FLAGS=MSG_NOSIGNAL
-+OPTIMIZE_FLAGS=
-+PROD_FLAGS=$(COMMON_FLAGS) $(OPTIMIZE_FLAGS)
-+DEV_FLAGS=-p -Wall -Wno-switch  $(COMMON_FLAGS) -Wno-non-virtual-dtor
++PROD_FLAGS=$(COMMON_FLAGS)
++DEV_FLAGS=@CFLAGS@ -Werror=delete-incomplete -Wall -Wno-switch  $(COMMON_FLAGS) -Wno-non-virtual-dtor

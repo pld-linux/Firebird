@@ -1,8 +1,9 @@
---- Firebird-3.0.0.32483-0/builds/posix/Makefile.in.orig	2016-04-14 16:07:29.000000000 +0200
-+++ Firebird-3.0.0.32483-0/builds/posix/Makefile.in	2016-09-01 21:59:46.720043484 +0200
-@@ -315,7 +315,7 @@
+diff -up Firebird-5.0.0.1306-0-source/builds/posix/Makefile.in._orig Firebird-5.0.0.1306-0-source/builds/posix/Makefile.in
+--- Firebird-5.0.0.1306-0-source/builds/posix/Makefile.in._orig	2024-02-22 09:14:30.430893458 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/Makefile.in	2024-02-22 09:17:31.106365442 +0100
+@@ -495,7 +495,7 @@ SECURITY_TMP = security.tmp
  
- databases:		yachts.lnk msg.timestamp $(HELP_FDB) $(SECURITY_FDB)
+ databases:		yachts.lnk $(SECURITY_FDB)
  
 -export LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(FIREBIRD)/lib
 +export LD_LIBRARY_PATH := $(FIREBIRD)/lib:$(LD_LIBRARY_PATH)

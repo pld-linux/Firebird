@@ -1,16 +1,14 @@
-diff -up Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf._orig Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf
---- Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf._orig	2023-11-08 13:07:47.000000000 +0100
-+++ Firebird-4.0.4.3010-0/builds/install/misc/firebird.conf	2023-12-20 11:20:04.132941663 +0100
-@@ -735,7 +735,7 @@
- #
+--- Firebird-5.0.0.1306-0-source/builds/install/misc/firebird.conf.orig	2024-01-11 11:24:21.000000000 +0100
++++ Firebird-5.0.0.1306-0-source/builds/install/misc/firebird.conf	2024-02-22 09:29:00.475211032 +0100
+@@ -775,6 +775,7 @@
  #	Type: string
  #
--#DataTypeCompatibility =
+ #DataTypeCompatibility =
 +DataTypeCompatibility = 3.0
  
  
- # ----------------------------
-@@ -1200,3 +1200,5 @@
+ # ===========================
+@@ -1258,3 +1259,5 @@
  # Type: integer
  #
  #ExtConnPoolLifeTime = 7200

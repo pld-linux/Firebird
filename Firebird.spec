@@ -9,20 +9,20 @@
 # - create SYSDBA user with initial password before first firebird start
 #   eg.:
 #     su firebird
-#     echo "create user SYSDBA password 'masterkey';"|fb_isql -u SYSDBA /var/lib/firebird/security4.fdb
+#     echo "create user SYSDBA password 'masterkey';"|fb_isql -u SYSDBA /var/lib/firebird/security5.fdb
 #
 Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	4.0.4.3010
-Release:	0.3
+Version:	5.0.0.1306
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v4.0.4/%{name}-%{version}-0.tar.xz
-# Source0-md5:	25da348775097c75c5458e91a761909f
-Source1:	http://www.firebirdsql.org/file/documentation/reference_manuals/user_manuals/%{name}-3-QuickStart.pdf
-# Source1-md5:	c69991a4311090d6d672f7faaab6390e
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v5.0.0/%{name}-%{version}-0-source.tar.xz
+# Source0-md5:	9d8b64e922df57d6a3f3de1acca4f8e3
+Source1:	https://firebirdsql.org/file/documentation/pdf/en/firebirddocs/qsg5/firebird-5-quickstartguide.pdf
+# Source1-md5:	626ec3f9d58485bf8be2249bb8cded3e
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
@@ -46,8 +46,8 @@ Source11:	http://www.firebirdsql.org/pdfmanual/%{name}-gfix.pdf
 # Source11-md5:	22e2cdc1058dd4f764728bcb3a8644f0
 Source12:	http://www.firebirdsql.org/pdfmanual/%{name}-gsplit.pdf
 # Source12-md5:	0147b5d2118e2e80c93762600107a71f
-Source13:	https://firebirdsql.org/file/documentation/pdf/en/refdocs/fblangref30/firebird-30-language-reference.pdf
-# Source13-md5:	a4a711621697fb1a23c35943a79d763b
+Source13:	https://firebirdsql.org/file/documentation/pdf/en/refdocs/fblangref50/firebird-50-language-reference.pdf
+# Source13-md5:	cf095a223a7b7f631e6a4b8a9604b1da
 Source100:	firebird.init
 Source101:	firebird.sysconfig
 Source102:	firebird.inetd
@@ -63,10 +63,8 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-FHS.patch
 Patch4:		%{name}-opt.patch
-Patch5:		%{name}-gcc-icu.patch
 Patch6:		%{name}-libpath.patch
 Patch7:		add-pkgconfig-files.patch
-Patch9:		parallel-build.patch
 Patch10:	no-copy-from-icu.patch
 Patch11:	config.patch
 Patch12:	chown.patch
@@ -198,16 +196,14 @@ Firebird Classic (inetd) init scripts.
 Skrypty startowe Firebirda w wersji Classic (inetd).
 
 %prep
-%setup -q -n %{name}-%{version}-0
+%setup -q -n %{name}-%{version}-0-source
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch9 -p1
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
@@ -261,13 +257,13 @@ touch $RPM_BUILD_ROOT/var/log/firebird.log
 cp -p gen/install/misc/fbclient.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
 cd gen/buildroot
-cp -p var/lib/firebird/security4.fdb $RPM_BUILD_ROOT/var/lib/firebird
+cp -p var/lib/firebird/security5.fdb $RPM_BUILD_ROOT/var/lib/firebird
 cp -p etc/firebird/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 chmod 755 usr/include/firebird/impl
 cp -pr usr/include/* $RPM_BUILD_ROOT%{_includedir}
 cp -dp usr/%{_lib}/*.so* $RPM_BUILD_ROOT%{_libdir}
 cd .%{ibdir}
-cp -a bin help intl plugins firebird.msg $RPM_BUILD_ROOT%{ibdir}
+cp -a bin intl plugins firebird.msg $RPM_BUILD_ROOT%{ibdir}
 ln -s %{ibdir}/intl $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 ln -s %{ibdir}/{bin,plugins,firebird.msg} $RPM_BUILD_ROOT%{_sysconfdir}/firebird
 chmod u+w -R examples # allow further cleaning
@@ -368,13 +364,13 @@ fi
 %exclude %{ibdir}/bin/fb_config
 %exclude %{ibdir}/bin/gpre
 %exclude %{ibdir}/bin/fbguard
-%{ibdir}/help
 %dir %{ibdir}/intl
 %attr(755,root,root) %{ibdir}/intl/fbintl
 # should it be moved to %{_sysconfdir} and marked as config?
 %{ibdir}/intl/fbintl.conf
 %dir %{ibdir}/plugins
 %attr(755,root,root) %{ibdir}/plugins/libChaCha.so
+%attr(755,root,root) %{ibdir}/plugins/libDefault_Profiler.so
 %attr(755,root,root) %{ibdir}/plugins/libfbtrace.so
 %attr(755,root,root) %{ibdir}/plugins/libEngine13.so
 %attr(755,root,root) %{ibdir}/plugins/libLegacy_Auth.so
@@ -389,7 +385,7 @@ fi
 
 %{ibdir}/firebird.msg
 %dir %attr(770,root,firebird) /var/lib/firebird
-%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/lib/firebird/security4.fdb
+%attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/lib/firebird/security5.fdb
 %attr(660,root,firebird) %config(noreplace) %verify(not md5 mtime size) /var/log/firebird.log
 
 
