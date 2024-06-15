@@ -63,6 +63,7 @@ Patch1:		%{name}-editline.patch
 Patch2:		%{name}-va.patch
 Patch3:		%{name}-FHS.patch
 Patch4:		%{name}-opt.patch
+Patch5:		%{name}-shared-libstdc++.patch
 Patch6:		%{name}-libpath.patch
 Patch7:		add-pkgconfig-files.patch
 Patch10:	no-copy-from-icu.patch
@@ -150,7 +151,7 @@ Group:		Development/Libraries
 Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	libstdc++-devel
-Obsoletes:	Firebird-static
+Obsoletes:	Firebird-static < 3
 
 %description devel
 Header files for Firebird library.
@@ -202,6 +203,7 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 %patch6 -p1
 %patch7 -p1
 %patch11 -p1

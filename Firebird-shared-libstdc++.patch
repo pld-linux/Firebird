@@ -1,0 +1,13 @@
+--- Firebird-5.0.0.1306-0-source/builds/posix/make.defaults.orig	2024-01-11 11:24:21.000000000 +0100
++++ Firebird-5.0.0.1306-0-source/builds/posix/make.defaults	2024-06-15 08:18:46.395554408 +0200
+@@ -207,8 +207,8 @@ ifeq ($(PLATFORM),DARWIN)
+ LIB_LINK = $(CXX) $(GLOB_OPTIONS) $(CXXFLAGS) $(WLDFLAGS)
+ EXE_LINK = $(CXX) $(GLOB_OPTIONS) $(CXXFLAGS) $(WLDFLAGS)
+ else
+-LIB_LINK = $(CXX) $(GLOB_OPTIONS) $(CXXFLAGS) $(WLDFLAGS) -static-libstdc++
+-EXE_LINK = $(CXX) $(GLOB_OPTIONS) $(CXXFLAGS) $(WLDFLAGS) -static-libstdc++
++LIB_LINK = $(CXX) $(GLOB_OPTIONS) $(CXXFLAGS) $(WLDFLAGS)
++EXE_LINK = $(CXX) $(GLOB_OPTIONS) $(CXXFLAGS) $(WLDFLAGS)
+ endif
+ 
+ STATICLIB_LINK = $(AR) crus
