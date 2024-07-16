@@ -261,9 +261,13 @@ cp -p gen/install/misc/fbclient.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 cd gen/buildroot
 cp -p var/lib/firebird/security5.fdb $RPM_BUILD_ROOT/var/lib/firebird
 cp -p etc/firebird/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/firebird
+cp -dp usr/%{_lib}/*.so* $RPM_BUILD_ROOT%{_libdir}
 chmod 755 usr/include/firebird/impl
 cp -pr usr/include/* $RPM_BUILD_ROOT%{_includedir}
-cp -dp usr/%{_lib}/*.so* $RPM_BUILD_ROOT%{_libdir}
+# missing in buildroot
+cp -p ../Release/firebird/include/firebird/FirebirdInterface.idl $RPM_BUILD_ROOT%{_includedir}/firebird
+cp -p ../Release/firebird/include/firebird/impl/iberror_c.h $RPM_BUILD_ROOT%{_includedir}/firebird/impl
+
 cd .%{ibdir}
 cp -a bin intl plugins firebird.msg $RPM_BUILD_ROOT%{ibdir}
 ln -s %{ibdir}/intl $RPM_BUILD_ROOT%{_sysconfdir}/firebird
@@ -279,7 +283,7 @@ for f in bin/{fb_lock_print,gbak,gfix,gpre,gsec,gsplit,gstat,nbackup}; do
 done
 ln -sf %{ibdir}/bin/isql $RPM_BUILD_ROOT%{_bindir}/fb_isql
 
-rm -f $RPM_BUILD_ROOT%{ibdir}/bin/{FirebirdUninstall.sh,changeServerMode.sh}
+%{__rm} $RPM_BUILD_ROOT%{ibdir}/bin/{FirebirdUninstall.sh,changeServerMode.sh}
 
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE100} >$RPM_BUILD_ROOT/etc/rc.d/init.d/firebird
 cp -p %{SOURCE101} $RPM_BUILD_ROOT/etc/sysconfig/firebird
