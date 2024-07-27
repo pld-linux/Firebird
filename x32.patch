@@ -1,0 +1,11 @@
+--- Firebird-5.0.0.1306-0-source/extern/ttmath/ttmathtypes.h~	2024-07-27 06:21:08.000000000 +0200
++++ Firebird-5.0.0.1306-0-source/extern/ttmath/ttmathtypes.h	2024-07-27 06:25:23.419024747 +0200
+@@ -114,7 +114,7 @@
+ */
+ #ifndef TTMATH_FORCEASM
+ 
+-	#if !defined __i386__  && !defined _X86_ && !defined  _M_IX86 && !defined __x86_64__  && !defined _M_X64
++	#if !defined __i386__  && !defined _X86_ && !defined  _M_IX86 && !defined __x86_64__  && !defined _M_X64 || (defined __x86_64__ && defined __ILP32__)
+ 		/*!
+ 			x86 architecture:
+ 			__i386__    defined by GNU C

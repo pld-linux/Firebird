@@ -71,6 +71,7 @@ Patch11:	config.patch
 Patch12:	chown.patch
 Patch13:	cloop-honour-build-flags.patch
 Patch14:	mod_loader.patch
+Patch15:	x32.patch
 URL:		http://www.firebirdsql.org/
 BuildRequires:	autoconf >= 2.67
 BuildRequires:	automake
@@ -79,10 +80,12 @@ BuildRequires:	libatomic_ops
 BuildRequires:	libedit-devel
 BuildRequires:	libicu-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtomcrypt-devel
 BuildRequires:	libtommath-devel
 BuildRequires:	libtool >= 2:2
 # for lockfile
 BuildRequires:	procmail
+BuildRequires:	re2-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	zlib-devel
@@ -210,6 +213,7 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch15 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} \
@@ -236,6 +240,7 @@ cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} 
 	--with-gnu-ld \
 	--with-gpre-pascal \
 	--with-system-editline \
+	--with-system-re2 \
 	%{?debug:--enable-debug} \
 	--disable-rpath \
 	--disable-binreloc
