@@ -1,5 +1,14 @@
 --- Firebird-5.0.0.1306-0-source/extern/ttmath/ttmathtypes.h~	2024-07-27 06:21:08.000000000 +0200
 +++ Firebird-5.0.0.1306-0-source/extern/ttmath/ttmathtypes.h	2024-07-27 06:25:23.419024747 +0200
+@@ -84,7 +84,7 @@
+ */
+ #if !defined TTMATH_PLATFORM32 && !defined TTMATH_PLATFORM64
+ 
+-	#if !defined _M_X64 && !defined __x86_64__
++	#if !defined _M_X64 && !defined __x86_64__ || (defined __x86_64__ && defined __ILP32__)
+ 
+ 		/*
+ 			other platforms than x86 and amd64 are not recognized at the moment
 @@ -114,7 +114,7 @@
  */
  #ifndef TTMATH_FORCEASM
