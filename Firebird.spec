@@ -16,7 +16,7 @@ Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsyste
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
 Version:	5.0.0.1306
-Release:	2
+Release:	3
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
 Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v5.0.0/%{name}-%{version}-0-source.tar.xz

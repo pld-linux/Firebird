@@ -3,19 +3,35 @@
 set -e
 ARCH=$(uname -m)
 
+LIB_DIRS=
+
 case "$ARCH" in
     x86_64 | sparc64 | s390x | ppc64 | aarch64)
-        LIB_DIR=/usr/lib64/interbase/bin
-        SECONDARY_LIB_DIR=/usr/lib/interbase/bin
+	if [ "$(getconf LONG_BIT)" -eq "32" ]; then
+	    LIB_DIRS="$LIB_DIRS /usr/libx32/interbase/bin"
+	else
+	    LIB_DIRS="$LIB_DIRS /usr/lib64/interbase/bin"
+	fi
         ;;
     *)
-        LIB_DIR=/usr/lib/interbase/bin
-        SECONDARY_LIB_DIR=/usr/lib64/interbase/bin
+        LIB_DIRS="$LIB_DIRS /usr/lib/interbase/bin"
         ;;
 esac
 
-if [ ! -x "$LIB_DIR"/fb_config ]; then
-    LIB_DIR=$SECONDARY_LIB_DIR
+# just fallback to all alternatives
+LIB_DIRS="$LIB_DIRS /usr/lib64/interbase/bin /usr/libx32/interbase/bin /usr/lib/interbase/bin"
+
+LIB_DIR=""
+for dir in $LIB_DIRS; do
+    if [ -x "${dir}/fb_config" ]; then
+	LIB_DIR="$dir"
+	break
+    fi
+done
+
+if [ -z "$LIB_DIR" ]; then
+    echo "$0: Unable to find fb_config" >&2
+    exit 1
 fi
 
 exec "$LIB_DIR"/fb_config "$@"
