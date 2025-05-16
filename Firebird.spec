@@ -47,7 +47,7 @@ Source11:	http://www.firebirdsql.org/pdfmanual/%{name}-gfix.pdf
 Source12:	http://www.firebirdsql.org/pdfmanual/%{name}-gsplit.pdf
 # Source12-md5:	0147b5d2118e2e80c93762600107a71f
 Source13:	https://firebirdsql.org/file/documentation/pdf/en/refdocs/fblangref50/firebird-50-language-reference.pdf
-# Source13-md5:	902937a44f80353565e72b5fb19ed5df
+# Source13-md5:	32bfaf68eb3590c1bbf8a81f925600db
 Source100:	firebird.init
 Source101:	firebird.sysconfig
 Source102:	firebird.inetd
