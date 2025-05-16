@@ -15,14 +15,14 @@ Summary:	Firebird SQL Database Server and Client tools
 Summary(de.UTF-8):	Firebird - relationalen Open-Source- Datenbankmanagementsystems
 Summary(pl.UTF-8):	Firebird - serwer baz danych SQL oraz narzędzia klienckie
 Name:		Firebird
-Version:	5.0.0.1306
-Release:	3
+Version:	5.0.2.1613
+Release:	1
 License:	Interbase Public License 1.0, Initial Developer's Public License 1.0
 Group:		Applications/Databases
-Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v5.0.0/%{name}-%{version}-0-source.tar.xz
-# Source0-md5:	9d8b64e922df57d6a3f3de1acca4f8e3
+Source0:	https://github.com/FirebirdSQL/firebird/releases/download/v5.0.2/%{name}-%{version}-0-source.tar.xz
+# Source0-md5:	71ab7107a9819e62274e9b9bf60d2f41
 Source1:	https://firebirdsql.org/file/documentation/pdf/en/firebirddocs/qsg5/firebird-5-quickstartguide.pdf
-# Source1-md5:	c02b14827cc050806bf107fd85a18458
+# Source1-md5:	4f6c51bab349fc63cd639cc28206d339
 # distfiles refuses this, would require some audit to allow '('/')' chars
 #Source2:	http://www.firebirdsql.org/pdfmanual/Using-Firebird_(wip).pdf
 ## Source2-md5:	9eb90583c200bdd7292a80ecc1df1178
@@ -47,7 +47,7 @@ Source11:	http://www.firebirdsql.org/pdfmanual/%{name}-gfix.pdf
 Source12:	http://www.firebirdsql.org/pdfmanual/%{name}-gsplit.pdf
 # Source12-md5:	0147b5d2118e2e80c93762600107a71f
 Source13:	https://firebirdsql.org/file/documentation/pdf/en/refdocs/fblangref50/firebird-50-language-reference.pdf
-# Source13-md5:	cf095a223a7b7f631e6a4b8a9604b1da
+# Source13-md5:	902937a44f80353565e72b5fb19ed5df
 Source100:	firebird.init
 Source101:	firebird.sysconfig
 Source102:	firebird.inetd
@@ -201,19 +201,19 @@ Skrypty startowe Firebirda w wersji Classic (inetd).
 
 %prep
 %setup -q -n %{name}-%{version}-0-source
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
+%patch -P 6 -p1
+%patch -P 7 -p1
+%patch -P 11 -p1
+%patch -P 12 -p1
+%patch -P 13 -p1
+%patch -P 14 -p1
+%patch -P 15 -p1
 
 mkdir docs
 cp %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} \
@@ -283,7 +283,7 @@ cp -rf examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so.0
 ln -sf libfbclient.so.2 $RPM_BUILD_ROOT%{_libdir}/libgds.so
 
-for f in bin/{fb_lock_print,gbak,gfix,gpre,gsec,gsplit,gstat,nbackup}; do
+for f in bin/{fb_lock_print,fbtracemgr,gbak,gfix,gpre,gsec,gsplit,gstat,nbackup}; do
 	ln -sf %{ibdir}/$f $RPM_BUILD_ROOT%{_bindir}/${f#bin/}
 done
 ln -sf %{ibdir}/bin/isql $RPM_BUILD_ROOT%{_bindir}/fb_isql
@@ -364,6 +364,7 @@ fi
 %{_sysconfdir}/firebird/plugins
 %attr(755,root,root) %{_bindir}/fb_isql
 %attr(755,root,root) %{_bindir}/fb_lock_print
+%attr(755,root,root) %{_bindir}/fbtracemgr
 %attr(755,root,root) %{_bindir}/gbak
 %attr(755,root,root) %{_bindir}/gfix
 %attr(755,root,root) %{_bindir}/gsec
@@ -428,7 +429,6 @@ fi
 %{_includedir}/ib_util.h
 %{_includedir}/ibase.h
 %{_includedir}/iberror.h
-%{_includedir}/perf.h
 %{_examplesdir}/%{name}-%{version}
 
 %files doc
